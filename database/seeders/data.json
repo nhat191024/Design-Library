@@ -1,0 +1,35 @@
+{
+    "tags": [
+        { "id": 1, "name": "UI/UX" },
+        { "id": 2, "name": "Graphic Design" },
+        { "id": 3, "name": "Web Development" }
+    ],
+
+    "users": [
+        { "id": 1, "name":"Vu Admin", "username": "admin", "password": "12345678", "role": 1 }
+    ],
+
+    "categories": [
+        { "id": 1, "name": "Website Templates", "parent_id": null, "is_show": 1 },
+        { "id": 2, "name": "Landing Pages", "parent_id": 1, "is_show": 1 },
+        { "id": 3, "name": "Mobile UI", "parent_id": null, "is_show": 1 }
+    ],
+
+    "products": [
+        { "id": 1, "name": "Portfolio Template", "description": "A sleek portfolio template", "category_id": 2 },
+        { "id": 2, "name": "E-commerce UI Kit", "description": "A modern e-commerce UI kit", "category_id": 1 },
+        { "id": 3, "name": "Mobile App UI", "description": "A clean and simple mobile app UI", "category_id": 3 }
+    ],
+
+    "images": [
+        { "id": 1, "product_id": 1 },
+        { "id": 2, "product_id": 2 },
+        { "id": 3, "product_id": 3 }
+    ],
+
+    "tag_products": [
+        { "id": 1, "tag_id": 1, "product_id": 1 },
+        { "id": 2, "tag_id": 2, "product_id": 2 },
+        { "id": 3, "tag_id": 3, "product_id": 3 }
+    ]
+}
