@@ -2,9 +2,15 @@
 
 namespace Database\Seeders;
 
+use App\Models\Category;
+use App\Models\Image;
+use App\Models\Product;
+use App\Models\Tag;
+use App\Models\TagProduct;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,11 +19,53 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $jsonFilePath = "./database/seeders/data.json";
+        $jsonContent = file_get_contents($jsonFilePath);
+        $dataArray = json_decode($jsonContent, true);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        foreach ($dataArray['users'] as $row) {
+            User::create([
+                "name" => $row['name'],
+                "username" => $row['username'],
+                "password" => Hash::make($row['password']),
+                "role" => $row['role']
+            ]);
+        }
+
+        foreach ($dataArray['categories'] as $row) {
+            Category::create([
+                "name" => $row['name'],
+                "parent_id" => $row['parent_id'],
+                "is_show" => $row['is_show']
+            ]);
+        }
+
+        foreach ($dataArray['products'] as $row) {
+            Product::create([
+                "name" => $row['name'],
+                "description" => $row['description'],
+                "category_id" => $row['category_id'],
+            ]);
+        }
+
+        foreach ($dataArray['images'] as $row) {
+            Image::create([
+                "product_id" => $row['product_id'],
+            ]);
+        }
+
+        foreach ($dataArray['tags'] as $row) {
+            Tag::create([
+                "name" => $row['name'],
+            ]);
+        }
+
+        foreach ($dataArray['tag_products'] as $row) {
+            TagProduct::create([
+                "tag_id" => $row['tag_id'],
+                "product_id" => $row['product_id']
+            ]);
+        }
+
     }
 }
