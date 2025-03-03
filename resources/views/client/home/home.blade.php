@@ -56,6 +56,12 @@
 
     {{-- main page content --}}
     <main class="pb-10 container mx-auto px-4">
+        <div class="mb-8">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+                {{ 'Tất cả' }}
+            </h1>
+            <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
+        </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach ($products as $product)
             <div class="card bg-base-100 shadow-sm group relative overflow-hidden">
