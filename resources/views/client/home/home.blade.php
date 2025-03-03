@@ -28,25 +28,25 @@
 
                 <!-- Popular Tags -->
                 <div class="flex flex-wrap justify-center gap-2 mt-5">
-                    @foreach (['file', 'image', 'video', 'audio', 'document', 'text'] as $tag)
-                        <a href="/search?query={{ $tag }}" class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
+                    @foreach ($tags as $tag)
+                        <a href="/search?query={{ $tag->name }}" class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>
-                            <span>{{ $tag }}</span>
+                            <span>{{ $tag->name }}</span>
                         </a>
                     @endforeach
                 </div>
 
                 <!-- Categories -->
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-24 justify-items-center">
-                    @foreach ([] as $category)
-                        <a href="{{ $category['url'] }}"
+                    @foreach ($categories as $category)
+                        <a href="{{ $category->url }}"
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
                                 <div class="w-10 h-10 md:w-24 md:h-24 rounded-full ring ring-warning ring-offset-2">
-                                    <img src="{{ $category['image'] }}" alt="{{ $category['name'] }}" />
+                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" />
                                 </div>
                             </div>
-                            <div class="mt-2 text-xs md:text-base text-black">{{ $category['name'] }}</div>
+                            <div class="mt-2 text-xs md:text-base text-white">{{ $category->name }}</div>
                         </a>
                     @endforeach
                 </div>
@@ -55,5 +55,27 @@
     </header>
 
     {{-- main page content --}}
-    
+    <main class="pb-10 container mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @foreach ($products as $product)
+            <div class="card bg-base-100 shadow-sm group relative overflow-hidden">
+                <figure class="relative aspect-[4/3]">
+                    <img
+                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        alt="Shoes"
+                        class="w-full h-full object-cover" />
+                    <!-- Overlay that appears on hover -->
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </figure>
+                <div class="card-body absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white flex flex-col justify-center p-4">
+                    <h2 class="card-title text-base sm:text-lg md:text-xl">{{ $product->name }}</h2>
+                    <p class="text-xs sm:text-sm md:text-base line-clamp-3">{{ $product->description }}</p>
+                    <div class="card-actions justify-end mt-2">
+                        <button class="btn btn-outline btn-sm md:btn-md">Xem chi tiết</button>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </main>
 @endsection
