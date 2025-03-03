@@ -11,8 +11,8 @@
         <h6 class="footer-title">Hỗ trợ</h6>
         <a href="tel:0986663155" class="link link-hover">CSKH (8h30 - 21h00)</a>
         <a href="tel:0386185195" class="link link-hover" style="color:#F31260">0386-185-195</a>
-        <a href="mailto:hotro@s99.vn" class="link link-hover">Email Hỗ Trợ</a>
-        <a href="mailto:hotro@s99.vn" class="link link-hover" style="color:#F31260">hotro@s99.vn</a>
+        <a href="mailto:hotro@designsc.vn" class="link link-hover">Email Hỗ Trợ</a>
+        <a href="mailto:hotro@designsc.vn" class="link link-hover" style="color:#F31260">hotro@designsc.vn</a>
 
         <h6 class="footer-title mt-4">Dịch Vụ Và Hỗ Trợ</h6>
         <a href="/page/phuong-thuc-thanh-toan" class="link link-hover">Phương thức thanh toán</a>
@@ -29,7 +29,7 @@
     <nav>
         <h6 class="footer-title">Kết nối với chúng tôi</h6>
         <div class="grid grid-flow-col gap-4">
-            <a href="https://www.facebook.com/groups/tainguyens99" target="_blank" rel="nofollow noopener noreferrer">
+            <a href="https://www.facebook.com/groups/tainguyendesignsc" target="_blank" rel="nofollow noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
                     <path d="M22 12a10 10 0 10-11.5 9.95v-7.05H8v-2.9h2.5V9.5a3.5 3.5 0 013.75-3.85 15.8 15.8 0 012.25.2v2.45h-1.35c-1.35 0-1.8.85-1.8 1.73v2.08h3.6l-.5 2.9h-3.1V22A10 10 0 0022 12z"></path>
                 </svg>
@@ -44,7 +44,7 @@
                     <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2a3 3 0 013 3v10a3 3 0 01-3 3H7a3 3 0 01-3-3V7a3 3 0 013-3h10zm-5 3a5 5 0 100 10 5 5 0 000-10zm0 2a3 3 0 110 6 3 3 0 010-6zm4.5-.5a1.5 1.5 0 11-3.001.001A1.5 1.5 0 0116.5 6.5z"></path>
                 </svg>
             </a>
-            <a href="https://www.youtube.com/@s99vn" target="_blank" rel="nofollow noopener noreferrer">
+            <a href="https://www.youtube.com/@designscvn" target="_blank" rel="nofollow noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current">
                     <path d="M23 12c0-1.08-.09-1.9-.22-2.72-.15-.98-.65-1.84-1.38-2.57C20.73 5.4 19.87 5 18.9 5H5.1C4.13 5 3.27 5.4 2.6 6.71c-.73.73-1.23 1.59-1.38 2.57C1.09 10.1 1 10.92 1 12c0 1.08.09 1.9.22 2.72.15.98.65 1.84 1.38 2.57C3.27 18.6 4.13 19 5.1 19h13.8c.97 0 1.83-.4 2.5-1.71.73-.73 1.23-1.59 1.38-2.57.13-.82.22-1.64.22-2.72zM9.75 15.02V8.98l6.5 3.02-6.5 3.02z"></path>
                 </svg>
