@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 shadow-sm">
+<div class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
     <div class="navbar-start">
         <!-- Mobile dropdown -->
         <div class="dropdown">
@@ -19,8 +19,8 @@
                 <li><a href="/assets/effect">Effect</a></li>
                 <li><a href="/assets/chu-3d">Chữ 3D</a></li>
                 <li><a href="/assets/san-pham-v">VIP</a></li>
-                <li><a href="https://s99.vn/assets/font">Font</a></li>
-                <li><a href="https://s99.vn/assets/viet-nam">Việt Nam</a></li>
+                <li><a href="https://designsc.vn/assets/font">Font</a></li>
+                <li><a href="https://designsc.vn/assets/viet-nam">Việt Nam</a></li>
                 <li><a href="/category">Xem thêm</a></li>
                 <li><a href="/blog">Blog</a></li>
                 <li><a href="/topup-plan">VIP tải không giới hạn</a></li>
@@ -29,8 +29,9 @@
             </ul>
         </div>
         <!-- Logo -->
-        <a class="btn btn-ghost" href="/">
-            <img src="/static/logo.png" alt="S99" width="40" height="30">
+        <a class="btn btn-ghost flex items-center" href="/">
+            <svg width="32" height="32" viewBox="0 0 415 415" xmlns="http://www.w3.org/2000/svg"><rect x="82.5" y="290" width="250" height="125" rx="62.5" fill="#1AD1A5"></rect><circle cx="207.5" cy="135" r="130" fill="black" fill-opacity=".3"></circle><circle cx="207.5" cy="135" r="125" fill="white"></circle><circle cx="207.5" cy="135" r="56" fill="#FF9903"></circle></svg>
+            <span class="ml-1">designSC</span>
         </a>
     </div>
 
@@ -44,8 +45,8 @@
             <li><a href="/assets/effect">Effect</a></li>
             <li><a href="/assets/chu-3d">Chữ 3D</a></li>
             <li><a href="/assets/san-pham-v">VIP</a></li>
-            <li><a href="https://s99.vn/assets/font">Font</a></li>
-            <li><a href="https://s99.vn/assets/viet-nam">Việt Nam</a></li>
+            <li><a href="https://designsc.vn/assets/font">Font</a></li>
+            <li><a href="https://designsc.vn/assets/viet-nam">Việt Nam</a></li>
             <li><a href="/category">Xem thêm</a></li>
         </ul>
     </div>
