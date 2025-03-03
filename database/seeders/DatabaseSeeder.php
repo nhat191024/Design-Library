@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['users'] as $row) {
             User::create([
                 "name" => $row['name'],
-                "username" => $row['username'],
+                "email" => $row['email'],
                 "password" => Hash::make($row['password']),
                 "role" => $row['role']
             ]);
