@@ -59,7 +59,7 @@
                             success: function(data) {
                                 if (data.success) {
                                     // Add new thumbnail
-                                    const newThumbnail = $(createThumbnailElement(data.image_url));
+                                    const newThumbnail = $(createThumbnailElement(data.image_url, data.image_id));
                                     $('.overflow-x-auto').prepend(newThumbnail);
 
                                     // Update main image if empty
@@ -80,25 +80,61 @@
                 });
 
                 // Create thumbnail element
-                function createThumbnailElement(imageUrl) {
+                function createThumbnailElement(imageUrl, imageId) {
                     return `
-                        <div class="relative group flex-none">
+                        <div class="relative group flex-none" id="image-${imageId}">
                             <img class="w-24 h-24 object-cover rounded-lg cursor-pointer hover:ring-1 hover:ring-primary thumbnail-image"
                                 src="${imageUrl}"
                                 alt="Design thumbnail"
                                 onclick="updateMainImage('${imageUrl}')">
                             <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="btn btn-error btn-xs btn-circle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                <button class="btn btn-error btn-xs btn-circle delete-image" data-id="${imageId}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
                                 </button>
                             </div>
                         </div>
                     `;
                 }
+
+                // Handle image deletion
+                $(document).on('click', '.delete-image', function() {
+                    const imageId = $(this).data('id');
+                    const $imageContainer = $(`#image-${imageId}`);
+
+                    if (confirm('Are you sure you want to delete this image?')) {
+                        $.ajax({
+                            url: `{{ url('designs/images') }}/${imageId}`,
+                            type: 'DELETE',
+                            data: {
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    $imageContainer.fadeOut(300, function() {
+                                        $(this).remove();
+
+                                        // If this was the displayed main image, update with next available image
+                                        const mainImageSrc = $('#mainImage').attr('src');
+                                        if (mainImageSrc.includes($imageContainer.find('img').attr('src'))) {
+                                            const nextImage = $('.thumbnail-image').first();
+                                            if (nextImage.length) {
+                                                updateMainImage(nextImage.attr('src'));
+                                            } else {
+                                                $('#mainImage').attr('src', '');
+                                            }
+                                        }
+                                    });
+                                }
+                            },
+                            error: function(error) {
+                                console.error('Error:', error);
+                                alert('Failed to delete image');
+                            }
+                        });
+                    }
+                });
             });
         </script>
     </x-slot>
