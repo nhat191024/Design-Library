@@ -1,6 +1,6 @@
 <section>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
@@ -13,6 +13,7 @@
                                 <th>Description</th>
                                 <th>First Image</th>
                                 <th>Category</th>
+                                <th>Tag</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -28,9 +29,15 @@
                                     </td>
                                     <td>{{ $design->category->name }}</td>
                                     <td>
-                                        <a href="{{ route('designs.edit', $design->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                        @foreach ($design->tags as $tag)
+                                            <span class="badge badge-info">
+                                                {{ $tag->name }}
+                                            </span>
+                                        @endforeach
+                                    <td>
+                                        <a href="{{ route('designs.edit', $design->id) }}"
+                                            class="btn btn-sm btn-primary">Edit</a>
                                         <a href="" class="btn btn-sm btn-error">Delete</a>
-                                        <a href="" class="btn btn-sm btn-info">All Img</a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -42,6 +49,7 @@
                                 <th>Description</th>
                                 <th>First Image</th>
                                 <th>Category</th>
+                                <th>Tag</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
