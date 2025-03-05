@@ -10,6 +10,8 @@ use App\Models\Image;
 use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
+use App\Http\Requests\DesignRequest;
+
 class DesignController extends Controller
 {
     /**
@@ -29,6 +31,22 @@ class DesignController extends Controller
         $designTags = $design->tags->pluck('id')->toArray();
 
         return view('admin.design.index', compact('design', 'categories', 'tags', 'designTags'));
+    }
+
+    public function update(DesignRequest $request, $id)
+    {
+        $design = Product::find($id);
+
+        $design->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category
+        ]);
+
+        $design->save();
+        $design->tags()->sync($request->tags);
+
+        return redirect()->route('designs.index')->with('success', 'Design updated Id ' . $id . ' successfully');
     }
 
     public function uploadImage(Request $request)
