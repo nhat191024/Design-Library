@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['images'] as $row) {
             Image::create([
                 "product_id" => $row['product_id'],
+                "url" => $row['url'],
             ]);
         }
 
