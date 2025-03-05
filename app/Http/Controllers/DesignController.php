@@ -102,4 +102,38 @@ class DesignController extends Controller
         $design->delete();
         return redirect()->route('designs.index')->with('success', 'Design deleted successfully');
     }
+
+    public function create()
+    {
+        $categories = Category::all();
+        $tags = Tag::all();
+        return view('admin.design.index', compact('categories', 'tags'));
+    }
+
+    public function store(DesignRequest $request)
+    {
+        $design = Product::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'category_id' => $request->category
+        ]);
+
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imageName = time() . '_' . $image->getClientOriginalName();
+                $image->move(public_path('images/designs'), $imageName);
+
+                $design->images()->create([
+                    'url' => 'images/designs/' . $imageName
+                ]);
+            }
+        }
+
+        $design->tags()->sync($request->tags);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Design created successfully'
+        ]);
+    }
 }
