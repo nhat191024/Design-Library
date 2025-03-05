@@ -22,8 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/designs/{id}', [DesignController::class, 'showEditForm'])->name('designs.edit');
     Route::patch('/designs/update/{id}', [DesignController::class, 'update'])->name('designs.update');
     Route::post('/designs/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
-    Route::delete('/designs/{id}', [DesignController::class, 'destroy'])->name('designs.destroy');
     Route::delete('/designs/images/{image}', [DesignController::class, 'deleteImage'])->name('designs.delete-image');
+    Route::get('/designs/delete/{id}', [DesignController::class, 'destroy'])->name('designs.destroy');
 });
 
 require __DIR__.'/auth.php';
