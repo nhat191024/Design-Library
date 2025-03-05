@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\CategoryController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/tags/edit/{id}', [TagController::class, 'showEditForm'])->name('tags.edit');
     Route::patch('/tags/update/{id}', [TagController::class, 'update'])->name('tags.update');
     Route::get('/tags/delete/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
+
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+    Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+    Route::post('/categories/store', [CategoryController::class, 'store'])->name('categories.store');
+    Route::get('/categories/edit/{id}', [CategoryController::class, 'showEditForm'])->name('categories.edit');
+    Route::patch('/categories/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
+    Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
 require __DIR__.'/auth.php';
