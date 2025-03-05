@@ -30,7 +30,7 @@
         <script>
             let imageFiles = [];
 
-            function deleteTag(id) {
+            function deleteCategory(id) {
                 if (confirm('Bạn chắc chắn muốn xóa hoàn toàn item này chứ?')) {
                     window.location.href = `{{ url('categories/delete') }}/${id}`;
                 }
