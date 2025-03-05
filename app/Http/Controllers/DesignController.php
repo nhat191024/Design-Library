@@ -77,4 +77,11 @@ class DesignController extends Controller
             'message' => 'Image deleted successfully'
         ]);
     }
+
+    public function destroy($id)
+    {
+        $design = Product::find($id);
+        $design->delete();
+        return redirect()->route('designs.index')->with('success', 'Design deleted successfully');
+    }
 }
