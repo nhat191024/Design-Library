@@ -32,6 +32,10 @@
 @endisset
 
 <body class="font-sans antialiased">
+
+    <!-- Toast container -->
+    <div id="toast-container" class="toast toast-top toast-end z-50"></div>
+
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.admin.navigation')
 
@@ -59,6 +63,59 @@
 
 <!-- select picker -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Toast Script -->
+@if (session('success') || session('error'))
+    <script>
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const alert = document.createElement('div');
+
+            // Thêm classes animation
+            alert.className =
+                `alert ${type === 'success' ? 'alert-success' : 'alert-error'} shadow-lg transform translate-x-full opacity-0 transition-all duration-300 ease-in-out`;
+
+            alert.innerHTML = `
+                <div>
+                    <span>${message}</span>
+                </div>
+                <div class="flex-none">
+                    <button onclick="closeToast(this.parentElement.parentElement)" class="btn btn-sm btn-ghost">✕</button>
+                </div>
+            `;
+
+            container.appendChild(alert);
+
+            // Trigger animation vào
+            setTimeout(() => {
+                alert.classList.remove('translate-x-full', 'opacity-0');
+            }, 100);
+
+            // Tự động đóng sau 5s
+            setTimeout(() => {
+                closeToast(alert);
+            }, 5000);
+        }
+
+        function closeToast(element) {
+            // Animation khi ẩn
+            element.classList.add('translate-x-full', 'opacity-0');
+
+            // Xóa element sau khi animation hoàn thành
+            setTimeout(() => {
+                element.remove();
+            }, 300);
+        }
+
+        @if (session('success'))
+            showToast("{{ session('success') }}", 'success');
+        @endif
+
+        @if (session('error'))
+            showToast("{{ session('error') }}", 'error');
+        @endif
+    </script>
+@endif
 
 <!-- script -->
 @isset($script)
