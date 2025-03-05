@@ -12,20 +12,7 @@
             <ul tabindex="0"
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
                 <li><a href="/">Trang chủ</a></li>
-                <li><a href="/assets/tai-nguyen-khac">File Mới</a></li>
-                <li><a href="/assets/plugin">Plugin</a></li>
-                <li><a href="/assets/video-edit">Video</a></li>
-                <li><a href="/assets/brush">Brush</a></li>
-                <li><a href="/assets/effect">Effect</a></li>
-                <li><a href="/assets/chu-3d">Chữ 3D</a></li>
-                <li><a href="/assets/san-pham-v">VIP</a></li>
-                <li><a href="https://designsc.vn/assets/font">Font</a></li>
-                <li><a href="https://designsc.vn/assets/viet-nam">Việt Nam</a></li>
-                <li><a href="/category">Xem thêm</a></li>
-                <li><a href="/blog">Blog</a></li>
-                <li><a href="/topup-plan">VIP tải không giới hạn</a></li>
-                <li><a href="/signup?callback=/">Đăng ký</a></li>
-                <li><a href="/login?callback=/">Đăng nhập</a></li>
+                <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
             </ul>
         </div>
         <!-- Logo -->
@@ -38,22 +25,13 @@
     <div class="navbar-center hidden lg:flex">
         <ul class="menu menu-horizontal px-1">
             <li><a href="/">Trang chủ</a></li>
-            <li><a href="/assets/tai-nguyen-khac">File Mới</a></li>
-            <li><a href="/assets/plugin">Plugin</a></li>
-            <li><a href="/assets/video-edit">Video</a></li>
-            <li><a href="/assets/brush">Brush</a></li>
-            <li><a href="/assets/effect">Effect</a></li>
-            <li><a href="/assets/chu-3d">Chữ 3D</a></li>
-            <li><a href="/assets/san-pham-v">VIP</a></li>
-            <li><a href="https://designsc.vn/assets/font">Font</a></li>
-            <li><a href="https://designsc.vn/assets/viet-nam">Việt Nam</a></li>
-            <li><a href="/category">Xem thêm</a></li>
+            <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
         </ul>
     </div>
 
     <div class="navbar-end">
         <ul class="menu menu-horizontal px-1">
-            <li><a href="/blog">Liên hệ</a></li>
+            <li><a href="/">Liên hệ</a></li>
         </ul>
     </div>
 </div>
