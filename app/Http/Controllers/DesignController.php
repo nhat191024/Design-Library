@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Image;
 
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class DesignController extends Controller
@@ -49,7 +51,8 @@ class DesignController extends Controller
 
             return response()->json([
                 'success' => true,
-                'image_url' => asset('images/designs/' . $imageName)
+                'image_url' => asset('images/designs/' . $imageName),
+                'image_id' => $design->images->last()->id
             ]);
         }
 
@@ -57,5 +60,21 @@ class DesignController extends Controller
             'success' => false,
             'message' => 'Upload failed'
         ], 400);
+    }
+
+    public function deleteImage($imageId)
+    {
+        $image = Image::findOrFail($imageId);
+
+        if (File::exists(public_path($image->url))) {
+            File::delete(public_path($image->url));
+        }
+
+        $image->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Image deleted successfully'
+        ]);
     }
 }
