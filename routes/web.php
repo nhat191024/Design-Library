@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DesignController;
+use App\Http\Controllers\TagController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/designs/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
     Route::delete('/designs/images/{image}', [DesignController::class, 'deleteImage'])->name('designs.delete-image');
     Route::get('/designs/delete/{id}', [DesignController::class, 'destroy'])->name('designs.destroy');
+
+    Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
+    Route::post('/tags/store', [TagController::class, 'store'])->name('tags.store');
+    Route::get('/tags/edit/{id}', [TagController::class, 'showEditForm'])->name('tags.edit');
+    Route::patch('/tags/update/{id}', [TagController::class, 'update'])->name('tags.update');
+    Route::get('/tags/delete/{id}', [TagController::class, 'destroy'])->name('tags.destroy');
 });
 
 require __DIR__.'/auth.php';

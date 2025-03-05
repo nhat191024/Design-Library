@@ -34,6 +34,7 @@
                                                 {{ $tag->name }}
                                             </span>
                                         @endforeach
+                                    </td>
                                     <td>
                                         <a href="{{ route('designs.edit', $design->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
