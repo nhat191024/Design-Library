@@ -10,15 +10,10 @@
         </ul>
     </div>
 
-    {{-- Product Details Section --}}
 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-    {{-- Product Image Carousel --}}
     <div class="relative">
-        {{-- Sale Badge --}}
         <div class="absolute left-4 top-4 z-10">
-            {{-- <div class="badge badge-error text-white px-4 py-3">Ưu đãi!</div> --}}
         </div>
-        {{-- Main Image Carousel --}}
         <div class="carousel w-full">
             @if($product->Images->count() > 0)
                 @foreach($product->Images as $index => $image)
