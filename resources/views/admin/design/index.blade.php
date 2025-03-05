@@ -119,13 +119,14 @@
                         data: formData,
                         processData: false,
                         contentType: false,
-                        success: function(data) {
-                            if (data.success) {
-                                window.location.href = '{{ route("designs.index") }}';
+                        success: function(response) {
+                            if (response.success) {
+                                window.location.href = response.redirect;
                             }
                         },
-                        error: function(error) {
-                            console.error('Error:', error);
+                        error: function(xhr) {
+                            const response = xhr.responseJSON;
+                            alert(response.message || 'An error occurred while creating the design.');
                         }
                     });
                 });

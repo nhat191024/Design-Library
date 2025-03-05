@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Product;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Requests\StoreCategoryRequest;
+use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Http\Request;
 
 
@@ -26,7 +27,7 @@ class CategoryController extends Controller
         return view('admin.category.index', compact('category'));
     }
 
-    public function update(CategoryRequest $request, $id)
+    public function update(UpdateCategoryRequest $request, $id)
     {
         try {
             $category = Category::find($id);
@@ -80,7 +81,7 @@ class CategoryController extends Controller
         return view('admin.category.index');
     }
 
-    public function store(CategoryRequest $request)
+    public function store(StoreCategoryRequest $request)
     {
         try {
             $category = new Category();
