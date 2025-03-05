@@ -4,7 +4,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    <button class="btn btn-success float-end mb-5">Add design</button>
+                    <a href="{{ route('designs.create') }}" class="btn btn-success float-end mb-5">Add design</a>
                     <table id="design-table" class="display order-column">
                         <thead>
                             <tr>
@@ -37,7 +37,8 @@
                                     <td>
                                         <a href="{{ route('designs.edit', $design->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
-                                        <a href="" class="btn btn-sm btn-error">Delete</a>
+                                        <button class="btn btn-sm btn-error"
+                                            onclick="deleteDesign({{ $design->id }})">Delete</button>
                                     </td>
                                 </tr>
                             @endforeach
