@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
+    Route::get('/designs/create', [DesignController::class, 'create'])->name('designs.create');
+    Route::post('/designs/store', [DesignController::class, 'store'])->name('designs.store');
     Route::get('/designs/edit/{id}', [DesignController::class, 'showEditForm'])->name('designs.edit');
     Route::patch('/designs/update/{id}', [DesignController::class, 'update'])->name('designs.update');
     Route::post('/designs/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
