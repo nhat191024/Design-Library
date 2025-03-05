@@ -25,6 +25,13 @@
 
     <x-slot name="script">
         <script>
+
+            function deleteDesign(id) {
+                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn item này chứ?')) {
+                    window.location.href = `{{ url('designs/delete') }}/${id}`;
+                }
+            }
+
             $(document).ready(function() {
                 // DataTable initialization
                 $('#design-table').DataTable({
@@ -47,7 +54,7 @@
 
                         let formData = new FormData();
                         formData.append('image', this.files[0]);
-                        formData.append('design_id', '{{ $design->id ?? "" }}');
+                        formData.append('design_id', '{{ $design->id ?? '' }}');
                         formData.append('_token', '{{ csrf_token() }}');
 
                         $.ajax({
@@ -59,7 +66,8 @@
                             success: function(data) {
                                 if (data.success) {
                                     // Add new thumbnail
-                                    const newThumbnail = $(createThumbnailElement(data.image_url, data.image_id));
+                                    const newThumbnail = $(createThumbnailElement(data.image_url,
+                                        data.image_id));
                                     $('.overflow-x-auto').prepend(newThumbnail);
 
                                     // Update main image if empty
@@ -117,7 +125,8 @@
 
                                         // If this was the displayed main image, update with next available image
                                         const mainImageSrc = $('#mainImage').attr('src');
-                                        if (mainImageSrc.includes($imageContainer.find('img').attr('src'))) {
+                                        if (mainImageSrc.includes($imageContainer.find(
+                                                'img').attr('src'))) {
                                             const nextImage = $('.thumbnail-image').first();
                                             if (nextImage.length) {
                                                 updateMainImage(nextImage.attr('src'));
