@@ -11,12 +11,12 @@ use App\Models\Tag;
 class HomeController extends Controller
 {
     private $PAGE_TITLE = "Design Showcase";
-    
+
     public function index()
     {
-        $tags = Tag::all();
-        $categories = Category::all();
-        $products = Product::with('Category', 'Images', 'Tags')->get();
+        $tags = Tag::latest()->limit(50)->get();
+        $categories = Category::latest()->limit(15)->get();
+        $products = Product::with(['Category', 'Images', 'Tags'])->latest()->limit(28)->get();
         return view('client.home.home')->with([
             'title' => $this->PAGE_TITLE,
             'tags' => $tags,
