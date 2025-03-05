@@ -8,9 +8,9 @@ use App\Models\Tag;
 use App\Models\Image;
 
 use Illuminate\Support\Facades\File;
+use App\Http\Requests\StoreDesignRequest;
+use App\Http\Requests\UpdateDesignRequest;
 use Illuminate\Http\Request;
-
-use App\Http\Requests\DesignRequest;
 
 class DesignController extends Controller
 {
@@ -33,7 +33,7 @@ class DesignController extends Controller
         return view('admin.design.index', compact('design', 'categories', 'tags', 'designTags'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateDesignRequest $request, $id)
     {
         try {
             $design = Product::find($id);
@@ -121,20 +121,13 @@ class DesignController extends Controller
         return view('admin.design.index', compact('categories', 'tags'));
     }
 
-    public function store(Request $request)
+    public function store(StoreDesignRequest $request)
     {
         try {
-            $validated = $request->validate([
-                'name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'category' => 'required|exists:categories,id',
-                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
-            ]);
-
             $design = Product::create([
-                'name' => $validated['name'],
-                'description' => $validated['description'],
-                'category_id' => $validated['category']
+                'name' => $request['name'],
+                'description' => $request['description'],
+                'category_id' => $request['category']
             ]);
 
             if ($request->hasFile('images')) {
@@ -152,9 +145,25 @@ class DesignController extends Controller
                 $design->tags()->sync($request->tags);
             }
 
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Design created successfully',
+                    'redirect' => route('designs.index')
+                ]);
+            }
+
             return redirect()->route('designs.index')
                 ->with('success', 'Design created successfully');
+
         } catch (\Exception $e) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error creating design: ' . $e->getMessage()
+                ], 422);
+            }
+
             return redirect()->back()
                 ->with('error', 'Error creating design: ' . $e->getMessage())
                 ->withInput();
