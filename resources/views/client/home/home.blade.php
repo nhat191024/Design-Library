@@ -1,6 +1,6 @@
 @extends('client.layouts.master')
 @section('content')
-    <header class="hero bg-base-100 py-10 md:py-28">
+    <header class="hero bg-base-100 pt-10 md:pt-28">
         <div class="hero-content text-center">
             <div class="max-w-4xl">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">Kho tài nguyên thiết kế chất lượng nhất Việt Nam</h1>
@@ -22,14 +22,14 @@
                             </label>
                             <div class="validator-hint hidden">Vui lòng nhập khóa</div>
                         </div>
-                        <button id="btn-search-submit" class="btn btn-soft join-item">Tìm kiếm</button>
+                        <button onclick="search()" id="btn-search-submit" class="btn btn-soft join-item">Tìm kiếm</button>
                     </div>
                 </div>
 
                 <!-- Popular Tags -->
                 <div class="flex flex-wrap justify-center gap-2 mt-5">
                     @foreach ($tags as $tag)
-                        <a href="/search?query={{ $tag->name }}" class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
+                        <a href="/products?q={{ $tag->name }}" class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>
                             <span>{{ $tag->name }}</span>
                         </a>
@@ -39,11 +39,11 @@
                 <!-- Categories -->
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-24 justify-items-center">
                     @foreach ($categories as $category)
-                        <a href="{{ $category->url }}"
+                        <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}"
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
                                 <div class="w-10 h-10 md:w-24 md:h-24 rounded-full ring ring-warning ring-offset-2">
-                                    <img src="{{ $category->image }}" alt="{{ $category->name }}" />
+                                    <img src="{{ $category->image }}" alt="{{ '' }}" />
                                 </div>
                             </div>
                             <div class="mt-2 text-xs md:text-base text-white">{{ $category->name }}</div>
@@ -56,32 +56,31 @@
 
     {{-- main page content --}}
     <main class="pb-10 container mx-auto px-4">
-        <div class="mb-8">
+        @foreach ($categories as $category)
+        <div class="mb-4 mt-12">
             <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
-                {{ 'Tất cả' }}
+                {{ $category->name }}
             </h1>
             <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @foreach ($products as $product)
-            <div class="card bg-base-100 shadow-sm group relative overflow-hidden">
-                <figure class="relative aspect-[4/3]">
-                    <img
-                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                        alt="Shoes"
-                        class="w-full h-full object-cover" />
-                    <!-- Overlay that appears on hover -->
-                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </figure>
-                <div class="card-body absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white flex flex-col justify-center p-4">
-                    <h2 class="card-title text-base sm:text-lg md:text-xl">{{ $product->name }}</h2>
-                    <p class="text-xs sm:text-sm md:text-base line-clamp-3">{{ $product->description }}</p>
-                    <div class="card-actions justify-end mt-2">
-                        <button class="btn btn-outline btn-sm md:btn-md">Xem chi tiết</button>
-                    </div>
-                </div>
-            </div>
-            @endforeach
+            @include('client.partials.products-loop', ['products' => $category->Products])
+        </div>
+        @endforeach
+        <div class="mt-12 mb-4">
+            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+                {{ 'Mới nhất' }}
+            </h1>
+            <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @include('client.partials.products-loop')
         </div>
     </main>
+    <script>
+        function search() {
+            const query = document.querySelector('input[type="search"]').value;
+            window.location.href = `/products?q=${query}`;
+        }
+    </script>
 @endsection
