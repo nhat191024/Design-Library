@@ -6,7 +6,8 @@
     <div class="text-sm breadcrumbs mb-6">
         <ul>
             <li><a href="/">Trang chủ</a></li>
-            <li><a href="/hoa-tiet">Chi tiết</a></li>
+            <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
+            <li><a href="#">Chi tiết</a></li>
         </ul>
     </div>
 
@@ -63,7 +64,7 @@
         {{-- Category --}}
         <div>
             <span class="text-gray-600">Danh mục: </span>
-            <a href="#" class="link link-hover">{{ $product->Category->name }}</a>
+            <a href="{{ route('client.shop.category', ['slug' => $product->Category->slug]) }}" class="link link-hover">{{ $product->Category->name }}</a>
         </div>
 
         {{-- Action Buttons --}}
