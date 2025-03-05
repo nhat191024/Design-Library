@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
+    Route::get('/designs/{id}', [DesignController::class, 'showEditForm'])->name('designs.edit');
+    Route::post('/designs/upload-image', [DesignController::class, 'uploadImage'])->name('designs.upload-image');
 });
 
 require __DIR__.'/auth.php';
