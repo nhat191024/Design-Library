@@ -33,20 +33,25 @@ class DesignController extends Controller
         return view('admin.design.index', compact('design', 'categories', 'tags', 'designTags'));
     }
 
-    public function update(DesignRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $design = Product::find($id);
+        try {
+            $design = Product::find($id);
+            $design->update([
+                'name' => $request->name,
+                'description' => $request->description,
+                'category_id' => $request->category
+            ]);
 
-        $design->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'category_id' => $request->category
-        ]);
+            $design->save();
+            $design->tags()->sync($request->tags);
 
-        $design->save();
-        $design->tags()->sync($request->tags);
-
-        return redirect()->route('designs.index')->with('success', 'Design updated Id ' . $id . ' successfully');
+            return redirect()->route('designs.index')
+                ->with('success', 'Design updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error updating design: ' . $e->getMessage());
+        }
     }
 
     public function uploadImage(Request $request)
@@ -98,9 +103,15 @@ class DesignController extends Controller
 
     public function destroy($id)
     {
-        $design = Product::find($id);
-        $design->delete();
-        return redirect()->route('designs.index')->with('success', 'Design deleted successfully');
+        try {
+            $design = Product::find($id);
+            $design->delete();
+            return redirect()->route('designs.index')
+                ->with('success', 'Design deleted successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error deleting design: ' . $e->getMessage());
+        }
     }
 
     public function create()
@@ -110,30 +121,43 @@ class DesignController extends Controller
         return view('admin.design.index', compact('categories', 'tags'));
     }
 
-    public function store(DesignRequest $request)
+    public function store(Request $request)
     {
-        $design = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'category_id' => $request->category
-        ]);
+        try {
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'category' => 'required|exists:categories,id',
+                'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
+            ]);
 
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imageName = time() . '_' . $image->getClientOriginalName();
-                $image->move(public_path('images/designs'), $imageName);
+            $design = Product::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'category_id' => $validated['category']
+            ]);
 
-                $design->images()->create([
-                    'url' => 'images/designs/' . $imageName
-                ]);
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = time() . '_' . $image->getClientOriginalName();
+                    $image->move(public_path('images/designs'), $imageName);
+
+                    $design->images()->create([
+                        'url' => 'images/designs/' . $imageName
+                    ]);
+                }
             }
+
+            if ($request->has('tags')) {
+                $design->tags()->sync($request->tags);
+            }
+
+            return redirect()->route('designs.index')
+                ->with('success', 'Design created successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error creating design: ' . $e->getMessage())
+                ->withInput();
         }
-
-        $design->tags()->sync($request->tags);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Design created successfully'
-        ]);
     }
 }
