@@ -117,6 +117,7 @@
                             complete: function() {
                                 $('#image').val('');
                                 $progressBar.addClass('hidden');
+                                showToast('Image added successfully.', 'success');
                             }
                         });
                     }
