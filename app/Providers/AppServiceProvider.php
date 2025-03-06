@@ -21,8 +21,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Share categories to all views (so we can display them in the header)
-        // only get 6 of them to avoid ugly/bad header
-        View::share('shared_categories', Category::where('is_show', 1)->latest()->take(6)->get());
+        // the try catch block is to prevent the error when the database is not yet migrated
+        try {
+            // Share categories to all views (so we can display them in the header)
+            // only get 6 of them to avoid ugly/bad header
+            View::share('shared_categories', Category::where('is_show', 1)->latest()->take(6)->get());
+        } catch (\Throwable $th) {
+        }
     }
 }
