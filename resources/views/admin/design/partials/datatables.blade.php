@@ -24,8 +24,12 @@
                                     <td>{{ $design->name }}</td>
                                     <td>{{ $design->description }}</td>
                                     <td>
-                                        <img class="w-24 h-24 object-cover mx-auto"
-                                            src="{{ asset($design->images->first()->url) }}" alt="">
+                                        @if ($design->images && $design->images->count() > 0)
+                                            <img class="w-24 h-24 object-cover mx-auto"
+                                                src="{{ asset($design->images->first()->url) }}" alt="">
+                                        @else
+                                            <p>Image error</p>
+                                        @endif
                                     </td>
                                     <td>{{ $design->category->name }}</td>
                                     <td>
