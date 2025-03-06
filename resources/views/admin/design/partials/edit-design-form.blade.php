@@ -62,8 +62,8 @@
 
                                 <div>
                                     <x-input-label for="image" :value="__('Design Image')" />
-                                    <x-file-input id="image" name="image" class="mt-1 block w-full"
-                                        accept="image/*" onchange="uploadImage(this)" />
+                                    <x-file-input id="image-edit" name="image" class="mt-1 block w-full"
+                                        accept="image/*"  />
                                     <div id="upload-progress" class="hidden mt-2">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                                             <div class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
@@ -73,9 +73,9 @@
                                 </div>
 
                                 <div>
-                                    <button class="btn btn-error" type="button" onclick="window.history.back()">
+                                    <a class="btn btn-error" href="{{ route('designs.index') }}">
                                         Cancel Edit
-                                    </button>
+                                    </a>
                                     <button type="submit" class="btn btn-primary">
                                         Edit Design
                                     </button>
