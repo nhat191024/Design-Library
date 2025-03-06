@@ -22,9 +22,12 @@
     ],
 
     "images": [
-        { "id": 1, "product_id": 1 },
-        { "id": 2, "product_id": 2 },
-        { "id": 3, "product_id": 3 }
+        { "id": 1, "product_id": 1 , "url":"images/designs/img1.png"},
+        { "id": 2, "product_id": 1 , "url":"images/designs/img2.jpg"},
+        { "id": 3, "product_id": 2 , "url":"images/designs/img3.png"},
+        { "id": 4, "product_id": 2 , "url":"images/designs/img1.png"},
+        { "id": 5, "product_id": 3 , "url":"images/designs/img2.jpg"},
+        { "id": 6, "product_id": 3 , "url":"images/designs/img3.png"}
     ],
 
     "tag_products": [

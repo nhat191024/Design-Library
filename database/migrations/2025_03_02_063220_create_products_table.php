@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name');
             $table->text('description')->nullable();
+            $table->text('slug');
             $table->unsignedBigInteger('category_id'); // Foreign key to category
             $table->timestamps();
 
