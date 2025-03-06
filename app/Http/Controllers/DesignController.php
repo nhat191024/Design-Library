@@ -89,6 +89,13 @@ class DesignController extends Controller
     {
         $image = Image::findOrFail($imageId);
 
+        if ($image->product->images->count() === 1) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Design must have at least one image'
+            ], 200);
+        }
+
         if (File::exists(public_path($image->url))) {
             File::delete(public_path($image->url));
         }
@@ -140,9 +147,10 @@ class DesignController extends Controller
                     ]);
                 }
             } else {
-                $design->images()->create([
-                    'url' => 'images/designs/default.png'
-                ]);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Design must have at least one image'
+                ], 200);
             }
 
             if ($request->has('tags')) {
@@ -159,7 +167,6 @@ class DesignController extends Controller
 
             return redirect()->route('designs.index')
                 ->with('success', 'Design created successfully');
-
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
