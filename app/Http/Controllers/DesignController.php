@@ -139,6 +139,10 @@ class DesignController extends Controller
                         'url' => 'images/designs/' . $imageName
                     ]);
                 }
+            } else {
+                $design->images()->create([
+                    'url' => 'images/designs/default.png'
+                ]);
             }
 
             if ($request->has('tags')) {
