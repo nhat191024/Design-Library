@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Tag;
+use App\Models\TagProduct;
 
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
@@ -54,6 +55,11 @@ class TagController extends Controller
     public function destroy($id)
     {
         try {
+            $tagProduct = TagProduct::where('tag_id', $id)->first();
+            if ($tagProduct) {
+                return redirect()->back()
+                    ->with('error', 'Error deleting tag: Tag is associated with a product');
+            }
             $design = Tag::find($id);
             $design->delete();
             return redirect()->route('tags.index')
