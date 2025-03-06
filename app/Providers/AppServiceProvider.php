@@ -23,6 +23,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Share categories to all views (so we can display them in the header)
         // only get 6 of them to avoid ugly/bad header
-        View::share('shared_categories', Category::latest()->take(6)->get());
+        View::share('shared_categories', Category::where('is_show', 1)->latest()->take(6)->get());
     }
 }
