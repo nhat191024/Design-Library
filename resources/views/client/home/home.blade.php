@@ -18,7 +18,8 @@
                                         <path d="m21 21-4.3-4.3"></path>
                                     </g>
                                 </svg>
-                                <input type="search" class="grow input input-ghost focus:outline-none" placeholder="Gõ từ khóa tài nguyên bạn cần" />
+                                <input type="search" class="grow input input-ghost focus:outline-none"
+                                    placeholder="Gõ từ khóa tài nguyên bạn cần" />
                             </label>
                             <div class="validator-hint hidden">Vui lòng nhập khóa</div>
                         </div>
@@ -29,7 +30,8 @@
                 <!-- Popular Tags -->
                 <div class="flex flex-wrap justify-center gap-2 mt-5">
                     @foreach ($tags as $tag)
-                        <a href="/products?q={{ $tag->name }}" class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
+                        <a href="/products?q={{ $tag->name }}"
+                            class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>
                             <span>{{ $tag->name }}</span>
                         </a>
@@ -43,7 +45,7 @@
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
                                 <div class="w-10 h-10 md:w-24 md:h-24 rounded-full ring ring-warning ring-offset-2">
-                                    <img src="{{ $category->image }}" alt="{{ '' }}" />
+                                    <img src="{{ asset($category->image) }}" alt="category" />
                                 </div>
                             </div>
                             <div class="mt-2 text-xs md:text-base text-white">{{ $category->name }}</div>
@@ -57,15 +59,15 @@
     {{-- main page content --}}
     <main class="pb-10 container mx-auto px-4">
         @foreach ($categories as $category)
-        <div class="mb-4 mt-12">
-            <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
-                {{ $category->name }}
-            </h1>
-            <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            @include('client.partials.products-loop', ['products' => $category->Products])
-        </div>
+            <div class="mb-4 mt-12">
+                <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
+                    {{ $category->name }}
+                </h1>
+                <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                @include('client.partials.products-loop', ['products' => $category->Products])
+            </div>
         @endforeach
         <div class="mt-12 mb-4">
             <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold">
