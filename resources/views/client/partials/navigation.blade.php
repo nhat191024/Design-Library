@@ -26,6 +26,10 @@
         <ul class="menu menu-horizontal px-1">
             <li><a href="/">Trang chủ</a></li>
             <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
+            @foreach ($shared_categories as $shared_category)
+                <li><a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ $shared_category->name }}</a></li>
+            @endforeach
+
         </ul>
     </div>
 
