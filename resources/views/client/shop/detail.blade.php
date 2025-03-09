@@ -113,7 +113,9 @@
         <div class="border-t border-gray-200 py-8">
             <div class="container mx-auto px-4">
                 <h1 class="text-2xl font-bold text-center mb-8">Xem thêm thiết kế khác liên quan</h1>
-                @include('client.partials.products-loop', ['products' => $products])
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    @include('client.partials.products-loop', ['products' => $products->take(16)])
+                </div>
             </div>
         </div>
     </div>
