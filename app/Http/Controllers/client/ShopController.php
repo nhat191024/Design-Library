@@ -24,7 +24,7 @@ class ShopController extends Controller
             $products = Product::with('Category', 'Images', 'Tags')->paginate(48);
         }
 
-        $tags = Tag::all()->unique('name');
+        $tags = Tag::latest()->get()->unique('name');
         $categories = Category::all();
 
         return view('client.shop.index')->with([
@@ -163,7 +163,7 @@ class ShopController extends Controller
             return redirect()->route('client.shop.index');
         }
         $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
-        $tags = Tag::all()->unique('name');
+        $tags = Tag::latest()->get()->unique('name');
         $categories = Category::all();
         return view('client.shop.index')->with([
             'title' => $category->name,
