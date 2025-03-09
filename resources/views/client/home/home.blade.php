@@ -3,8 +3,8 @@
     <header class="hero bg-base-100 pt-10 md:pt-5">
         <div class="hero-content text-center pb-0">
             <div class="max-w-4xl">
-                <h1 class="text-3xl md:text-5xl font-bold mb-4">Kho tài nguyên thiết kế chất lượng nhất Việt Nam</h1>
-                <h5 class="mb-6">Các file tài nguyên mới sẽ được update mỗi ngày</h5>
+                <h1 class="text-3xl md:text-5xl font-bold mb-4">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
+                <h5 class="mb-6">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
 
                 <!-- Search Bar Container -->
                 <div class="flex justify-center w-full px-4">
