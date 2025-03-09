@@ -61,7 +61,13 @@
     {{-- main page content --}}
     <main class="pb-10 container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div class="flex-col justify-center col-span-full mt-4">
+                {{ $products->links() }}
+            </div>
             @include('client.partials.products-loop')
+            <div class="flex-col justify-center col-span-full mt-4">
+                {{ $products->links() }}
+            </div>
         </div>
     </main>
     <script>
