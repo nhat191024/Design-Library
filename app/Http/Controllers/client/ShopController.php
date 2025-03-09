@@ -21,10 +21,10 @@ class ShopController extends Controller
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
-            $products = Product::with('Category', 'Images', 'Tags')->get();
+            $products = Product::with('Category', 'Images', 'Tags')->paginate(48);
         }
 
-        $tags = Tag::all();
+        $tags = Tag::all()->unique('name');
         $categories = Category::all();
 
         return view('client.shop.index')->with([
@@ -47,20 +47,20 @@ class ShopController extends Controller
     {
         try {
             $products = Product::search($query, function ($meilisearch, $query, $options) {
-                $options['typoTolerance'] = [
-                    'enabled' => true,
-                    'minWordSizeForTypos' => [
-                        'oneTypo' => 3,
-                        'twoTypos' => 6
-                    ],
-                    'disableOnWords' => [],
-                    'disableOnAttributes' => []
-                ];
+            $options['typoTolerance'] = [
+                'enabled' => true,
+                'minWordSizeForTypos' => [
+                'oneTypo' => 3,
+                'twoTypos' => 6
+                ],
+                'disableOnWords' => [],
+                'disableOnAttributes' => []
+            ];
 
-                return $meilisearch->search($query, $options);
+            return $meilisearch->search($query, $options);
             })
-                ->with('Category', 'Images', 'Tags')
-                ->get();
+            ->with('Category', 'Images', 'Tags')
+            ->paginate(48);
             return $products;
         } catch (\Exception $e) {
             return null;
@@ -100,7 +100,7 @@ class ShopController extends Controller
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
             });
         });
-        $products = $query->get();
+        $products = $query->paginate(48);
         return $products;
     }
 
@@ -122,7 +122,7 @@ class ShopController extends Controller
             }
             if ($image->url === null) {
                 abort(404);
-            }  
+            }
             return response()->download(public_path($image->url), null, [
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
             ]);
@@ -162,8 +162,8 @@ class ShopController extends Controller
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
-        $products = $category->Products()->with('Category', 'Images', 'Tags')->get();
-        $tags = Tag::all();
+        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
+        $tags = Tag::all()->unique('name');
         $categories = Category::all();
         return view('client.shop.index')->with([
             'title' => $category->name,
@@ -181,7 +181,7 @@ class ShopController extends Controller
             return redirect()->route('client.shop.index');
         }
         try {
-            $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->with('Category', 'Images', 'Tags')->get();
+            $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->with('Category', 'Images', 'Tags')->paginate(48);
         } catch (\Exception $e) {
             $relatedProducts = [];
         }
