@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
+<div class="navbar sticky top-0 z-50 backdrop-blur-md bg-base-100/70 shadow-sm">
     <div class="navbar-start">
         <!-- Mobile dropdown -->
         <div class="dropdown">
