@@ -39,9 +39,7 @@
                 const highlightedText = highlightKeyword(suggestion, keyword);
 
                 suggestionsList.append(`
-                        <li class="px-4 py-2 hover:bg-base-200 cursor-pointer suggestion-item">
-                            ${highlightedText}
-                        </li>
+                        <li class="px-4 py-2 hover:bg-base-200 cursor-pointer suggestion-item">${highlightedText}</li>
                     `);
             });
 
