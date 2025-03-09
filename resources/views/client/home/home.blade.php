@@ -10,7 +10,7 @@
                 <div class="flex justify-center w-full px-4">
                     <div class="form-control w-full max-w-3xl">
                         <div class="join w-full">
-                            <div class="w-full">
+                            <div class="w-full relative">
                                 <label class="input validator join-item w-full">
                                     <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                         <g stroke-linejoin="round" stroke-linecap="round" stroke-width="2.5" fill="none"
@@ -20,9 +20,16 @@
                                         </g>
                                     </svg>
                                     <input type="search" class="grow input input-ghost focus:outline-none"
-                                        placeholder="Gõ từ khóa tài nguyên bạn cần" />
+                                        id="search-input"
+                                        placeholder="Gõ từ khóa tài nguyên bạn cần"
+                                        autocomplete="off" />
                                 </label>
                                 <div class="validator-hint hidden">Vui lòng nhập khóa</div>
+
+                                {{-- Suggestions Dropdown --}}
+                                <div id="search-suggestions" class="absolute z-20 w-full mt-1 bg-base-100 shadow-lg rounded-md border border-base-300 hidden">
+                                    <ul class="py-2 max-h-60 overflow-y-auto text-left"></ul>
+                                </div>
                             </div>
                             <button onclick="search()" id="btn-search-submit" class="btn btn-soft join-item whitespace-nowrap">Tìm kiếm</button>
                         </div>
@@ -31,7 +38,7 @@
 
                 <!-- Popular Tags -->
                 <div class="flex flex-wrap justify-center gap-2 mt-5">
-                    @foreach ($tags as $tag)
+                    @foreach ($tags->take(30) as $tag)
                         <a href="/products?q={{ $tag->name }}"
                             class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>
@@ -91,4 +98,5 @@
             window.location.href = `/products?q=${query}`;
         }
     </script>
+    @include('client.partials.search-suggestions')
 @endsection
