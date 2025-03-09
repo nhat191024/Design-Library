@@ -2,7 +2,8 @@
 <div class="card bg-base-100 shadow-sm group relative overflow-hidden cursor-pointer" onclick="handleClick(event, this, '{{ route('client.product.detail', ['slug' => $product->slug]) }}')">
     <figure class="relative aspect-[4/3]">
         <img
-            src="{{ asset($product->Images[0]->url ?? 'placeholder.jpg') }}"
+            src="{{ asset($product->Images[0]->url ?? '/images/designs/placeholder.jpg') }}"
+            onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';"
             alt="{{ $product->name }}"
             class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
