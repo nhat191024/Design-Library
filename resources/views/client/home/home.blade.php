@@ -47,7 +47,7 @@
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
                                 <div class="w-10 h-10 md:w-14 md:h-14 rounded-full ring ring-warning ring-offset-2">
-                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" />
+                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';" />
                                 </div>
                             </div>
                             <div class="mt-2 text-xs md:text-base">{{ $category->name }}</div>
