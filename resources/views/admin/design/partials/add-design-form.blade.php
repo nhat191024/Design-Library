@@ -82,7 +82,7 @@
 
                             <!-- Main Image Preview -->
                             <div class="w-full aspect-square mb-4">
-                                <img id="mainImage" src="" class="w-full h-full object-cover rounded-lg hidden"
+                                <img id="mainImage" src="" class="w-full h-full object-contain rounded-lg hidden"
                                     alt="Main design image">
                             </div>
 

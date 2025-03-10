@@ -92,7 +92,7 @@
                             <!-- Main Image -->
                             <div class="w-full aspect-square mb-4">
                                 <img id="mainImage" src="{{ asset($design->images->first()->url) }}"
-                                    class="w-full h-full object-cover rounded-lg" alt="Main design image">
+                                    class="w-full h-full object-contain rounded-lg" alt="Main design image">
                             </div>
 
                             <!-- Thumbnails -->
