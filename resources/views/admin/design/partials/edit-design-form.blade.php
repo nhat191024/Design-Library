@@ -78,13 +78,30 @@
                                     <div class="mt-1"></div>
                                     <x-select-input name="main_image" id="main-image-select" class="mt-1 block w-full">
                                         @foreach ($design->Images as $image)
-                                            <option value="{{ $image->id }}" id = "main-image-select-{{ $image->id }}"
+                                            <option value="{{ $image->id }}"
+                                                id = "main-image-select-{{ $image->id }}"
                                                 {{ $design->main_image == $image->id ? 'selected' : '' }}>
                                                 {{ "Image $image->id: " . basename($image->url) }}
                                             </option>
                                         @endforeach
                                     </x-select-input>
                                     <x-input-error class="mt-2" :messages="$errors->get('main_image')" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="is_showcase" :value="__('Is Design Show On Home Page')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="is_showcase" class="mt-1 block w-full">
+                                        <option value="0"
+                                            {{ old('is_showcase', $design->is_showcase) == 0 ? 'selected' : '' }}>
+                                            No
+                                        </option>
+                                        <option value="1"
+                                            {{ old('is_showcase', $design->is_showcase) == 1 ? 'selected' : '' }}>
+                                            Yes
+                                        </option>
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('category')" />
                                 </div>
 
                                 <div>
