@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('slug');
             $table->unsignedBigInteger('category_id'); // Foreign key to category
+            $table->unsignedBigInteger('main_image')->nullable(); // Foreign key to image
             $table->timestamps();
 
             // Foreign Key Constraints
