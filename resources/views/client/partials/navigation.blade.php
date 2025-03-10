@@ -1,4 +1,4 @@
-<div class="navbar bg-base-100 shadow-sm sticky top-0 z-50">
+<div class="navbar sticky top-0 z-50 backdrop-blur-md bg-base-100/70 shadow-sm">
     <div class="navbar-start">
         <!-- Mobile dropdown -->
         <div class="dropdown">
@@ -17,25 +17,45 @@
         </div>
         <!-- Logo -->
         <a class="btn btn-ghost flex items-center" href="/">
-            <svg width="32" height="32" viewBox="0 0 415 415" xmlns="http://www.w3.org/2000/svg"><rect x="82.5" y="290" width="250" height="125" rx="62.5" fill="#1AD1A5"></rect><circle cx="207.5" cy="135" r="130" fill="black" fill-opacity=".3"></circle><circle cx="207.5" cy="135" r="125" fill="white"></circle><circle cx="207.5" cy="135" r="56" fill="#FF9903"></circle></svg>
-            <span class="ml-1">designSC</span>
+            <svg width="42" height="42" viewBox="0 0 415 415" xmlns="http://www.w3.org/2000/svg"><rect x="82.5" y="290" width="250" height="125" rx="62.5" fill="#1AD1A5"></rect><circle cx="207.5" cy="135" r="130" fill="black" fill-opacity=".3"></circle><circle cx="207.5" cy="135" r="125" fill="white"></circle><circle cx="207.5" cy="135" r="56" fill="#FF9903"></circle></svg>
+            <span class="ml-1 font-bold text-2xl">designSC</span>
         </a>
     </div>
 
     <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">
-            <li><a href="/">Trang chủ</a></li>
-            <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
+        <ul class="menu menu-horizontal px-1 text-lg">
+            <li><a href="/">TRANG CHỦ</a></li>
+            <li><a href="{{ route('client.shop.index') }}">KHÁM PHÁ</a></li>
             @foreach ($shared_categories as $shared_category)
-                <li><a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ $shared_category->name }}</a></li>
+                <li><a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ strtoupper($shared_category->name) }}</a></li>
             @endforeach
-
         </ul>
     </div>
 
     <div class="navbar-end">
-        <ul class="menu menu-horizontal px-1">
-            <li><a href="/">Liên hệ</a></li>
+        <label class="toggle text-base-content">
+            <input type="checkbox" value="dark" class="theme-controller hidden">
+
+            <svg aria-label="sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path></g></svg>
+
+            <svg aria-label="moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g stroke-linejoin="round" stroke-linecap="round" stroke-width="2" fill="none" stroke="currentColor"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path></g></svg>
+
+        </label>
+        <ul class="menu menu-horizontal px-1 text-lg font-bold">
+            <li><a href="{{ route('client.contact.index') }}">LIÊN HỆ</a></li>
         </ul>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        const themeToggle = $(".theme-controller");
+        let currentTheme = localStorage.getItem("theme") || "light";
+        $("html").attr("data-theme", currentTheme);
+        themeToggle.prop("checked", currentTheme === "dark");
+        themeToggle.on("change", function () {
+            const newTheme = themeToggle.is(":checked") ? "dark" : "light";
+            $("html").attr("data-theme", newTheme);
+            localStorage.setItem("theme", newTheme);
+        });
+    });
+</script>
