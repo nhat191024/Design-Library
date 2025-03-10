@@ -10,9 +10,14 @@
     ],
 
     "categories": [
-        { "id": 1, "name": "Website Templates", "parent_id": null, "is_show": 1 },
+        { "id": 1, "name": "Website", "parent_id": null, "is_show": 1 },
         { "id": 2, "name": "Landing Pages", "parent_id": 1, "is_show": 1 },
-        { "id": 3, "name": "Mobile UI", "parent_id": null, "is_show": 1 }
+        { "id": 3, "name": "Mobile UI", "parent_id": null, "is_show": 1 },
+        { "id": 4, "name": "Admin", "parent_id": 1, "is_show": 1 },
+        { "id": 5, "name": "E-commerce", "parent_id": 1, "is_show": 1 },
+        { "id": 6, "name": "Dashboard", "parent_id": 1, "is_show": 1 },
+        { "id": 7, "name": "Blog", "parent_id": 1, "is_show": 1 },
+        { "id": 8, "name": "Portfolio", "parent_id": 1, "is_show": 1 }
     ],
 
     "products": [
