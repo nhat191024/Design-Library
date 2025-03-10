@@ -72,6 +72,17 @@
                                 </div>
 
                                 <div>
+                                    <x-input-label for="is_showcase" :value="__('Is Design Show On Home Page')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="is_showcase" class="mt-1 block w-full">
+                                        <option value="0">No</option>
+                                        <option value="1">Yes
+                                        </option>
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('category')" />
+                                </div>
+
+                                <div>
                                     <button class="btn btn-error" type="button" onclick="window.history.back()">
                                         Cancel
                                     </button>

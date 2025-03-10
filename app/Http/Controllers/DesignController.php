@@ -41,7 +41,8 @@ class DesignController extends Controller
                 'name' => $request->name,
                 'description' => $request->description,
                 'category_id' => $request->category,
-                'main_image' => $request->main_image
+                'main_image' => $request->main_image,
+                'is_showcase' => $request->is_showcase
             ]);
 
             $design->save();
@@ -145,7 +146,8 @@ class DesignController extends Controller
             $design = Product::create([
                 'name' => $request['name'],
                 'description' => $request['description'],
-                'category_id' => $request['category']
+                'category_id' => $request['category'],
+                'is_showcase' => $request['is_showcase']
             ]);
 
             if ($request->hasFile('images')) {

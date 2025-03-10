@@ -14,6 +14,7 @@ class Product extends Model
         'description',
         'category_id',
         'main_image',
+        'is_showcase',
     ];
 
     public function Category()

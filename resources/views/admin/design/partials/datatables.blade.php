@@ -14,6 +14,7 @@
                                 <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
+                                <th>Is Show On Homepage</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -40,6 +41,13 @@
                                         @endforeach
                                     </td>
                                     <td>
+                                        @if ($design->is_showcase)
+                                            <span class="badge badge-success">Show</span>
+                                        @else
+                                            <span class="badge badge-danger">Not show</span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <a href="{{ route('designs.edit', $design->id) }}"
                                             class="btn btn-sm btn-primary">Edit</a>
                                         <button class="btn btn-sm btn-error"
@@ -56,6 +64,7 @@
                                 <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
+                                <th>Is Show On Homepage</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
