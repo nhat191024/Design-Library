@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
+
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,6 +20,7 @@ class ProfileController extends Controller
     {
         return view('admin.profile.edit', [
             'user' => $request->user(),
+            'contacts' => $request->user()->contacts,
         ]);
     }
 
@@ -56,5 +59,51 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    /**
+     * Add a new contact to the user's profile.
+     */
+    public function addContact(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'contact_name' => ['required', 'string', 'max:255'],
+            'contact_phone' => ['required', 'string', 'max:255'],
+        ]);
+
+        $request->user()->contacts()->create([
+            'name' => $request->contact_name,
+            'phone' => $request->contact_phone,
+        ]);
+
+        return Redirect::route('profile.edit')->with('success', 'contact added');
+    }
+
+    /**
+     * Update a contact in the user's profile.
+     */
+    public function updateContact(Request $request, Contact $contact): RedirectResponse
+    {
+        $request->validate([
+            'contact_name' => ['required', 'string', 'max:255'],
+            'contact_phone' => ['required', 'string', 'max:255'],
+        ]);
+
+        $contact->update([
+            'name' => $request->contact_name,
+            'phone' => $request->contact_phone,
+        ]);
+
+        return Redirect::route('profile.edit')->with('success', 'contact updated');
+    }
+
+    /**
+     * Delete a contact from the user's profile.
+     */
+    public function deleteContact(Contact $contact): RedirectResponse
+    {
+        $contact->delete();
+
+        return Redirect::route('profile.edit')->with('success', 'contact deleted');
     }
 }
