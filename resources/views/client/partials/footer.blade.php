@@ -21,7 +21,7 @@
     </nav>
     <nav>
         <h6 class="footer-title">Danh mục</h6>
-        @foreach ($shared_categories as $shared_category)
+        @foreach ($shared_categories->take(8) as $shared_category)
             <a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}" class="link link-hover">- {{ $shared_category->name }}</a>
         @endforeach
     </nav>
