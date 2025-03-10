@@ -145,7 +145,8 @@ class DesignController extends Controller
             $design = Product::create([
                 'name' => $request['name'],
                 'description' => $request['description'],
-                'category_id' => $request['category']
+                'category_id' => $request['category'],
+                'is_showcase' => $request['is_showcase']
             ]);
 
             if ($request->hasFile('images')) {
