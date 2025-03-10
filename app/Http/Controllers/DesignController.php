@@ -138,13 +138,21 @@ class DesignController extends Controller
             ]);
 
             if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
+                foreach ($request->file('images') as $key => $image) {
                     $imageName = time() . '_' . $image->getClientOriginalName();
                     $image->move(public_path('images/designs'), $imageName);
 
-                    $design->images()->create([
+                    $designImage = Image::create([
+                        'product_id' => $design->id,
                         'url' => 'images/designs/' . $imageName
                     ]);
+
+                    if ($key == $request['main-image']) {
+                        $design->update([
+                            'main_image' => $designImage->id
+                        ]);
+                        $design->save();
+                    }
                 }
             } else {
                 return response()->json([
