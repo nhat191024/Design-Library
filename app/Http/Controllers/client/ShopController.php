@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use ZipArchive;
 
 class ShopController extends Controller
 {
@@ -19,10 +21,10 @@ class ShopController extends Controller
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
-            $products = Product::with('Category', 'Images', 'Tags')->get();
+            $products = Product::with('Category', 'Images', 'Tags')->paginate(48);
         }
 
-        $tags = Tag::all();
+        $tags = Tag::latest()->get()->unique('name');
         $categories = Category::all();
 
         return view('client.shop.index')->with([
@@ -45,20 +47,20 @@ class ShopController extends Controller
     {
         try {
             $products = Product::search($query, function ($meilisearch, $query, $options) {
-                $options['typoTolerance'] = [
-                    'enabled' => true,
-                    'minWordSizeForTypos' => [
-                        'oneTypo' => 3,
-                        'twoTypos' => 6
-                    ],
-                    'disableOnWords' => [],
-                    'disableOnAttributes' => []
-                ];
+            $options['typoTolerance'] = [
+                'enabled' => true,
+                'minWordSizeForTypos' => [
+                'oneTypo' => 3,
+                'twoTypos' => 6
+                ],
+                'disableOnWords' => [],
+                'disableOnAttributes' => []
+            ];
 
-                return $meilisearch->search($query, $options);
+            return $meilisearch->search($query, $options);
             })
-                ->with('Category', 'Images', 'Tags')
-                ->get();
+            ->with('Category', 'Images', 'Tags')
+            ->paginate(48);
             return $products;
         } catch (\Exception $e) {
             return null;
@@ -98,8 +100,60 @@ class ShopController extends Controller
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
             });
         });
-        $products = $query->get();
+        $products = $query->paginate(48);
         return $products;
+    }
+
+    public function downloadImage($slug): BinaryFileResponse
+    {
+        $product = Product::where('slug', $slug)->first();
+        try {
+            $imageCount = $product->Images->count();
+        } catch (\Exception $e) {
+            $imageCount = 0;
+        }
+        if (!$product || $imageCount < 1) {
+            abort(404);
+        } else if ($imageCount == 1) {
+            try {
+                $image = $product->Images->first();
+            } catch (\Exception $e) {
+                abort(404);
+            }
+            if ($image->url === null) {
+                abort(404);
+            }
+            return response()->download(public_path($image->url), null, [
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            ]);
+        } else {
+            $directory = storage_path('app/public/images/designs');
+            if (!is_dir($directory)) {
+                mkdir($directory, 0755, true);
+            }
+            $zipFileName = 'tai-nguyen-' . $product->slug . '.zip';
+            $zipFilePath = $directory . DIRECTORY_SEPARATOR . $zipFileName;
+            $zip = new ZipArchive;
+            $result = $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+            if ($result === true) {
+                $zip->setCompressionIndex(0, ZipArchive::CM_STORE);
+                foreach ($product->Images as $image) {
+                    $filePath = public_path($image->url);
+                    if (file_exists($filePath)) {
+                        $zip->addFile($filePath, basename($filePath));
+                        $index = $zip->lastId;
+                        // set no compression for this zip file (best optimize for server performance)
+                        $zip->setCompressionIndex($index, ZipArchive::CM_STORE);
+                    }
+                }
+                $zip->close();
+            } else {
+                abort(500);
+            }
+            return response()->download($zipFilePath, null, [
+                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+            ])->deleteFileAfterSend(true);
+        }
     }
 
     public function category($slug)
@@ -108,8 +162,8 @@ class ShopController extends Controller
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
-        $products = $category->Products()->with('Category', 'Images', 'Tags')->get();
-        $tags = Tag::all();
+        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
+        $tags = Tag::latest()->get()->unique('name');
         $categories = Category::all();
         return view('client.shop.index')->with([
             'title' => $category->name,
@@ -126,9 +180,17 @@ class ShopController extends Controller
         if (!$product) {
             return redirect()->route('client.shop.index');
         }
+        try {
+            $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->with('Category', 'Images', 'Tags')->paginate(48);
+        } catch (\Exception $e) {
+            $relatedProducts = [];
+        }
+        $curentTags = $product->Tags;
         return view('client.shop.detail')->with([
             'title' => $product->name,
-            'product' => $product
+            'product' => $product,
+            'products' => $relatedProducts,
+            'tags' => $curentTags
         ]);
     }
 }
