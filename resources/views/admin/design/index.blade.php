@@ -91,17 +91,24 @@
                     `;
             }
 
-            function updateMainImageSelector() {
+            function updateMainImageSelector(edit = false, id = null, image = null) {
                 const $select = $('#main-image-select');
-                $select.empty();
-
-                imageFiles.forEach((imageData, index) => {
+                if (edit) {
                     const $option = $('<option>', {
-                        value: index,
-                        text: `Image ${index+1}: ${imageData.file.name}`
+                        value: id,
+                        text: `Image ${id}: ${image}`
                     });
                     $select.append($option);
-                });
+                } else {
+                    $select.empty();
+                    imageFiles.forEach((imageData, index) => {
+                        const $option = $('<option>', {
+                            value: index,
+                            text: `Image ${index+1}: ${imageData.file.name}`
+                        });
+                        $select.append($option);
+                    });
+                }
             }
 
             $(document).ready(function() {
@@ -144,6 +151,8 @@
                                     if (!$('#mainImage').attr('src')) {
                                         updateMainImage(data.image_url);
                                     }
+                                    // Update main image selector
+                                    updateMainImageSelector(true, data.image_id, data.image_name);
                                 }
                             },
                             error: function(error) {
