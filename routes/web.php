@@ -17,6 +17,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/contact', [ProfileController::class, 'addContact'])->name('profile.add-contact');
+    Route::patch('/profile/contact/{contact}', [ProfileController::class, 'updateContact'])->name('profile.update-contact');
+    Route::get('/profile/contact/delete/{contact}', [ProfileController::class, 'deleteContact'])->name('profile.delete-contact');
 
     Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
     Route::get('/designs/create', [DesignController::class, 'create'])->name('designs.create');
