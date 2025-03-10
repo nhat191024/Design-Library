@@ -12,7 +12,8 @@ class Product extends Model
     protected $fillable = [
         'name',
         'description',
-        'category_id'
+        'category_id',
+        'main_image',
     ];
 
     public function Category()
@@ -30,6 +31,10 @@ class Product extends Model
         return $this->belongsToMany(Tag::class, 'tag_products', 'product_id', 'tag_id');
     }
 
+    public function MainImage()
+    {
+        return $this->hasOne(Image::class, 'id', 'main_image');
+    }
 
     public static function boot()
     {

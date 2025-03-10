@@ -15,7 +15,8 @@
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
                                 {{ __('Design Information') }}
                             </h3>
-                            <form method="POST" action="{{ route('designs.update', $design->id) }}" class="max-w-xl space-y-6">
+                            <form method="POST" action="{{ route('designs.update', $design->id) }}"
+                                class="max-w-xl space-y-6">
                                 @csrf
                                 @method('patch')
                                 <div>
@@ -63,13 +64,27 @@
                                 <div>
                                     <x-input-label for="image" :value="__('Design Image')" />
                                     <x-file-input id="image-edit" name="image" class="mt-1 block w-full"
-                                        accept="image/*"  />
+                                        accept="image/*" />
                                     <div id="upload-progress" class="hidden mt-2">
                                         <div class="w-full bg-gray-200 rounded-full h-2.5">
                                             <div class="bg-blue-600 h-2.5 rounded-full" style="width: 0%"></div>
                                         </div>
                                     </div>
                                     <x-input-error class="mt-2" :messages="$errors->get('image')" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="main-image" :value="__('Main Image')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="main_image" id="main-image-select" class="mt-1 block w-full">
+                                        @foreach ($design->Images as $image)
+                                            <option value="{{ $image->id }}" id = "main-image-select-{{ $image->id }}"
+                                                {{ $design->main_image == $image->id ? 'selected' : '' }}>
+                                                {{ "Image $image->id: " . basename($image->url) }}
+                                            </option>
+                                        @endforeach
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('main_image')" />
                                 </div>
 
                                 <div>

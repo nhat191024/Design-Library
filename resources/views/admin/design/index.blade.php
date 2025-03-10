@@ -38,7 +38,9 @@
 
             function deleteImage(index) {
                 imageFiles.splice(index, 1);
+                $(`#main-image-select-${index}`).remove();
                 updateThumbnails();
+                updateMainImageSelector();
                 if (imageFiles.length > 0) {
                     updateMainImage(imageFiles[0].dataUrl);
                 } else {
@@ -46,11 +48,13 @@
                 }
             }
 
+            // Update thumbnails for add form
             function updateThumbnails() {
                 const $container = $('#thumbnailContainer');
                 $container.empty();
 
                 imageFiles.forEach((imageData, index) => {
+                    console.log(index)
                     const $div = $('<div>', {
                         class: 'relative group flex-none'
                     }).append(`
@@ -68,6 +72,49 @@
                     `);
                     $container.append($div);
                 });
+            }
+
+            // Create thumbnail element for edit form
+            function createThumbnailElement(imageUrl) {
+                return `
+                        <div class="relative group flex-none">
+                            <img class="w-24 h-24 object-cover rounded-lg cursor-pointer hover:ring-1 hover:ring-primary thumbnail-image"
+                                src="${imageUrl}"
+                                alt="Design thumbnail"
+                                onclick="updateMainImage('${imageUrl}')">
+                            <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button class="btn btn-error btn-xs btn-circle">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+            }
+
+            function updateMainImageSelector(edit = false, id = null, image = null) {
+                const $select = $('#main-image-select');
+                if (edit) {
+                    const $option = $('<option>', {
+                        id: `main-image-select-${id}`,
+                        value: id,
+                        text: `Image ${id}: ${image}`
+                    });
+                    $select.append($option);
+                } else {
+                    $select.empty();
+                    imageFiles.forEach((imageData, index) => {
+                        const $option = $('<option>', {
+                            id: `main-image-select-${index}`,
+                            value: index,
+                            text: `Image ${index+1}: ${imageData.file.name}`
+                        });
+                        $select.append($option);
+                    });
+                }
             }
 
             $(document).ready(function() {
@@ -90,6 +137,7 @@
                         $progressBar.removeClass('hidden');
                         let formData = new FormData();
 
+                        //TODO: think again about this later
                         formData.append('image', this.files[0]);
                         formData.append('design_id', '{{ $design->id ?? '' }}');
                         formData.append('_token', '{{ csrf_token() }}');
@@ -109,6 +157,8 @@
                                     if (!$('#mainImage').attr('src')) {
                                         updateMainImage(data.image_url);
                                     }
+                                    // Update main image selector
+                                    updateMainImageSelector(true, data.image_id, data.image_name);
                                 }
                             },
                             error: function(error) {
@@ -122,27 +172,6 @@
                         });
                     }
                 });
-
-                // Create thumbnail element
-                function createThumbnailElement(imageUrl) {
-                    return `
-                        <div class="relative group flex-none">
-                            <img class="w-24 h-24 object-cover rounded-lg cursor-pointer hover:ring-1 hover:ring-primary thumbnail-image"
-                                src="${imageUrl}"
-                                alt="Design thumbnail"
-                                onclick="updateMainImage('${imageUrl}')">
-                            <div class="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button class="btn btn-error btn-xs btn-circle">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }
 
                 // Handle image change for add form
                 $('#image').on('change', function(event) {
@@ -158,6 +187,7 @@
                             imageFiles.push(imageData);
 
                             updateThumbnails();
+                            updateMainImageSelector();
                             if (!$('#mainImage').attr('src')) {
                                 updateMainImage(imageData.dataUrl);
                             }
@@ -226,6 +256,11 @@
                                                 $('#mainImage').attr('src', '');
                                             }
                                         }
+
+                                        // Update main image selector
+                                        $(`#main-image-select-${imageId}`).remove();
+
+                                        showToast(response.message, 'success');
                                     });
                                 } else {
                                     showToast(response.message, 'error');

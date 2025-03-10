@@ -21,22 +21,22 @@
 
                                 <div>
                                     <x-input-label for="name" :value="__('Design Name')" />
-                                    <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
-                                        required />
+                                    <x-text-input id="name" name="name" type="text"
+                                        class="mt-1 block w-full" />
                                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                 </div>
 
                                 <div>
                                     <x-input-label for="description" :value="__('Design Description')" />
                                     <x-text-input id="description" name="description" type="text"
-                                        class="mt-1 block w-full" required />
+                                        class="mt-1 block w-full" />
                                     <x-input-error class="mt-2" :messages="$errors->get('description')" />
                                 </div>
 
                                 <div>
                                     <x-input-label for="category" :value="__('Design Category')" />
                                     <div class="mt-1"></div>
-                                    <x-select-input name="category" class="mt-1 block w-full" required>
+                                    <x-select-input name="category" class="mt-1 block w-full">
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
@@ -48,7 +48,7 @@
                                     <x-input-label for="tag" :value="__('Design Tags')" />
                                     <div class="mt-1"></div>
                                     <x-select-input name="tags[]" class="select-category-multiple mt-1 block w-full"
-                                        required multiple="multiple">
+                                        multiple="multiple">
                                         @foreach ($tags as $tag)
                                             <option value="{{ $tag->id }}">{{ $tag->name }}</option>
                                         @endforeach
@@ -60,7 +60,15 @@
                                     <x-input-label for="image" :value="__('Design Images')" />
                                     <x-file-input id="image" type="file" class="mt-1 block w-full"
                                         accept="image/*" multiple />
-                                    <x-input-error class="mt-2" :messages="$errors->get('image')" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('images')" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="main-image" :value="__('Main Image')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="main-image" id="main-image-select" class="mt-1 block w-full">
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('main_image')" />
                                 </div>
 
                                 <div>
@@ -82,8 +90,8 @@
 
                             <!-- Main Image Preview -->
                             <div class="w-full aspect-square mb-4">
-                                <img id="mainImage" src="" class="w-full h-full object-contain rounded-lg hidden"
-                                    alt="Main design image">
+                                <img id="mainImage" src=""
+                                    class="w-full h-full object-contain rounded-lg hidden" alt="Main design image">
                             </div>
 
                             <!-- Thumbnails Preview -->

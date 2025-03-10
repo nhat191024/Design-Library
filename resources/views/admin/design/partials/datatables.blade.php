@@ -11,7 +11,7 @@
                                 <th>STT</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>First Image</th>
+                                <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
                                 <th>Action</th>
@@ -25,8 +25,8 @@
                                     <td>{{ $design->description }}</td>
                                     <td>
                                         @if ($design->images && $design->images->count() > 0)
-                                            <img class="w-24 h-24 object-cover mx-auto"
-                                                src="{{ asset($design->images->first()->url) }}" alt="">
+                                            <img class="w-24 h-24 object-contain mx-auto"
+                                                src="{{ asset($design->MainImage->url) }}" alt="">
                                         @else
                                             <p>Image error</p>
                                         @endif
@@ -53,7 +53,7 @@
                                 <th>STT</th>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th>First Image</th>
+                                <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
                                 <th>Action</th>

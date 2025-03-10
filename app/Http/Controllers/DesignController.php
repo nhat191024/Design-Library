@@ -40,7 +40,8 @@ class DesignController extends Controller
             $design->update([
                 'name' => $request->name,
                 'description' => $request->description,
-                'category_id' => $request->category
+                'category_id' => $request->category,
+                'main_image' => $request->main_image
             ]);
 
             $design->save();
@@ -74,7 +75,9 @@ class DesignController extends Controller
 
             return response()->json([
                 'success' => true,
+                'message' => 'Image uploaded successfully',
                 'image_url' => asset('images/designs/' . $imageName),
+                'image_name' => $imageName,
                 'image_id' => $design->images->last()->id
             ]);
         }
@@ -98,6 +101,14 @@ class DesignController extends Controller
 
         if (File::exists(public_path($image->url))) {
             File::delete(public_path($image->url));
+        }
+
+        $product = $image->product;
+        if ($product->main_image === $image->id) {
+            $product->update([
+                'main_image' => $product->images->first()->id
+            ]);
+            $product->save();
         }
 
         $image->delete();
@@ -138,13 +149,21 @@ class DesignController extends Controller
             ]);
 
             if ($request->hasFile('images')) {
-                foreach ($request->file('images') as $image) {
+                foreach ($request->file('images') as $key => $image) {
                     $imageName = time() . '_' . $image->getClientOriginalName();
                     $image->move(public_path('images/designs'), $imageName);
 
-                    $design->images()->create([
+                    $designImage = Image::create([
+                        'product_id' => $design->id,
                         'url' => 'images/designs/' . $imageName
                     ]);
+
+                    if ($key == $request['main-image']) {
+                        $design->update([
+                            'main_image' => $designImage->id
+                        ]);
+                        $design->save();
+                    }
                 }
             } else {
                 return response()->json([

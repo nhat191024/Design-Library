@@ -27,7 +27,8 @@ class StoreDesignRequest extends FormRequest
             'category' => 'required|exists:categories,id',
             'tags' => 'required|array',
             'tags.*' => 'exists:tags,id',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:10240'
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'main-image' => 'required|integer'
         ];
     }
 }

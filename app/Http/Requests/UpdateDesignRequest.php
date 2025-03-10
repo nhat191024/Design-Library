@@ -27,7 +27,8 @@ class UpdateDesignRequest extends FormRequest
             'category' => 'sometimes|exists:categories,id',
             'tags' => 'sometimes|array',
             'tags.*' => 'exists:tags,id',
-            'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240'
+            'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'main-image' => 'sometimes|integer'
         ];
     }
 }
