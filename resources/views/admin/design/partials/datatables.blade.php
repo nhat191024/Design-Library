@@ -14,7 +14,7 @@
                                 <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
-                                <th>Is Show Case</th>
+                                <th>Is Show On Homepage</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -41,10 +41,10 @@
                                         @endforeach
                                     </td>
                                     <td>
-                                        @if ($design->is_show_case)
-                                            <span class="badge badge-success">Show case</span>
+                                        @if ($design->is_showcase)
+                                            <span class="badge badge-success">Show</span>
                                         @else
-                                            <span class="badge badge-danger">Not show case</span>
+                                            <span class="badge badge-danger">Not show</span>
                                         @endif
                                     </td>
                                     <td>
@@ -64,7 +64,7 @@
                                 <th>Main Image</th>
                                 <th>Category</th>
                                 <th>Tag</th>
-                                <th>Is Show Case</th>
+                                <th>Is Show On Homepage</th>
                                 <th>Action</th>
                             </tr>
                         </tfoot>
