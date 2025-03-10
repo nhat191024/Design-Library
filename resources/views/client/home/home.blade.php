@@ -77,7 +77,13 @@
                 <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @include('client.partials.products-loop', ['products' => $category->Products])
+                @php
+                    $products = $category->ProductsShowCase()->get();
+                    if ($products->isEmpty()) {
+                        $products = $category->Products->take(8);
+                    }
+                @endphp
+                @include('client.partials.products-loop', ['products' => $products])
             </div>
         @endforeach
         <div class="mt-12 mb-4">

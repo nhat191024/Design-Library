@@ -31,6 +31,11 @@ class Category extends Model
         return $this->hasMany(Product::class, 'category_id');
     }
 
+    public function ProductsShowCase()
+    {
+        return $this->hasMany(Product::class, 'category_id')->where('is_showcase', true);
+    }
+
     public static function boot()
     {
         parent::boot();

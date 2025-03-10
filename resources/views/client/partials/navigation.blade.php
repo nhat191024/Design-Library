@@ -18,7 +18,7 @@
         <!-- Logo -->
         <a class="btn btn-ghost flex items-center" href="/">
             <svg width="42" height="42" viewBox="0 0 415 415" xmlns="http://www.w3.org/2000/svg"><rect x="82.5" y="290" width="250" height="125" rx="62.5" fill="#1AD1A5"></rect><circle cx="207.5" cy="135" r="130" fill="black" fill-opacity=".3"></circle><circle cx="207.5" cy="135" r="125" fill="white"></circle><circle cx="207.5" cy="135" r="56" fill="#FF9903"></circle></svg>
-            <span class="ml-1 font-bold text-2xl">designSC</span>
+            <span class="ml-1 font-bold text-xl">designSC</span>
         </a>
     </div>
 
@@ -26,9 +26,23 @@
         <ul class="menu menu-horizontal px-1 text-lg">
             <li><a href="/">TRANG CHỦ</a></li>
             <li><a href="{{ route('client.shop.index') }}">KHÁM PHÁ</a></li>
-            @foreach ($shared_categories as $shared_category)
+            @foreach ($shared_categories->take(3) as $shared_category)
                 <li><a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ strtoupper($shared_category->name) }}</a></li>
             @endforeach
+
+            {{-- Dropdown for more categories --}}
+            @if ($shared_categories->count() > 3)
+            <li>
+                <details class="dropdown">
+                    <summary class="mx-0">KHÁC</summary>
+                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                        @foreach ($shared_categories->skip(3) as $category)
+                            <li><a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a></li>
+                        @endforeach
+                    </ul>
+                </details>
+            </li>
+            @endif
         </ul>
     </div>
 

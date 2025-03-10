@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
                 "name" => $row['name'],
                 "description" => $row['description'],
                 "category_id" => $row['category_id'],
+                "is_showcase" => $row['is_showcase'],
             ]);
         }
 
