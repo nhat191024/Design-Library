@@ -74,7 +74,9 @@ class DesignController extends Controller
 
             return response()->json([
                 'success' => true,
+                'message' => 'Image uploaded successfully',
                 'image_url' => asset('images/designs/' . $imageName),
+                'image_name' => $imageName,
                 'image_id' => $design->images->last()->id
             ]);
         }
