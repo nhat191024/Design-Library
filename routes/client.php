@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\ShopController;
 use Illuminate\Support\Facades\Route;
