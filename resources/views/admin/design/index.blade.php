@@ -38,7 +38,9 @@
 
             function deleteImage(index) {
                 imageFiles.splice(index, 1);
+                $(`#main-image-select-${index}`).remove();
                 updateThumbnails();
+                updateMainImageSelector();
                 if (imageFiles.length > 0) {
                     updateMainImage(imageFiles[0].dataUrl);
                 } else {
@@ -46,11 +48,13 @@
                 }
             }
 
+            // Update thumbnails for add form
             function updateThumbnails() {
                 const $container = $('#thumbnailContainer');
                 $container.empty();
 
                 imageFiles.forEach((imageData, index) => {
+                    console.log(index)
                     const $div = $('<div>', {
                         class: 'relative group flex-none'
                     }).append(`
@@ -70,7 +74,7 @@
                 });
             }
 
-            // Create thumbnail element
+            // Create thumbnail element for edit form
             function createThumbnailElement(imageUrl) {
                 return `
                         <div class="relative group flex-none">
@@ -95,6 +99,7 @@
                 const $select = $('#main-image-select');
                 if (edit) {
                     const $option = $('<option>', {
+                        id: `main-image-select-${id}`,
                         value: id,
                         text: `Image ${id}: ${image}`
                     });
@@ -103,6 +108,7 @@
                     $select.empty();
                     imageFiles.forEach((imageData, index) => {
                         const $option = $('<option>', {
+                            id: `main-image-select-${index}`,
                             value: index,
                             text: `Image ${index+1}: ${imageData.file.name}`
                         });
@@ -250,6 +256,11 @@
                                                 $('#mainImage').attr('src', '');
                                             }
                                         }
+
+                                        // Update main image selector
+                                        $(`#main-image-select-${imageId}`).remove();
+
+                                        showToast(response.message, 'success');
                                     });
                                 } else {
                                     showToast(response.message, 'error');
