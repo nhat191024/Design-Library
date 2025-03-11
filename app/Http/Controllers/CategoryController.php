@@ -35,7 +35,12 @@ class CategoryController extends Controller
         try {
             if ($id == $request->parent_id) {
                 return redirect()->back()
-                    ->with('error', 'Error updating category: Category cannot be parent of itself');
+                    ->with('error', 'Lỗi khi cập nhật danh mục: Danh mục cha không thể là chính nó');
+            }
+
+            if (Category::where('parent_id', $id)->exists()) {
+                return redirect()->back()
+                    ->with('error', 'Lỗi khi cập nhật danh mục: Danh mục này đang chứa danh mục con');
             }
 
             $category = Category::find($id);
@@ -62,10 +67,10 @@ class CategoryController extends Controller
             $category->save();
 
             return redirect()->route('categories.index')
-                ->with('success', 'Category updated successfully');
+                ->with('success', 'Cập nhật danh mục thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error updating category: ' . $e->getMessage());
+                ->with('error', 'Lôi khi cập nhập danh mục' . $e->getMessage());
         }
     }
 
@@ -74,15 +79,15 @@ class CategoryController extends Controller
         try {
             if (Product::where('category_id', $id)->exists()) {
                 return redirect()->back()
-                    ->with('error', 'Error deleting category: Category is in use');
+                    ->with('error', 'Lỗi khi xóa danh mục: Danh mục này đang chứa sản phẩm');
             }
             $category = Category::find($id);
             $category->delete();
             return redirect()->route('categories.index')
-                ->with('success', 'Category deleted successfully');
+                ->with('success', 'Xoá danh mục thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting category: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi xóa danh mục' . $e->getMessage());
         }
     }
 
@@ -110,10 +115,10 @@ class CategoryController extends Controller
             $category->save();
 
             return redirect()->route('categories.index')
-                ->with('success', 'Category created successfully');
+                ->with('success', 'Tạo danh mục thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error creating category: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi tạo danh mục' . $e->getMessage());
         }
     }
 }
