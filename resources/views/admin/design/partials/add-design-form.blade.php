@@ -36,7 +36,7 @@
                                 <div>
                                     <x-input-label for="category" :value="__('Design Category')" />
                                     <div class="mt-1"></div>
-                                    <x-select-input name="category" class="mt-1 block w-full">
+                                    <x-select-input name="category" class="select-search mt-1 block w-full">
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
@@ -47,7 +47,8 @@
                                 <div>
                                     <x-input-label for="tag" :value="__('Design Tags')" />
                                     <div class="mt-1"></div>
-                                    <x-select-input name="tags[]" class="select-category-multiple mt-1 block w-full"
+                                    <x-select-input name="tags[]"
+                                        class="select-search select-category-multiple mt-1 block w-full"
                                         multiple="multiple">
                                         @foreach ($tags as $tag)
                                             <option value="{{ $tag->id }}">{{ $tag->name }}</option>
@@ -67,6 +68,7 @@
                                     <x-input-label for="main-image" :value="__('Main Image')" />
                                     <div class="mt-1"></div>
                                     <x-select-input name="main-image" id="main-image-select" class="mt-1 block w-full">
+                                        <option value="" disabled>select your option</option>
                                     </x-select-input>
                                     <x-input-error class="mt-2" :messages="$errors->get('main_image')" />
                                 </div>
