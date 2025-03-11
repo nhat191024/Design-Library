@@ -100,19 +100,24 @@ class DesignController extends Controller
             ], 200);
         }
 
-        if (File::exists(public_path($image->url))) {
-            File::delete(public_path($image->url));
-        }
-
         $product = $image->product;
         if ($product->main_image === $image->id) {
-            $product->update([
-                'main_image' => $product->images->first()->id
-            ]);
+            if ($image->id === $product->images->first()->id) {
+                $product->main_image = $product->images->last()->id;
+            } else {
+                $product->main_image = $product->images->first()->id;
+            }
             $product->save();
+            $image->delete();
+            if (File::exists(public_path($image->url))) {
+                File::delete(public_path($image->url));
+            }
+        } else {
+            $image->delete();
+            if (File::exists(public_path($image->url))) {
+                File::delete(public_path($image->url));
+            }
         }
-
-        $image->delete();
 
         return response()->json([
             'success' => true,
