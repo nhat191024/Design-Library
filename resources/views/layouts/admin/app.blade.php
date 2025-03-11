@@ -122,7 +122,7 @@
 
 <script>
     $(function() {
-        $('select').each(function() {
+        $('.select-search').each(function() {
             let options = {
                 theme: 'tailwindcss-3',
                 width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-full') ?
