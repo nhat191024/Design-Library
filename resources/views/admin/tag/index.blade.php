@@ -12,7 +12,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Tags') }}
+            {{ __('Nhãn') }}
         </h2>
     </x-slot>
 
@@ -29,7 +29,7 @@
             let imageFiles = [];
 
             function deleteTag(id) {
-                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn item này chứ?')) {
+                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn nhãn này chứ?')) {
                     window.location.href = `{{ url('tags/delete') }}/${id}`;
                 }
             }
@@ -38,100 +38,22 @@
                 // DataTable initialization
                 $('#tag-table').DataTable({
                     language: {
+                        "entries per page": "số bản ghi mỗi trang",
+                        "search": "Tìm kiếm",
+                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "emptyTable": "Không có dữ liệu",
+                        "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "lengthMenu": "Hiển thị _MENU_ bản ghi",
                         paginate: {
                             "first": "",
                             "last": "",
-                            "next": "Next",
-                            "previous": "Previous"
+                            "next": "Tiếp theo",
+                            "previous": "Trước đó"
                         }
                     }
                 });
-
-                // // Handle image change for add form
-                // $('#image').on('change', function(event) {
-                //     const files = Array.from(this.files);
-
-                //     files.forEach(file => {
-                //         const reader = new FileReader();
-                //         reader.onload = function(e) {
-                //             const imageData = {
-                //                 dataUrl: e.target.result,
-                //                 file: file
-                //             };
-                //             imageFiles.push(imageData);
-
-                //             updateThumbnails();
-                //             if (!$('#mainImage').attr('src')) {
-                //                 updateMainImage(imageData.dataUrl);
-                //             }
-                //         };
-                //         reader.readAsDataURL(file);
-                //     });
-                // });
-
-                // // Handle form submission for add form
-                // $('#designForm').on('submit', function(e) {
-                //     e.preventDefault();
-
-                //     const formData = new FormData(this);
-                //     imageFiles.forEach((imageData, index) => {
-                //         formData.append(`images[]`, imageData.file);
-                //     });
-
-                //     $.ajax({
-                //         url: $(this).attr('action'),
-                //         method: 'POST',
-                //         data: formData,
-                //         processData: false,
-                //         contentType: false,
-                //         success: function(data) {
-                //             if (data.success) {
-                //                 window.location.href = '{{ route('designs.index') }}';
-                //             }
-                //         },
-                //         error: function(error) {
-                //             console.error('Error:', error);
-                //         }
-                //     });
-                // });
-
-                // // Handle image deletion for edit form
-                // $(document).on('click', '.delete-image', function() {
-                //     const imageId = $(this).data('id');
-                //     if (!imageId) return;
-
-                //     const $imageContainer = $(`#image-${imageId}`);
-                //     if (confirm('Are you sure you want to delete this image?')) {
-                //         $.ajax({
-                //             url: `{{ url('designs/images') }}/${imageId}`,
-                //             type: 'DELETE',
-                //             data: {
-                //                 _token: '{{ csrf_token() }}'
-                //             },
-                //             success: function(response) {
-                //                 if (response.success) {
-                //                     $imageContainer.fadeOut(300, function() {
-                //                         $(this).remove();
-                //                         // Update main image if needed
-                //                         const mainImageSrc = $('#mainImage').attr('src');
-                //                         if (mainImageSrc.includes($imageContainer.find('img').attr('src'))) {
-                //                             const nextImage = $('.thumbnail-image').first();
-                //                             if (nextImage.length) {
-                //                                 updateMainImage(nextImage.attr('src'));
-                //                             } else {
-                //                                 $('#mainImage').attr('src', '');
-                //                             }
-                //                         }
-                //                     });
-                //                 }
-                //             },
-                //             error: function(error) {
-                //                 console.error('Error:', error);
-                //                 alert('Failed to delete image');
-                //             }
-                //         });
-                //     }
-                // });
             });
         </script>
     </x-slot>
