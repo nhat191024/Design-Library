@@ -54,7 +54,6 @@
                 $container.empty();
 
                 imageFiles.forEach((imageData, index) => {
-                    console.log(index)
                     const $div = $('<div>', {
                         class: 'relative group flex-none'
                     }).append(`
