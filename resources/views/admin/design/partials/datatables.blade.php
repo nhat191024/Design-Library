@@ -25,7 +25,7 @@
                                     <td>{{ $design->name }}</td>
                                     <td>{{ $design->description }}</td>
                                     <td>
-                                        @if ($design->images && $design->images->count() > 0)
+                                        @if ($design->MainImage && $design->MainImage->count() > 0)
                                             <img class="w-24 h-24 object-contain mx-auto"
                                                 src="{{ asset($design->MainImage->url) }}" alt="">
                                         @else
