@@ -32,7 +32,7 @@ class TagController extends Controller
     /**
      * Update a tag.
      */
-    public function update(StoreTagRequest $request, $id)
+    public function update(UpdateTagRequest $request, $id)
     {
         try {
             $tag = Tag::find($id);
@@ -82,7 +82,7 @@ class TagController extends Controller
     /**
      * Store a new tag.
      */
-    public function store(UpdateTagRequest $request)
+    public function store(StoreTagRequest $request)
     {
         try {
             Tag::create([
