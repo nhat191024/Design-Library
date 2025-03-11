@@ -23,6 +23,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
+            'parent_id' => 'sometimes|integer',
             'is_show' => 'sometimes|integer',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg|max:10240'
         ];
