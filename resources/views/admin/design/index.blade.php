@@ -181,7 +181,7 @@
                             complete: function() {
                                 $('#image').val('');
                                 $progressBar.addClass('hidden');
-                                showToast('Image added successfully.', 'success');
+                                showToast('Tải ảnh lên thành công', 'success');
                             }
                         });
                     }
@@ -282,7 +282,7 @@
                             },
                             error: function(error) {
                                 console.error('Error:', error);
-                                showToast('An error occurred while deleting the image.', 'error');
+                                showToast('Có lỗi xảy ra khi xóa ảnh', 'error');
                             }
                         });
                     }
