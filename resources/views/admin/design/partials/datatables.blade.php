@@ -4,18 +4,18 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    <a href="{{ route('designs.create') }}" class="btn btn-success float-end mb-5">Add design</a>
+                    <a href="{{ route('designs.create') }}" class="btn btn-success float-end mb-5">Thêm thiết kế</a>
                     <table id="design-table" class="display order-column">
                         <thead>
                             <tr>
                                 <th>STT</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Main Image</th>
-                                <th>Category</th>
-                                <th>Tag</th>
-                                <th>Is Show On Homepage</th>
-                                <th>Action</th>
+                                <th>Tên</th>
+                                <th>Miêu tả</th>
+                                <th>Ảnh chính</th>
+                                <th>Danh mục</th>
+                                <th>Nhãn</th>
+                                <th>Xuất hiện trên trang chủ?</th>
+                                <th>Hành động</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -29,11 +29,11 @@
                                             <img class="w-24 h-24 object-contain mx-auto"
                                                 src="{{ asset($design->MainImage->url) }}" alt="">
                                         @else
-                                            <p>Image error</p>
+                                            <p>Lỗi Ảnh</p>
                                         @endif
                                     </td>
                                     <td>{{ $design->category->name }}</td>
-                                    <td>
+                                    <td class="w-1/6">
                                         @foreach ($design->tags as $tag)
                                             <span class="badge badge-info">
                                                 {{ $tag->name }}
@@ -42,16 +42,16 @@
                                     </td>
                                     <td>
                                         @if ($design->is_showcase)
-                                            <span class="badge badge-success">Show</span>
+                                            <span class="badge badge-success">Hiển thị</span>
                                         @else
-                                            <span class="badge badge-danger">Not show</span>
+                                            <span class="badge badge-danger">Không hiển thị</span>
                                         @endif
                                     </td>
                                     <td>
                                         <a href="{{ route('designs.edit', $design->id) }}"
-                                            class="btn btn-sm btn-primary">Edit</a>
+                                            class="btn btn-sm btn-primary">Sửa</a>
                                         <button class="btn btn-sm btn-error"
-                                            onclick="deleteDesign({{ $design->id }})">Delete</button>
+                                            onclick="deleteDesign({{ $design->id }})">Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -59,13 +59,13 @@
                         <tfoot>
                             <tr>
                                 <th>STT</th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Main Image</th>
-                                <th>Category</th>
-                                <th>Tag</th>
-                                <th>Is Show On Homepage</th>
-                                <th>Action</th>
+                                <th>Tên</th>
+                                <th>Miêu tả</th>
+                                <th>Ảnh chính</th>
+                                <th>Danh mục</th>
+                                <th>Nhãn</th>
+                                <th>Xuất hiện trên trang chủ?</th>
+                                <th>Hành động</th>
                             </tr>
                         </tfoot>
                     </table>
