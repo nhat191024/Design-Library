@@ -52,7 +52,7 @@ class DesignController extends Controller
                 ->with('success', 'Cập nhật thiết kế thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Lỗi khi cập nhập thiết kế: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi cập nhật thiết kế: ' . $e->getMessage());
         }
     }
 
