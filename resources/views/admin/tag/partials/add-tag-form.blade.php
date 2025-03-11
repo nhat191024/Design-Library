@@ -5,7 +5,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Add New Tag') }}
+                            {{ __('Thêm nhãn mới') }}
                         </h2>
                     </header>
 
@@ -13,17 +13,17 @@
                         @csrf
 
                         <div>
-                            <x-input-label for="name" :value="__('Tag Name')" />
+                            <x-input-label for="name" :value="__('Tên')" />
                             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" />
                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
 
                         <div>
                             <a class="btn btn-error" href="{{ route('tags.index') }}">
-                                Cancel
+                                Hủy
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                Add Tag
+                                Xác nhận
                             </button>
                         </div>
 
