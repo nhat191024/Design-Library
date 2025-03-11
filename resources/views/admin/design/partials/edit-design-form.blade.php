@@ -36,6 +36,7 @@
 
                                 <div>
                                     <x-input-label for="category" :value="__('Design Category')" />
+                                    <div class="mt-1"></div>
                                     <x-select-input name="category" class="select-search mt-1 block w-full" required>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category['id'] }}"
@@ -49,6 +50,7 @@
 
                                 <div>
                                     <x-input-label for="tag" :value="__('Design Tags')" />
+                                    <div class="mt-1"></div>
                                     <x-select-input name="tags[]"
                                         class="select-search select-category-multiple mt-1 block w-full" required
                                         multiple="multiple">
@@ -76,7 +78,6 @@
 
                                 <div>
                                     <x-input-label for="main-image" :value="__('Main Image')" />
-                                    <div class="mt-1"></div>
                                     <x-select-input name="main_image" id="main-image-select" class="mt-1 block w-full">
                                         @foreach ($design->Images as $image)
                                             <option value="{{ $image->id }}"
@@ -91,7 +92,6 @@
 
                                 <div>
                                     <x-input-label for="is_showcase" :value="__('Is Design Show On Home Page')" />
-                                    <div class="mt-1"></div>
                                     <x-select-input name="is_showcase" class="mt-1 block w-full">
                                         <option value="0"
                                             {{ old('is_showcase', $design->is_showcase) == 0 ? 'selected' : '' }}>
@@ -145,6 +145,11 @@
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
                                             </button>
+                                        </div>
+
+                                        <div
+                                            class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                                            <p>{{ $image->id }}</p>
                                         </div>
                                     </div>
                                 @endforeach
