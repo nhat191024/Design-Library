@@ -49,18 +49,25 @@ class DesignController extends Controller
             $design->tags()->sync($request->tags);
 
             return redirect()->route('designs.index')
-                ->with('success', 'Design updated successfully');
+                ->with('success', 'Cập nhật thiết kế thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error updating design: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi cập nhập thiết kế: ' . $e->getMessage());
         }
     }
 
     public function uploadImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'design_id' => 'required|exists:products,id'
+        ], [
+            'image.required' => 'Trường hình ảnh là bắt buộc.',
+            'image.image' => 'Tệp tải lên phải là hình ảnh.',
+            'image.mimes' => 'Hình ảnh phải có định dạng jpeg, png, jpg, hoặc gif.',
+            'image.max' => 'Kích thước hình ảnh không được vượt quá 10MB.',
+            'design_id.required' => 'Trường ID thiết kế là bắt buộc.',
+            'design_id.exists' => 'ID thiết kế không tồn tại.'
         ]);
 
         if ($request->hasFile('image')) {
@@ -76,7 +83,7 @@ class DesignController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Image uploaded successfully',
+                'message' => 'Tải ảnh lên thành công',
                 'image_url' => asset('images/designs/' . $imageName),
                 'image_name' => $imageName,
                 'image_id' => $design->images->last()->id
@@ -85,7 +92,7 @@ class DesignController extends Controller
 
         return response()->json([
             'success' => false,
-            'message' => 'Upload failed'
+            'message' => 'Có lỗi xảy ra khi tải ảnh lên'
         ], 400);
     }
 
@@ -96,7 +103,7 @@ class DesignController extends Controller
         if ($image->product->images->count() === 1) {
             return response()->json([
                 'success' => false,
-                'message' => 'Design must have at least one image'
+                'message' => 'Thiết kế phải có ít nhất 1 hình ảnh'
             ], 200);
         }
 
@@ -121,7 +128,7 @@ class DesignController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Image deleted successfully'
+            'message' => 'Xoá hình ảnh thành công'
         ]);
     }
 
@@ -131,10 +138,10 @@ class DesignController extends Controller
             $design = Product::find($id);
             $design->delete();
             return redirect()->route('designs.index')
-                ->with('success', 'Design deleted successfully');
+                ->with('success', 'Xoá thiết kế thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting design: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi xóa thiết kế:' . $e->getMessage());
         }
     }
 
@@ -175,7 +182,7 @@ class DesignController extends Controller
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Design must have at least one image'
+                    'message' => 'Trường hình ảnh không được để trống.'
                 ], 200);
             }
 
@@ -186,23 +193,23 @@ class DesignController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'Design created successfully',
+                    'message' => 'Thiết kế được tạo thành công',
                     'redirect' => route('designs.index')
                 ]);
             }
 
             return redirect()->route('designs.index')
-                ->with('success', 'Design created successfully');
+                ->with('success', 'Thiết kế được tạo thành công');
         } catch (\Exception $e) {
             if ($request->ajax()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error creating design: ' . $e->getMessage()
+                    'message' => 'Lỗi khi tạo thiết kế:' . $e->getMessage()
                 ], 422);
             }
 
             return redirect()->back()
-                ->with('error', 'Error creating design: ' . $e->getMessage())
+                ->with('error', 'Lỗi khi tạo thiết kế: ' . $e->getMessage())
                 ->withInput();
         }
     }
