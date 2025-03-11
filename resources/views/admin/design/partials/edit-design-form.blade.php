@@ -36,7 +36,7 @@
 
                                 <div>
                                     <x-input-label for="category" :value="__('Design Category')" />
-                                    <x-select-input name="category" class="mt-1 block w-full" required>
+                                    <x-select-input name="category" class="select-search mt-1 block w-full" required>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category['id'] }}"
                                                 {{ old('category', $design->category_id) == $category->id ? 'selected' : '' }}>
@@ -49,8 +49,9 @@
 
                                 <div>
                                     <x-input-label for="tag" :value="__('Design Tags')" />
-                                    <x-select-input name="tags[]" class="select-category-multiple mt-1 block w-full"
-                                        required multiple="multiple">
+                                    <x-select-input name="tags[]"
+                                        class="select-search select-category-multiple mt-1 block w-full" required
+                                        multiple="multiple">
                                         @foreach ($tags as $tag)
                                             <option value="{{ $tag->id }}"
                                                 {{ in_array($tag->id, old('tags', $designTags)) ? 'selected' : '' }}>
