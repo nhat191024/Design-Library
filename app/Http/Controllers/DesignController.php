@@ -26,7 +26,7 @@ class DesignController extends Controller
     public function showEditForm($id)
     {
         $design = Product::find($id);
-        $categories = Category::all();
+        $categories = Category::whereNotNull('parent_id')->get();
         $tags = Tag::all();
         $designTags = $design->tags->pluck('id')->toArray();
 
@@ -147,7 +147,7 @@ class DesignController extends Controller
 
     public function create()
     {
-        $categories = Category::all();
+        $categories = Category::whereNotNull('parent_id')->get();
         $tags = Tag::all();
         return view('admin.design.index', compact('categories', 'tags'));
     }
