@@ -5,7 +5,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Design Edit') }}
+                            {{ __('Chỉnh sửa thiết kế') }}
                         </h2>
                     </header>
 
@@ -13,21 +13,21 @@
                         <!-- Left side - Form -->
                         <div class="flex-1">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-                                {{ __('Design Information') }}
+                                {{ __('Thông tin thiết kế') }}
                             </h3>
                             <form method="POST" action="{{ route('designs.update', $design->id) }}"
                                 class="max-w-xl space-y-6">
                                 @csrf
                                 @method('patch')
                                 <div>
-                                    <x-input-label for="name" :value="__('Design Name')" />
+                                    <x-input-label for="name" :value="__('Tên')" />
                                     <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
                                         :value="old('name', $design['name'])" required autofocus autocomplete="name" />
                                     <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                 </div>
 
                                 <div>
-                                    <x-input-label for="description" :value="__('Design Description')" />
+                                    <x-input-label for="description" :value="__('Mô tả')" />
                                     <x-text-input id="description" name="description" type="text"
                                         class="mt-1 block w-full" :value="old('description', $design['description'])" required autofocus
                                         autocomplete="description" />
@@ -35,8 +35,9 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="category" :value="__('Design Category')" />
-                                    <x-select-input name="category" class="mt-1 block w-full" required>
+                                    <x-input-label for="category" :value="__('Danh mục')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="category" class="select-search mt-1 block w-full" required>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category['id'] }}"
                                                 {{ old('category', $design->category_id) == $category->id ? 'selected' : '' }}>
@@ -48,9 +49,11 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="tag" :value="__('Design Tags')" />
-                                    <x-select-input name="tags[]" class="select-category-multiple mt-1 block w-full"
-                                        required multiple="multiple">
+                                    <x-input-label for="tag" :value="__('Nhãn')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="tags[]"
+                                        class="select-search select-category-multiple mt-1 block w-full" required
+                                        multiple="multiple">
                                         @foreach ($tags as $tag)
                                             <option value="{{ $tag->id }}"
                                                 {{ in_array($tag->id, old('tags', $designTags)) ? 'selected' : '' }}>
@@ -62,7 +65,7 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="image" :value="__('Design Image')" />
+                                    <x-input-label for="image" :value="__('Ảnh')" />
                                     <x-file-input id="image-edit" name="image" class="mt-1 block w-full"
                                         accept="image/*" />
                                     <div id="upload-progress" class="hidden mt-2">
@@ -74,8 +77,7 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="main-image" :value="__('Main Image')" />
-                                    <div class="mt-1"></div>
+                                    <x-input-label for="main-image" :value="__('Ảnh chính')" />
                                     <x-select-input name="main_image" id="main-image-select" class="mt-1 block w-full">
                                         @foreach ($design->Images as $image)
                                             <option value="{{ $image->id }}"
@@ -89,16 +91,15 @@
                                 </div>
 
                                 <div>
-                                    <x-input-label for="is_showcase" :value="__('Is Design Show On Home Page')" />
-                                    <div class="mt-1"></div>
+                                    <x-input-label for="is_showcase" :value="__('Hiển thị trên trang chủ?')" />
                                     <x-select-input name="is_showcase" class="mt-1 block w-full">
                                         <option value="0"
                                             {{ old('is_showcase', $design->is_showcase) == 0 ? 'selected' : '' }}>
-                                            No
+                                            Không
                                         </option>
                                         <option value="1"
                                             {{ old('is_showcase', $design->is_showcase) == 1 ? 'selected' : '' }}>
-                                            Yes
+                                            Có
                                         </option>
                                     </x-select-input>
                                     <x-input-error class="mt-2" :messages="$errors->get('category')" />
@@ -106,10 +107,10 @@
 
                                 <div>
                                     <a class="btn btn-error" href="{{ route('designs.index') }}">
-                                        Cancel Edit
+                                        Hủy
                                     </a>
                                     <button type="submit" class="btn btn-primary">
-                                        Edit Design
+                                        Xác nhận
                                     </button>
                                 </div>
                             </form>
@@ -118,7 +119,7 @@
                         <!-- Right side - Images -->
                         <div class="flex-1">
                             <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">
-                                {{ __('Design Images') }}
+                                {{ __('Ảnh thiết kế') }}
                             </h3>
 
                             <!-- Main Image -->
@@ -144,6 +145,11 @@
                                                         stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                 </svg>
                                             </button>
+                                        </div>
+
+                                        <div
+                                            class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                                            <p>{{ $image->id }}</p>
                                         </div>
                                     </div>
                                 @endforeach

@@ -5,7 +5,7 @@
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <header>
                         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-                            {{ __('Tag Edit') }}
+                            {{ __('Cập nhật nhãn') }}
                         </h2>
                     </header>
 
@@ -13,7 +13,7 @@
                         @csrf
                         @method('patch')
                         <div>
-                            <x-input-label for="name" :value="__('Tag Name')" />
+                            <x-input-label for="name" :value="__('Tên nhãn')" />
                             <x-text-input id="name" name="name" type="text" class="mt-1 block w-full"
                                 :value="old('name', $tag['name'])" required autofocus autocomplete="name" />
                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
@@ -21,10 +21,10 @@
 
                         <div>
                             <a class="btn btn-error" href="{{ route('tags.index') }}">
-                                Cancel Edit
+                                Hủy
                             </a>
                             <button type="submit" class="btn btn-primary">
-                                Edit Tag
+                                Xác nhận
                             </button>
                         </div>
                     </form>

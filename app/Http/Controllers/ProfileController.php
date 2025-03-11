@@ -69,6 +69,9 @@ class ProfileController extends Controller
         $request->validate([
             'contact_name' => ['required', 'string', 'max:255'],
             'contact_phone' => ['required', 'string', 'max:255'],
+        ], [
+            'contact_name.required' => 'Trường tên liên hệ không được để trống.',
+            'contact_phone.required' => 'Trường số điện thoại không được để trống.',
         ]);
 
         $request->user()->contacts()->create([
@@ -76,7 +79,7 @@ class ProfileController extends Controller
             'phone' => $request->contact_phone,
         ]);
 
-        return Redirect::route('profile.edit')->with('success', 'contact added');
+        return Redirect::route('profile.edit')->with('success', 'Thêm liên hệ thành công');
     }
 
     /**
@@ -87,6 +90,9 @@ class ProfileController extends Controller
         $request->validate([
             'contact_name' => ['required', 'string', 'max:255'],
             'contact_phone' => ['required', 'string', 'max:255'],
+        ], [
+            'contact_name.required' => 'Trường tên liên hệ không được để trống.',
+            'contact_phone.required' => 'Trường số điện thoại không được để trống.',
         ]);
 
         $contact->update([
@@ -94,7 +100,7 @@ class ProfileController extends Controller
             'phone' => $request->contact_phone,
         ]);
 
-        return Redirect::route('profile.edit')->with('success', 'contact updated');
+        return Redirect::route('profile.edit')->with('success', 'Câp nhật liên hệ thành công');
     }
 
     /**
@@ -104,6 +110,6 @@ class ProfileController extends Controller
     {
         $contact->delete();
 
-        return Redirect::route('profile.edit')->with('success', 'contact deleted');
+        return Redirect::route('profile.edit')->with('success', 'Xoá liên hệ thành công');
     }
 }

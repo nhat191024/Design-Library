@@ -25,4 +25,18 @@ class StoreTagRequest extends FormRequest
             'name' => 'required|string|max:255',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Trường tên không được để trống.',
+            'name.string' => 'Trường tên phải là chuỗi.',
+            'name.max' => 'Trường tên không được vượt quá 255 ký tự.',
+        ];
+    }
 }

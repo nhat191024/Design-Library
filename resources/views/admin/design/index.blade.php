@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Designs') }}
+            {{ __('Thiết kế') }}
         </h2>
     </x-slot>
 
@@ -27,7 +27,7 @@
             let imageFiles = [];
 
             function deleteDesign(id) {
-                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn item này chứ?')) {
+                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn thiết kế này chứ?')) {
                     window.location.href = `{{ url('designs/delete') }}/${id}`;
                 }
             }
@@ -54,7 +54,6 @@
                 $container.empty();
 
                 imageFiles.forEach((imageData, index) => {
-                    console.log(index)
                     const $div = $('<div>', {
                         class: 'relative group flex-none'
                     }).append(`
@@ -69,13 +68,16 @@
                                 </svg>
                             </button>
                         </div>
+                        <div class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                            <p>${index+1}</p>
+                        </div>
                     `);
                     $container.append($div);
                 });
             }
 
             // Create thumbnail element for edit form
-            function createThumbnailElement(imageUrl) {
+            function createThumbnailElement(imageId, imageUrl) {
                 return `
                         <div class="relative group flex-none">
                             <img class="w-24 h-24 object-cover rounded-lg cursor-pointer hover:ring-1 hover:ring-primary thumbnail-image"
@@ -91,8 +93,11 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                                <p>${imageId}</p>
+                            </div>
                         </div>
-                    `;
+                        `;
             }
 
             function updateMainImageSelector(edit = false, id = null, image = null) {
@@ -121,11 +126,19 @@
                 // DataTable initialization
                 $('#design-table').DataTable({
                     language: {
+                        "entries per page": "số bản ghi mỗi trang",
+                        "search": "Tìm kiếm",
+                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "emptyTable": "Không có dữ liệu",
+                        "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "lengthMenu": "Hiển thị _MENU_ bản ghi",
                         paginate: {
                             "first": "",
                             "last": "",
-                            "next": "Next",
-                            "previous": "Previous"
+                            "next": "Tiếp theo",
+                            "previous": "Trước đó"
                         }
                     }
                 });
@@ -151,7 +164,8 @@
                             success: function(data) {
                                 if (data.success) {
                                     // Add new thumbnail
-                                    const newThumbnail = $(createThumbnailElement(data.image_url));
+                                    const newThumbnail = $(createThumbnailElement(data.image_id,
+                                        data.image_url));
                                     $('.overflow-x-auto').prepend(newThumbnail);
                                     // Update main image if empty
                                     if (!$('#mainImage').attr('src')) {
@@ -167,7 +181,7 @@
                             complete: function() {
                                 $('#image').val('');
                                 $progressBar.addClass('hidden');
-                                showToast('Image added successfully.', 'success');
+                                showToast('Tải ảnh lên thành công', 'success');
                             }
                         });
                     }
@@ -234,7 +248,7 @@
                     if (!imageId) return;
 
                     const $imageContainer = $(`#image-${imageId}`);
-                    if (confirm('Are you sure you want to delete this image?')) {
+                    if (confirm(`Bạn có chắc bạn muốn xóa ảnh ${imageId}?`)) {
                         $.ajax({
                             url: `{{ url('designs/images') }}/${imageId}`,
                             type: 'DELETE',
@@ -268,7 +282,7 @@
                             },
                             error: function(error) {
                                 console.error('Error:', error);
-                                showToast('An error occurred while deleting the image.', 'error');
+                                showToast('Có lỗi xảy ra khi xóa ảnh', 'error');
                             }
                         });
                     }

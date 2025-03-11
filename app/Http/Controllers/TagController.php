@@ -32,7 +32,7 @@ class TagController extends Controller
     /**
      * Update a tag.
      */
-    public function update(StoreTagRequest $request, $id)
+    public function update(UpdateTagRequest $request, $id)
     {
         try {
             $tag = Tag::find($id);
@@ -42,10 +42,10 @@ class TagController extends Controller
             $tag->save();
 
             return redirect()->route('tags.index')
-                ->with('success', 'Tag updated successfully');
+                ->with('success', 'Cập nhật nhãn thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error updating tag: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi cập nhật nhãn: ' . $e->getMessage());
         }
     }
 
@@ -58,15 +58,15 @@ class TagController extends Controller
             $tagProduct = TagProduct::where('tag_id', $id)->first();
             if ($tagProduct) {
                 return redirect()->back()
-                    ->with('error', 'Error deleting tag: Tag is associated with a product');
+                    ->with('error', 'Lỗi khi xóa nhãn: nhãn này đang được sử dụng');
             }
             $design = Tag::find($id);
             $design->delete();
             return redirect()->route('tags.index')
-                ->with('success', 'Tag deleted successfully');
+                ->with('success', 'Xóa nhãn thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error deleting tag: ' . $e->getMessage());
+                ->with('error', 'Lỗi khi xóa nhãn: ' . $e->getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ class TagController extends Controller
     /**
      * Store a new tag.
      */
-    public function store(UpdateTagRequest $request)
+    public function store(StoreTagRequest $request)
     {
         try {
             Tag::create([
@@ -90,10 +90,10 @@ class TagController extends Controller
             ]);
 
             return redirect()->route('tags.index')
-                ->with('success', 'Tag created successfully');
+                ->with('success', 'Tạo nhãn thành công');
         } catch (\Exception $e) {
             return redirect()->back()
-                ->with('error', 'Error creating ag: ' . $e->getMessage())
+                ->with('error', 'Lỗi khi tạo nhãn: ' . $e->getMessage())
                 ->withInput();
         }
     }

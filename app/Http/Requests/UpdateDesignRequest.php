@@ -27,9 +27,30 @@ class UpdateDesignRequest extends FormRequest
             'category' => 'sometimes|exists:categories,id',
             'tags' => 'sometimes|array',
             'tags.*' => 'exists:tags,id',
-            'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
             'main-image' => 'sometimes|integer',
             'is_showcase' => 'sometimes|boolean',
+        ];
+    }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'name.string' => 'Trường tên phải là chuỗi.',
+            'name.max' => 'Trường tên không được vượt quá 255 ký tự.',
+            'description.string' => 'Trường mô tả phải là chuỗi.',
+            'category.exists' => 'Danh mục đã chọn không tồn tại.',
+            'tags.*.exists' => 'Thẻ đã chọn không tồn tại.',
+            'images.*.image' => 'Trường hình ảnh phải là hình ảnh.',
+            'images.*.mimes' => 'Trường hình ảnh phải có định dạng jpeg, png, jpg hoặc gif.',
+            'images.*.max' => 'Dung lượng hình ảnh không được vượt quá 2MB.',
+            'main-image.integer' => 'Trường hình ảnh chính phải là số nguyên.',
+            'is_showcase.boolean' => 'Trường hiển thị phải là boolean.',
         ];
     }
 }
