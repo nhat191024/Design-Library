@@ -27,7 +27,7 @@
             let imageFiles = [];
 
             function deleteDesign(id) {
-                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn item này chứ?')) {
+                if (confirm('Bạn chắc chắn muốn xóa hoàn toàn thiết kế này chứ?')) {
                     window.location.href = `{{ url('designs/delete') }}/${id}`;
                 }
             }
@@ -248,7 +248,7 @@
                     if (!imageId) return;
 
                     const $imageContainer = $(`#image-${imageId}`);
-                    if (confirm('Are you sure you want to delete this image?')) {
+                    if (confirm(`Bạn có chắc bạn muốn xóa ảnh ${imageId}?`)) {
                         $.ajax({
                             url: `{{ url('designs/images') }}/${imageId}`,
                             type: 'DELETE',
