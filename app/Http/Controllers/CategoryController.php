@@ -17,14 +17,17 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')
+            ->with('Children')
+            ->get();
         return view('admin.category.index', compact('categories'));
     }
 
     public function showEditForm($id)
     {
         $category = Category::find($id);
-        return view('admin.category.index', compact('category'));
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.category.index', compact('category', 'categories'));
     }
 
     public function update(UpdateCategoryRequest $request, $id)
@@ -39,12 +42,14 @@ class CategoryController extends Controller
 
                 $category->update([
                     'name' => $request->name,
+                    'parent_id' => $request->parent_id == "0" ? null : $request->parent_id,
                     'is_show' => $request->is_show,
                     'image' => 'images/categories/' . $imageName,
                 ]);
             } else {
                 $category->update([
                     'name' => $request->name,
+                    'parent_id' => $request->parent_id == "0" ? null : $request->parent_id,
                     'is_show' => $request->is_show
                 ]);
             }
@@ -78,7 +83,8 @@ class CategoryController extends Controller
 
     public function create()
     {
-        return view('admin.category.index');
+        $categories = Category::whereNull('parent_id')->get();
+        return view('admin.category.index', compact('categories'));
     }
 
     public function store(StoreCategoryRequest $request)
@@ -86,6 +92,7 @@ class CategoryController extends Controller
         try {
             $category = new Category();
             $category->name = $request->name;
+            $category->parent_id = $request->parent_id == 0 ? null : $request->parent_id;
             $category->is_show = $request->is_show;
 
             if ($request->hasFile('image')) {
