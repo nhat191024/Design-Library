@@ -33,6 +33,11 @@ class CategoryController extends Controller
     public function update(UpdateCategoryRequest $request, $id)
     {
         try {
+            if ($id == $request->parent_id) {
+                return redirect()->back()
+                    ->with('error', 'Error updating category: Category cannot be parent of itself');
+            }
+
             $category = Category::find($id);
 
             if ($request->hasFile('image')) {
