@@ -10,7 +10,8 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Name</th>
-                                <th>image</th>
+                                <th>Image</th>
+                                <th>Parent</th>
                                 <th>is show on nav</th>
                                 <th>Action</th>
                             </tr>
@@ -21,9 +22,10 @@
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>
-                                        <img class="w-24 h-24 object-cover mx-auto" src="{{ asset($category->image) }}"
+                                        <img class="w-24 h-24 object-contain mx-auto" src="{{ asset($category->image) }}"
                                             alt="">
                                     </td>
+                                    <td>{{ $category->parent ? $category->parent->name : 'None' }}</td>
                                     <td>{{ $category->is_show ? 'Yes' : 'No' }}</td>
                                     <td>
                                         <a href="{{ route('categories.edit', $category->id) }}"
@@ -32,13 +34,35 @@
                                             onclick="deleteCategory({{ $category->id }})">Delete</button>
                                     </td>
                                 </tr>
+
+                                @if ($category->Children->isNotEmpty())
+                                    @foreach ($category->Children as $secondKey => $child)
+                                        <tr>
+                                            <td>{{ $key }}.{{ $secondKey + 1 }}</td>
+                                            <td>{{ $child->name }}</td>
+                                            <td>
+                                                <img class="w-24 h-24 object-contain mx-auto"
+                                                    src="{{ asset($child->image) }}" alt="">
+                                            </td>
+                                            <td>{{ $child->parent ? $child->parent->name : 'None' }}</td>
+                                            <td>{{ $child->is_show ? 'Yes' : 'No' }}</td>
+                                            <td>
+                                                <a href="{{ route('categories.edit', $child->id) }}"
+                                                    class="btn btn-sm btn-primary">Edit</a>
+                                                <button class="btn btn-sm btn-error"
+                                                    onclick="deleteCategory({{ $child->id }})">Delete</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                             @endforeach
                         </tbody>
                         <tfoot>
                             <tr>
                                 <th>STT</th>
                                 <th>Name</th>
-                                <th>image</th>
+                                <th>Image</th>
+                                <th>Parent</th>
                                 <th>is show on nav</th>
                                 <th>Action</th>
                             </tr>
