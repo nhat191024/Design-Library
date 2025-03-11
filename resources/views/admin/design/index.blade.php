@@ -68,6 +68,9 @@
                                 </svg>
                             </button>
                         </div>
+                        <div class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                            <p>${index+1}</p>
+                        </div>
                     `);
                     $container.append($div);
                 });
@@ -153,7 +156,8 @@
                             success: function(data) {
                                 if (data.success) {
                                     // Add new thumbnail
-                                    const newThumbnail = $(createThumbnailElement( data.image_id, data.image_url));
+                                    const newThumbnail = $(createThumbnailElement(data.image_id,
+                                        data.image_url));
                                     $('.overflow-x-auto').prepend(newThumbnail);
                                     // Update main image if empty
                                     if (!$('#mainImage').attr('src')) {
