@@ -10,7 +10,7 @@
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Designs') }}
+            {{ __('Thiết kế') }}
         </h2>
     </x-slot>
 
@@ -126,11 +126,19 @@
                 // DataTable initialization
                 $('#design-table').DataTable({
                     language: {
+                        "entries per page": "số bản ghi mỗi trang",
+                        "search": "Tìm kiếm",
+                        "info": "Hiển thị _START_ đến _END_ của _TOTAL_ bản ghi",
+                        "infoEmpty": "Showing 0 to 0 of 0 entries",
+                        "emptyTable": "Không có dữ liệu",
+                        "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "lengthMenu": "Hiển thị _MENU_ bản ghi",
                         paginate: {
                             "first": "",
                             "last": "",
-                            "next": "Next",
-                            "previous": "Previous"
+                            "next": "Tiếp theo",
+                            "previous": "Trước đó"
                         }
                     }
                 });
