@@ -27,6 +27,18 @@
                                 </div>
 
                                 <div>
+                                    <x-input-label for="parent_id" :value="__('Parent Category')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="parent_id" class="select-search mt-1 block w-full">
+                                        <option value="0">None</option>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('category')" />
+                                </div>
+
+                                <div>
                                     <x-input-label for="is_show" :value="__('Is show on nav')" />
                                     <div class="mt-1"></div>
                                     <x-select-input id="is_show" name="is_show" class="mt-1 block w-full" required>

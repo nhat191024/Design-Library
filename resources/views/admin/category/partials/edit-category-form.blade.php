@@ -27,6 +27,20 @@
                                 </div>
 
                                 <div>
+                                    <x-input-label for="parent_id" :value="__('Parent Category')" />
+                                    <div class="mt-1"></div>
+                                    <x-select-input name="parent_id" class="select-search mt-1 block w-full">
+                                        <option value="0">None</option>
+                                        @foreach ($categories as $item)
+                                            <option value="{{ $item->id }}"
+                                                {{ old('parent_id', $category->parent_id) == $item->id ? 'selected' : '' }}>
+                                                {{ $item->name }}</option>
+                                        @endforeach
+                                    </x-select-input>
+                                    <x-input-error class="mt-2" :messages="$errors->get('parent_id')" />
+                                </div>
+
+                                <div>
                                     <x-input-label for="is_show" :value="__('Is show on nav')" />
                                     <div class="mt-1"></div>
                                     <x-select-input id="is_show" name="is_show" class="mt-1 block w-full" required>
@@ -69,7 +83,7 @@
                             <!-- Main Image Preview -->
                             <div class="w-full aspect-square mb-4">
                                 <img id="mainImage" src="{{ asset($category->image) }}"
-                                    class="w-full h-full object-cover rounded-lg" alt="Main design image">
+                                    class="w-full h-full object-contain rounded-lg" alt="Category image">
                             </div>
                         </div>
                     </div>
