@@ -74,7 +74,7 @@
             }
 
             // Create thumbnail element for edit form
-            function createThumbnailElement(imageUrl) {
+            function createThumbnailElement(imageId, imageUrl) {
                 return `
                         <div class="relative group flex-none">
                             <img class="w-24 h-24 object-cover rounded-lg cursor-pointer hover:ring-1 hover:ring-primary thumbnail-image"
@@ -90,8 +90,11 @@
                                     </svg>
                                 </button>
                             </div>
+                            <div class="absolute top-1 left-1 opacity-0 group-hover:opacity-100 transition-opacity text-gray-900 text-xs z-10 bg-white border border-black rounded-full w-6 h-6 flex items-center justify-center">
+                                <p>${imageId}</p>
+                            </div>
                         </div>
-                    `;
+                        `;
             }
 
             function updateMainImageSelector(edit = false, id = null, image = null) {
@@ -150,7 +153,7 @@
                             success: function(data) {
                                 if (data.success) {
                                     // Add new thumbnail
-                                    const newThumbnail = $(createThumbnailElement(data.image_url));
+                                    const newThumbnail = $(createThumbnailElement( data.image_id, data.image_url));
                                     $('.overflow-x-auto').prepend(newThumbnail);
                                     // Update main image if empty
                                     if (!$('#mainImage').attr('src')) {
