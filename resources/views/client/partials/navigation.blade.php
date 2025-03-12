@@ -10,12 +10,15 @@
                 </svg>
             </label>
             <ul tabindex="0"
-                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
-                <li><a href="/">Trang chủ</a></li>
-                <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 p-2 shadow max-h-[86vh] overflow-auto w-max"
+                    style="flex-flow: column;"
+                    >
+                <li><a class="font-semibold" href="/">Trang chủ</a></li>
+                <li><a class="font-semibold" href="{{ route('client.shop.index') }}">Khám phá</a></li>
+                <li><a class="font-semibold" href="{{ route('client.contact.index') }}">Liên hệ</a></li>
                 @foreach ($shared_categories as $category)
                     <li>
-                        <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a>
+                        <a class="font-bold" href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a>
                         <ul class="p-2">
                             @foreach ($category->Children as $child)
                                 <li><a href="{{ route('client.shop.category', ['slug' => $child->slug]) }}">{{ strtoupper($child->name) }}</a></li>
@@ -23,7 +26,6 @@
                         </ul>
                     </li>
                 @endforeach
-                <li><a href="{{ route('client.contact.index') }}">Liên hệ</a></li>
             </ul>
         </div>
         <!-- Your existing logo link -->
