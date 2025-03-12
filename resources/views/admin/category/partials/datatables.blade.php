@@ -22,8 +22,12 @@
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>
-                                        <img class="w-24 h-24 object-contain mx-auto" src="{{ asset($category->image) }}"
-                                            alt="">
+                                        @if ($category->image)
+                                            <img class="w-24 h-24 object-contain mx-auto"
+                                                src="{{ asset($category->image) }}" alt="">
+                                        @else
+                                            <span class="badge badge-Neutral">Lỗi ảnh</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="badge badge-Neutral">Không có</span>
@@ -49,8 +53,12 @@
                                             <td>{{ $key }}.{{ $secondKey + 1 }}</td>
                                             <td>{{ $child->name }}</td>
                                             <td>
-                                                <img class="w-24 h-24 object-contain mx-auto"
-                                                    src="{{ asset($child->image) }}" alt="">
+                                                @if ($child->image)
+                                                    <img class="w-24 h-24 object-contain mx-auto"
+                                                        src="{{ asset($child->image) }}" alt="">
+                                                @else
+                                                    <span class="badge badge-Neutral">Lỗi ảnh</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <span class="badge badge-success">{{ $child->parent->name }}</span>
