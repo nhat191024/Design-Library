@@ -39,14 +39,14 @@
     </div>
 
     <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1 text-lg">
+        <ul class="menu menu-horizontal px-1 text-lg dropdown-hover-container">
             <li><a href="/">TRANG CHỦ</a></li>
             <li><a href="{{ route('client.shop.index') }}">KHÁM PHÁ</a></li>
             @foreach ($shared_categories->take(3) as $shared_category)
-            <li>
+            <li class="dropdown-hover">
                 <details class="dropdown">
                     <summary class="mx-0">{{ strtoupper($shared_category->name) }}</summary>
-                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52" style="margin-top:0;">
                             <li><a class="font-bold text-lg" href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ strtoupper($shared_category->name) }}</a></li>
                             @foreach ($shared_category->Children as $category)
                                 <li><a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a></li>
@@ -58,10 +58,10 @@
 
             {{-- Dropdown for more categories --}}
             @if ($shared_categories->count() > 3)
-            <li>
+            <li class="dropdown-hover">
                 <details class="dropdown">
                     <summary class="mx-0">KHÁC</summary>
-                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52" style="margin-top: 0;">
                         @foreach ($shared_categories->skip(3) as $category)
                             <li><a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a></li>
                         @endforeach
@@ -126,5 +126,62 @@
                 }
             }
         }
+    });
+    $(document).ready(function() {
+        const $dropdowns = $('.dropdown-hover');
+
+        $dropdowns.each(function() {
+            const $dropdown = $(this);
+            const $details = $dropdown.find('details');
+
+            $dropdown.on('mouseenter', function() {
+                $details.attr('open', true);
+            });
+
+            $dropdown.on('mouseleave', function() {
+                if (!$details.hasClass('clicked')) {
+                    $details.removeAttr('open');
+                }
+            });
+        });
+
+        $dropdowns.each(function() {
+            const $dropdown = $(this);
+            const $details = $dropdown.find('details');
+            const $summary = $dropdown.find('summary');
+
+            $summary.on('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                $dropdowns.not($dropdown).each(function() {
+                    $(this).find('details').removeAttr('open').removeClass('clicked');
+                });
+
+                if ($details.attr('open') && $details.hasClass('clicked')) {
+                    $details.removeAttr('open').removeClass('clicked');
+                } else {
+                    $details.attr('open', true).addClass('clicked');
+                }
+            });
+        });
+
+        $dropdowns.find('.dropdown-content').on('click', function(e) {
+            e.stopPropagation();
+        });
+
+        $(document).on('click touchend', function(e) {
+            if ($(e.target).closest('.dropdown-hover').length === 0) {
+                $dropdowns.each(function() {
+                    const $details = $(this).find('details');
+                    $details.removeAttr('open');
+                    $details.removeClass('clicked');
+                });
+            }
+        });
+
+        $('details.dropdown').on('click', function(e) {
+            e.preventDefault();
+        });
     });
 </script>
