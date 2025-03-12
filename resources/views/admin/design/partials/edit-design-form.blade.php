@@ -124,8 +124,12 @@
 
                             <!-- Main Image -->
                             <div class="w-full aspect-square mb-4">
-                                <img id="mainImage" src="{{ asset($design->images->first()->url) }}"
-                                    class="w-full h-full object-contain rounded-lg" alt="Main design image">
+                                @if ($design->images->isEmpty())
+                                    <span class="badge badge-Neutral">Không có ảnh</span>
+                                @else
+                                    <img id="mainImage" src="{{ asset($design->images->first()->url) }}"
+                                        class="w-full h-full object-contain rounded-lg" alt="Main design image">
+                                @endif
                             </div>
 
                             <!-- Thumbnails -->
