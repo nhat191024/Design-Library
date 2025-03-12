@@ -11,7 +11,7 @@
     <div class="card-body absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white flex flex-col justify-center p-4 overflow-hidden">
         {{-- Description --}}
         <div class="overflow-y-scroll">
-            <p class="text-[0.65rem] sm:text-[0.75rem] md:text-[0.85rem]">
+            <p class="text-[0.75rem] sm:text-[0.80rem] md:text-[1rem]">
                 <b>{{ Str::limit($product->name, 80) }}</b> <br> {{ Str::limit($product->description, 150) }}
             </p>
         </div>
