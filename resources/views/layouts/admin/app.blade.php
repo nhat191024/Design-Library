@@ -8,6 +8,9 @@
 
     <title>{{ config('app.name', 'Laravel') . " - Admin" }}</title>
 
+    <!-- icon -->
+    <link rel="icon" href="{{ asset('images/logos/favicon.ico') }}" type="image/x-icon">
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
