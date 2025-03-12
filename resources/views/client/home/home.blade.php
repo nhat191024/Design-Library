@@ -4,7 +4,7 @@
         <div class="hero-content text-center pb-0">
             <div class="max-w-4xl">
                 <h1 class="text-3xl md:text-5xl font-bold mb-4">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
-                <h5 class="mb-6">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
+                <h5 class="mb-6 text-xl">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
 
                 <!-- Search Bar Container -->
                 <div class="flex justify-center w-full px-4">
@@ -19,7 +19,7 @@
                                             <path d="m21 21-4.3-4.3"></path>
                                         </g>
                                     </svg>
-                                    <input type="search" class="grow input input-ghost focus:outline-none"
+                                    <input type="search" class="grow input input-ghost focus:outline-none text-lg"
                                         id="search-input"
                                         placeholder="Gõ từ khóa tài nguyên bạn cần"
                                         autocomplete="off" />
@@ -31,7 +31,7 @@
                                     <ul class="py-2 max-h-60 overflow-y-auto text-left"></ul>
                                 </div>
                             </div>
-                            <button onclick="search()" id="btn-search-submit" class="btn btn-soft join-item whitespace-nowrap">Tìm kiếm</button>
+                            <button onclick="search()" id="btn-search-submit" class="btn btn-soft join-item whitespace-nowrap font-semibold">Tìm kiếm</button>
                         </div>
                     </div>
                 </div>
@@ -42,14 +42,14 @@
                         <a href="/products?q={{ $tag->name }}"
                             class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>
-                            <span>{{ $tag->name }}</span>
+                            <span class="text-lg">{{ $tag->name }}</span>
                         </a>
                     @endforeach
                 </div>
 
                 <!-- Categories -->
                 <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-7 justify-items-center">
-                    @foreach ($categories as $category)
+                    @foreach ($showcaseCategories as $category)
                         <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}"
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
@@ -57,7 +57,7 @@
                                     <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';" />
                                 </div>
                             </div>
-                            <div class="mt-2 text-xs md:text-base">{{ $category->name }}</div>
+                            <div class="mt-2 text-lg md:text-base font-semibold">{{ $category->name }}</div>
                         </a>
                     @endforeach
                 </div>
@@ -70,7 +70,7 @@
         @foreach ($categories as $category)
             <div class="mb-4 mt-6">
                 <a href="javascript:void(0)">
-                    <h1 onclick="location.href='{{ route('client.shop.category', ['slug' => $category->slug]) }}'" class="text-2xl md:text-3xl lg:text-4xl font-bold">
+                    <h1 onclick="location.href='{{ route('client.shop.category', ['slug' => $category->slug]) }}'" class="text-lg md:text-xl lg:text-2xl font-bold">
                         {{ $category->name }}
                     </h1>
                 </a>
@@ -88,7 +88,7 @@
         @endforeach
         <div class="mt-12 mb-4">
             <a href="javascript:void(0)">
-                <h1 onclick="location.href='{{ route('client.shop.index') }}'" class="text-2xl md:text-3xl lg:text-4xl font-bold">
+                <h1 onclick="location.href='{{ route('client.shop.index') }}'" class="text-lg md:text-xl lg:text-2xl font-bold">
                     Mới nhất
                 </h1>
             </a>
