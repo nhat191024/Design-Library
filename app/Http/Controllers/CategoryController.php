@@ -38,7 +38,7 @@ class CategoryController extends Controller
                     ->with('error', 'Lỗi khi cập nhật danh mục: Danh mục cha không thể là chính nó');
             }
 
-            if (Category::where('parent_id', $id)->exists()) {
+            if (Category::where('parent_id', $id)->exists() && $request->parent_id != "0") {
                 return redirect()->back()
                     ->with('error', 'Lỗi khi cập nhật danh mục: Danh mục này đang chứa danh mục con');
             }
