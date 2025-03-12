@@ -17,11 +17,13 @@ class HomeController extends Controller
         $tags = Tag::latest()->limit(50)->get();
         $categories = Category::latest()->limit(15)->get();
         $products = Product::with(['Category', 'Images', 'Tags'])->latest()->limit(28)->get();
+        $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->get();
         return view('client.home.home')->with([
             'title' => $this->PAGE_TITLE,
             'tags' => $tags,
             'categories' => $categories,
-            'products' => $products
+            'products' => $products,
+            'showcaseCategories' => $showcaseCategories
         ]);
     }
 }

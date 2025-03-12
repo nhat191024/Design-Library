@@ -159,12 +159,20 @@ class ShopController extends Controller
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->first();
+        $categories = Category::all();
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
+        if ($category->parent_id) {
+            $products = Product::where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(48);
+        } else {
+            $products = Product::whereHas('Category', function ($query) use ($category) {
+                $query->where('parent_id', $category->id);
+            })->with('Category', 'Images', 'Tags')->paginate(48);
+            $categories = Category::where('parent_id', $category->id)->get();
+        }
         $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
         $tags = Tag::latest()->get()->unique('name');
-        $categories = Category::all();
         return view('client.shop.index')->with([
             'title' => $category->name,
             'products' => $products,

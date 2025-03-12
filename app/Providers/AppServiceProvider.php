@@ -24,7 +24,8 @@ class AppServiceProvider extends ServiceProvider
         // the try catch block is to prevent the error when the database is not yet migrated
         try {
             // Share categories to all views (so we can display them everywhere)
-            View::share('shared_categories', Category::where('is_show', 1)->latest()->take(50)->get());
+            $parentCategories = Category::where('is_show', 1)->whereNull('parent_id')->latest()->get();
+            View::share('shared_categories', $parentCategories??[]);
         } catch (\Throwable $th) {
         }
     }

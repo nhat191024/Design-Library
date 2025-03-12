@@ -10,15 +10,31 @@
                 </svg>
             </label>
             <ul tabindex="0"
-                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow">
-                <li><a href="/">Trang chủ</a></li>
-                <li><a href="{{ route('client.shop.index') }}">Khám phá</a></li>
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 p-2 shadow max-h-[86vh] overflow-auto w-max"
+                    style="flex-flow: column;"
+                    >
+                <li><a class="font-semibold" href="/">Trang chủ</a></li>
+                <li><a class="font-semibold" href="{{ route('client.shop.index') }}">Khám phá</a></li>
+                <li><a class="font-semibold" href="{{ route('client.contact.index') }}">Liên hệ</a></li>
+                @foreach ($shared_categories as $category)
+                    <li>
+                        <a class="font-bold" href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a>
+                        <ul class="p-2">
+                            @foreach ($category->Children as $child)
+                                <li><a href="{{ route('client.shop.category', ['slug' => $child->slug]) }}">{{ strtoupper($child->name) }}</a></li>
+                            @endforeach
+                        </ul>
+                    </li>
+                @endforeach
             </ul>
         </div>
-        <!-- Logo -->
-        <a class="btn btn-ghost flex items-center" href="/">
-            <svg width="42" height="42" viewBox="0 0 415 415" xmlns="http://www.w3.org/2000/svg"><rect x="82.5" y="290" width="250" height="125" rx="62.5" fill="#1AD1A5"></rect><circle cx="207.5" cy="135" r="130" fill="black" fill-opacity=".3"></circle><circle cx="207.5" cy="135" r="125" fill="white"></circle><circle cx="207.5" cy="135" r="56" fill="#FF9903"></circle></svg>
-            <span class="ml-1 font-bold text-xl">designSC</span>
+        <!-- Your existing logo link -->
+        <a class="btn btn-ghost swap swap-flip w-12 md:w-20 px-0" href="/">
+            <img src="{{ asset('images/logos/logo-nav.png') }}" alt="Logo" class="absolute h-12 w-12 md:h-16 md:w-16 lg:h-16 lg:w-16 xl:h-16 xl:w-16 text-primary swap-off">
+            <img src="{{ asset('images/logos/logo-footer.png') }}" alt="Logo" class="absolute h-12 w-12 md:h-16 md:w-16 lg:h-16 lg:w-16 xl:h-16 xl:w-16 text-primary swap-on">
+        </a>
+        <a class="btn btn-ghost px-0" href="/">
+            <span class="ml-1 font-bold text-xl hidden md:block">THIETKEDECOR</span>
         </a>
     </div>
 
@@ -27,7 +43,17 @@
             <li><a href="/">TRANG CHỦ</a></li>
             <li><a href="{{ route('client.shop.index') }}">KHÁM PHÁ</a></li>
             @foreach ($shared_categories->take(3) as $shared_category)
-                <li><a href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ strtoupper($shared_category->name) }}</a></li>
+            <li>
+                <details class="dropdown">
+                    <summary class="mx-0">{{ strtoupper($shared_category->name) }}</summary>
+                    <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+                            <li><a class="font-bold text-lg" href="{{ route('client.shop.category', ['slug' => $shared_category->slug]) }}">{{ strtoupper($shared_category->name) }}</a></li>
+                            @foreach ($shared_category->Children as $category)
+                                <li><a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}">{{ strtoupper($category->name) }}</a></li>
+                            @endforeach
+                        </ul>
+                    </details>
+                </li>
             @endforeach
 
             {{-- Dropdown for more categories --}}
@@ -70,6 +96,35 @@
             const newTheme = themeToggle.is(":checked") ? "dark" : "light";
             $("html").attr("data-theme", newTheme);
             localStorage.setItem("theme", newTheme);
+            flipLogo();
         });
+
+        initLogo();
+
+        function flipLogo() {
+            const logo = $(".swap");
+            if (localStorage.getItem("theme") === "light") {
+                if (!logo.hasClass("swap-active")) {
+                    logo.addClass("swap-active");
+                }
+            } else {
+                if (logo.hasClass("swap-active")) {
+                    logo.removeClass("swap-active");
+                }
+            }
+        }
+
+        function initLogo() {
+            const logo = $(".swap");
+            if (localStorage.getItem("theme") === "light") {
+                if (!logo.hasClass("swap-active")) {
+                    logo.addClass("swap-active");
+                }
+            } else {
+                if (logo.hasClass("swap-active")) {
+                    logo.removeClass("swap-active");
+                }
+            }
+        }
     });
 </script>

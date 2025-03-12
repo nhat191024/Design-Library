@@ -7,10 +7,10 @@
         {{-- Categories - First Row --}}
         <div class="flex flex-wrap gap-2 mb-3">
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
-                <span class="text-base-content/70">Danh mục:</span>
+                <span class="text-base-content/70 text-sm">Danh mục:</span>
             </button>
             @foreach ($categories as $category)
-                <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}" class="btn btn-sm btn-ghost bg-base-200md">
+                <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}" class="btn btn-sm btn-ghost bg-base-200md text-sm">
                     <span class="text-base-content/70">{{ $category->name }}</span>
                 </a>
             @endforeach
@@ -19,7 +19,7 @@
         {{-- Tags - Second Row --}}
         <div class="flex flex-wrap gap-2 mb-6">
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
-                <span class="text-base-content/70">Tags:</span>
+                <span class="text-base-content/70 text-sm">Tags:</span>
             </button>
             @php
                 $i = 0;
@@ -27,7 +27,7 @@
             @foreach ($tags as $tag)
                 @if ($i < 30)
                     <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
-                        <span class="text-base-content/70">{{ $tag->name }}</span>
+                        <span class="text-base-content/70 text-sm">{{ $tag->name }}</span>
                     </a>
                     @php
                         $i++;
@@ -63,13 +63,15 @@
                 </div>
             </div>
 
-            <button class="btn btn-soft" onclick="search()">Tìm kiếm</button>
+            <button class="btn btn-soft font-bold" onclick="search()">Tìm kiếm</button>
         </div>
 
-        {{-- Search Results Title --}}
-        <div class="text-xl font-medium mb-6">
-            Kết quả cho {{ 'từ khóa' }}: <span class="font-bold">{{ request('q') ?? isset($query)?$query:'' }}</span>
-        </div>
+        @if(request('q'))
+            {{-- Search Results Title --}}
+            <div class="text-xl font-medium mb-6">
+                Kết quả cho {{ 'từ khóa' }}: <span class="font-bold">{{ request('q') ?? isset($query)?$query:'' }}</span>
+            </div>
+        @endif
     </div>
 
 
