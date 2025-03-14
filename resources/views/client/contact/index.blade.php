@@ -21,7 +21,7 @@
                         <div class="space-y-4">
                             <div class="flex items-start gap-4">
                                 <div class="bg-primary/10 p-3 rounded-full">
-                                    <img src="{{ asset('images/icons/zalo-light.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
+                                    <img src="{{ asset('images/logos/zalo.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
                                 </div>
                                 <a href="https://zalo.me/0908556913" target="_blank" rel="noopener noreferrer"
                                     class="group hover:text-primary transition-colors duration-200">
@@ -35,7 +35,7 @@
 
                             <div class="flex items-start gap-4">
                                 <div class="bg-primary/10 p-3 rounded-full">
-                                    <img src="{{ asset('images/icons/zalo-light.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
+                                    <img src="{{ asset('images/logos/zalo.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
                                 </div>
                                 <a href="https://zalo.me/0975038534" target="_blank" rel="noopener noreferrer"
                                     class="group hover:text-primary transition-colors duration-200">
@@ -69,11 +69,7 @@
                             {{-- Facebook Link --}}
                             <div class="flex items-start gap-4">
                                 <div class="bg-primary/10 p-3 rounded-full">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none"
-                                        viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-                                    </svg>
+                                    <img src="{{ asset('images/logos/facebook.png') }}" alt="Facebook Icon" class="h-6 w-6 text-primary">
                                 </div>
                                 <a href="https://www.facebook.com/profile.php?id=61574064683251" target="_blank" rel="noopener noreferrer"
                                     class="group hover:text-primary transition-colors duration-200">

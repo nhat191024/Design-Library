@@ -29,20 +29,20 @@
             </ul>
         </div>
         <!-- Your existing logo link -->
-        <a class="btn btn-ghost swap swap-flip w-12 md:w-20 px-0" href="/">
-            <img src="{{ asset('images/logos/logo-nav.png') }}" alt="Logo" class="absolute h-12 w-12 md:h-16 md:w-16 lg:h-16 lg:w-16 xl:h-16 xl:w-16 text-primary swap-off">
-            <img src="{{ asset('images/logos/logo-footer.png') }}" alt="Logo" class="absolute h-12 w-12 md:h-16 md:w-16 lg:h-16 lg:w-16 xl:h-16 xl:w-16 text-primary swap-on">
+        <a class="btn btn-ghost swap swap-flip w-20 md:w-24 h-20 md:h-24 px-0" href="/">
+            <img src="{{ asset('images/logos/logo-nav.png') }}" alt="Logo" class="absolute h-18 w-18 md:h-24 md:w-24 lg:h-24 lg:w-24 xl:h-24 xl:w-24 text-primary swap-off">
+            <img src="{{ asset('images/logos/logo-footer.png') }}" alt="Logo" class="absolute h-18 w-18 md:h-24 md:w-24 lg:h-24 lg:w-24 xl:h-24 xl:w-24 text-primary swap-on">
         </a>
         <a class="btn btn-ghost px-0" href="/">
-            <span class="ml-1 font-bold text-xl hidden md:block">THIETKEDECOR</span>
+            <span class="ml-1 font-bold text-xl hidden md:block">THIETKEDECOR.VN</span>
         </a>
     </div>
 
     <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1 text-lg dropdown-hover-container">
+        <ul class="menu menu-horizontal px-1 text-base dropdown-hover-container">
             <li><a href="/">TRANG CHỦ</a></li>
             <li><a href="{{ route('client.shop.index') }}">KHÁM PHÁ</a></li>
-            @foreach ($shared_categories->take(3) as $shared_category)
+            @foreach ($shared_categories as $shared_category)
             <li class="dropdown-hover">
                 <details class="dropdown">
                     <summary class="mx-0">{{ strtoupper($shared_category->name) }}</summary>
@@ -57,7 +57,7 @@
             @endforeach
 
             {{-- Dropdown for more categories --}}
-            @if ($shared_categories->count() > 3)
+            {{-- @if ($shared_categories->count() > 3)
             <li class="dropdown-hover">
                 <details class="dropdown">
                     <summary class="mx-0">KHÁC</summary>
@@ -68,7 +68,7 @@
                     </ul>
                 </details>
             </li>
-            @endif
+            @endif --}}
         </ul>
     </div>
 
