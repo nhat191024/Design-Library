@@ -10,6 +10,8 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên</th>
+                                <th>Mã</th>
+                                <th>Giá</th>
                                 <th>Miêu tả</th>
                                 <th>Ảnh chính</th>
                                 <th>Danh mục</th>
@@ -23,7 +25,9 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $design->name }}</td>
-                                    <td>{{ $design->description }}</td>
+                                    <td>{{ $design->code }}</td>
+                                    <td>{{ number_format($design->price) }} VNĐ</td>
+                                    <td class="w-[15%]">{{ $design->description }}</td>
                                     <td>
                                         @if ($design->MainImage && $design->MainImage->count() > 0)
                                             <img class="w-24 h-24 object-contain mx-auto"
@@ -40,7 +44,7 @@
                                             </span>
                                         @endforeach
                                     </td>
-                                    <td>
+                                    <td class="w-[10%]">
                                         @if ($design->is_showcase)
                                             <span class="badge badge-success">Hiển thị</span>
                                         @else
@@ -60,6 +64,8 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên</th>
+                                <th>Mã</th>
+                                <th>Giá</th>
                                 <th>Miêu tả</th>
                                 <th>Ảnh chính</th>
                                 <th>Danh mục</th>
