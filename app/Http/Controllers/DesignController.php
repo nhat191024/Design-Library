@@ -39,6 +39,8 @@ class DesignController extends Controller
             $design = Product::find($id);
             $design->update([
                 'name' => $request->name,
+                'price' => $request->price,
+                'code' => $request->code,
                 'description' => $request->description,
                 'category_id' => $request->category,
                 'main_image' => $request->main_image,
@@ -155,12 +157,28 @@ class DesignController extends Controller
     public function store(StoreDesignRequest $request)
     {
         try {
+            if (!$request->hasFile('images')) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Trường hình ảnh không được để trống.'
+                ], 200);
+            }
+
             $design = Product::create([
                 'name' => $request['name'],
+                'price' => $request['price'],
                 'description' => $request['description'],
                 'category_id' => $request['category'],
                 'is_showcase' => $request['is_showcase']
             ]);
+
+            if ($request['code'] !== null) {
+                $design->code = $request->code;
+                $design->save();
+            } else {
+                $design->code = 'SP' . $design->id;
+                $design->save();
+            }
 
             if ($request->hasFile('images')) {
                 foreach ($request->file('images') as $key => $image) {
@@ -179,11 +197,6 @@ class DesignController extends Controller
                         $design->save();
                     }
                 }
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Trường hình ảnh không được để trống.'
-                ], 200);
             }
 
             if ($request->has('tags')) {
