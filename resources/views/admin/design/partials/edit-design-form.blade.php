@@ -27,6 +27,20 @@
                                 </div>
 
                                 <div>
+                                    <x-input-label for="code" :value="__('Mã thiết kế')" />
+                                    <x-text-input id="code" name="code" type="text" class="mt-1 block w-full"
+                                        :value="old('code', $design['code'])" :placeholder="'Để trống để tự động tạo'" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('code')" />
+                                </div>
+
+                                <div>
+                                    <x-input-label for="price" :value="__('Giá tiền')" />
+                                    <x-text-input id="price" name="price" type="text" class="mt-1 block w-full"
+                                        :value="old('price', $design['price'])" />
+                                    <x-input-error class="mt-2" :messages="$errors->get('price')" />
+                                </div>
+
+                                <div>
                                     <x-input-label for="description" :value="__('Mô tả')" />
                                     <x-text-input id="description" name="description" type="text"
                                         class="mt-1 block w-full" :value="old('description', $design['description'])" required autofocus
