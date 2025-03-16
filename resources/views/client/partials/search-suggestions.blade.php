@@ -34,7 +34,8 @@
                 return;
             }
 
-            suggestions.forEach(suggestion => {
+            // Limit suggestions to 15
+            suggestions.slice(0, 15).forEach(suggestion => {
                 const keyword = searchInput.val();
                 const highlightedText = highlightKeyword(suggestion, keyword);
 

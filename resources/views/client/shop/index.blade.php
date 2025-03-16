@@ -9,7 +9,7 @@
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
                 <span class="text-base-content/70 text-sm">Danh mục:</span>
             </button>
-            @foreach ($categories as $category)
+            @foreach ($categories->take(9) as $category)
                 <a href="{{ route('client.shop.category', ['slug' => $category->slug]) }}" class="btn btn-sm btn-ghost bg-base-200md text-sm">
                     <span class="text-base-content/70">{{ $category->name }}</span>
                 </a>
@@ -21,20 +21,10 @@
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
                 <span class="text-base-content/70 text-sm">Tags:</span>
             </button>
-            @php
-                $i = 0;
-            @endphp
-            @foreach ($tags as $tag)
-                @if ($i < 30)
+            @foreach ($tags->take(10) as $tag)
                     <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
                         <span class="text-base-content/70 text-sm">{{ $tag->name }}</span>
                     </a>
-                    @php
-                        $i++;
-                    @endphp
-                @else
-                    @break
-                @endif
             @endforeach
         </div>
 
