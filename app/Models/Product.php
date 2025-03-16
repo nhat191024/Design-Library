@@ -45,10 +45,12 @@ class Product extends Model
 
         static::creating(function ($product) {
             $product->slug = $product->slug ?: self::generateSlug($product);
+            $product->code = $product->code ?: $product->generateCode();
         });
 
         static::updating(function ($product) {
             $product->slug = self::generateSlug($product);
+            $product->code = $product->code ?: $product->generateCode();
         });
     }
 
@@ -65,5 +67,10 @@ class Product extends Model
             return 'san-pham-' . Str::slug($product->name) . '-' . $timestamp . '-' . ($product->id ?? Str::random(6));
         }
         return Str::slug($product->name) . '-' . ($product->id ?? $timestamp);
+    }
+
+    public function generateCode()
+    {
+        return strtoupper('SP' . Str::random(3) . time());
     }
 }
