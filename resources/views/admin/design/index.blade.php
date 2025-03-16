@@ -237,7 +237,7 @@
                         },
                         error: function(xhr) {
                             const response = xhr.responseJSON;
-                            alert(response.message);
+                            showToast(response.message, 'error');
                         }
                     });
                 });
