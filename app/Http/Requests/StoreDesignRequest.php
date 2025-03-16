@@ -23,6 +23,8 @@ class StoreDesignRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'price' => 'required|integer',
+            'code' => 'max:255|unique:products,code',
             'description' => 'required|string',
             'category' => 'required|exists:categories,id',
             'tags' => 'required|array',
@@ -44,6 +46,9 @@ class StoreDesignRequest extends FormRequest
             'name.required' => 'Trường tên không được để trống.',
             'name.string' => 'Trường tên phải là chuỗi.',
             'name.max' => 'Trường tên không được vượt quá 255 ký tự.',
+            'price.integer' => 'Trường giá phải là số nguyên.',
+            'code.max' => 'Trường mã không được vượt quá 255 ký tự.',
+            'code.unique' => 'Mã đã tồn tại.',
             'description.required' => 'Trường mô tả không được để trống.',
             'description.string' => 'Trường mô tả phải là chuỗi.',
             'category.required' => 'Trường danh mục không được để trống.',

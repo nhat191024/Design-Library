@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name');
             $table->text('description')->nullable();
+            $table->integer('price');
+            $table->string('code')->unique()->nullable();
             $table->text('slug');
             $table->unsignedBigInteger('category_id'); // Foreign key to category
             $table->unsignedBigInteger('main_image')->nullable(); // Foreign key to image
