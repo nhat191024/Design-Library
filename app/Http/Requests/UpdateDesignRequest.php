@@ -24,7 +24,7 @@ class UpdateDesignRequest extends FormRequest
         return [
             'name' => 'sometimes|string|max:255',
             'price' => 'sometimes|integer',
-            'code' => 'sometimes|string|max:255|unique:products,code',
+            'code' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
             'category' => 'sometimes|exists:categories,id',
             'tags' => 'sometimes|array',
@@ -48,7 +48,6 @@ class UpdateDesignRequest extends FormRequest
             'price.integer' => 'Trường giá phải là số nguyên.',
             'code.string' => 'Trường mã phải là chuỗi.',
             'code.max' => 'Trường mã không được vượt quá 255 ký tự.',
-            'code.unique' => 'Mã đã tồn tại.',
             'description.string' => 'Trường mô tả phải là chuỗi.',
             'category.exists' => 'Danh mục đã chọn không tồn tại.',
             'tags.*.exists' => 'Thẻ đã chọn không tồn tại.',
