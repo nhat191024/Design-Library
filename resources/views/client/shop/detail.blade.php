@@ -128,6 +128,43 @@
         </div>
     </div>
 </div>
+
+<button class="hidden" id="download_modal_button" class="btn" onclick="download_modal.showModal()">open modal</button>
+<dialog id="download_modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold mb-4">Tải xuống hình ảnh</h3>
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="download_modal_body">
+                    @foreach($product->Images as $index => $image)
+                        <tr>
+                            <td><img src="{{ asset($image->url) }}" alt="{{ $image->name }}" width="50%"></td>
+                            <td>
+                                <a href="{{ asset($image->url) }}" download="{{ $image->name }}" class="btn btn-sm btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Đóng</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
 <script>
     function setActiveThumbnail(activeIndex) {
         $('[id^="thumb"]').removeClass('border-primary').addClass('border-gray-200');
@@ -137,6 +174,12 @@
             block: 'nearest',
             inline: 'center'
         });
+    }
+
+    function initDownloadModal()
+    {
+        $('#download_modal_button').click();
+
     }
 
     $(document).ready(function() {
@@ -150,12 +193,40 @@
     });
 
     downloadImage = (x) => {
+        isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        if (isMobile) {
+            $.ajax({
+                url: `{{ route('client.product.detail.download-mobile', ['slug' => $product->slug, 'is_mobile' => true]) }}`,
+                type: 'GET',
+                success: function(res) {
+                    // check if response type is blob
+                        console.log('got many data...', res);
+                        if (res.length > 200) {
+                            console.log('too much data...');
+                            location.href = `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`;
+                        } else {
+                            initDownloadModal(res.images);
+                        }
+                    $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg> Đã tải xuống`).prop('disabled', false);
+                },
+                beforeSend: function() {
+                    $('#downloadButton').html('<span class="loading loading-spinner"></span> Đang tải xuống').prop('disabled', true);
+                    console.log('beforeSend...');
+                },
+                error: function(xhr, status, error) {
+                    $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg> Vui lòng thử lại sau`).prop('disabled', false);
+                }
+            });
+            return;
+        }
+
         $.ajax({
             url: `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`,
             type: 'GET',
-            xhrFields: {
-                responseType: 'blob'
-            },
             success: function(blob) {
                 location.href = `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`;
                 $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
