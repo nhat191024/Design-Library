@@ -11,5 +11,7 @@ Route::get('/products?q={query?}', [ShopController::class, 'search'])->name('cli
 Route::get('/products/category/{slug}', [ShopController::class, 'category'])->name('client.shop.category'); // shop category filter
 Route::get('/products/detail/{slug}', [ShopController::class, 'detail'])->name('client.product.detail'); // product detail
 Route::get('/products/detail/{slug}/download', [ShopController::class, 'downloadImage'])->name('client.product.detail.download'); // product detail image download
+Route::get('/products/detail/{slug}/download/{is_mobile}', [ShopController::class, 'downloadImage'])->name('client.product.detail.download-mobile'); // product detail mobile image download
+Route::get('/products/detail/{slug}/download-one', [ShopController::class, 'downloadImage'])->name('client.product.detail.download-one'); // product detail 1 image download
 
 Route::get('/contact', [ContactController::class, 'index'])->name('client.contact.index'); // contact index
