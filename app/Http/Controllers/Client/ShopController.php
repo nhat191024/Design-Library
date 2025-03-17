@@ -25,7 +25,7 @@ class ShopController extends Controller
         }
 
         $tags = Tag::latest()->get()->unique('name');
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')->get();
 
         return view('client.shop.index')->with([
             'title' => "Cửa hàng - Design showcase",
@@ -106,6 +106,7 @@ class ShopController extends Controller
 
     public function downloadImage($slug): BinaryFileResponse
     {
+        // TODO: add is mobile parameter
         $product = Product::where('slug', $slug)->first();
         try {
             $imageCount = $product->Images->count();
@@ -159,19 +160,18 @@ class ShopController extends Controller
     public function category($slug)
     {
         $category = Category::where('slug', $slug)->first();
-        $categories = Category::all();
+        $categories = Category::whereNull('parent_id')->get();
+        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
         if ($category->parent_id) {
-            $products = Product::where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(48);
+            $products = Product::latest()->where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(48);
         } else {
-            $products = Product::whereHas('Category', function ($query) use ($category) {
+            $products = Product::latest()->whereHas('Category', function ($query) use ($category) {
                 $query->where('parent_id', $category->id);
             })->with('Category', 'Images', 'Tags')->paginate(48);
-            $categories = Category::where('parent_id', $category->id)->get();
         }
-        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
         $tags = Tag::latest()->get()->unique('name');
         return view('client.shop.index')->with([
             'title' => $category->name,
