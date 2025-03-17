@@ -104,10 +104,10 @@ class ShopController extends Controller
         return $products;
     }
 
-    public function downloadImage($slug): BinaryFileResponse
+    public function downloadImage($slug, Request $request)
     {
-        // TODO: add is mobile parameter
         $product = Product::where('slug', $slug)->first();
+        $isMobile = $request->is_mobile?? false;
         try {
             $imageCount = $product->Images->count();
         } catch (\Exception $e) {
@@ -124,36 +124,66 @@ class ShopController extends Controller
             if ($image->url === null) {
                 abort(404);
             }
-            return response()->download(public_path($image->url), null, [
-                'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-            ]);
+            return $this->downloadOneImage($image->url);
         } else {
-            $directory = storage_path('app/public/images/designs');
-            if (!is_dir($directory)) {
-                mkdir($directory, 0755, true);
-            }
-            $zipFileName = 'tai-nguyen-' . $product->slug . '.zip';
-            $zipFilePath = $directory . DIRECTORY_SEPARATOR . $zipFileName;
-            $zip = new ZipArchive;
-            $result = $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-            if ($result === true) {
-                $zip->setCompressionIndex(0, ZipArchive::CM_STORE);
+
+            if ($isMobile) {
+                // send all the file urls to ajax request
+                $imageUrls = [];
                 foreach ($product->Images as $image) {
                     $filePath = public_path($image->url);
                     if (file_exists($filePath)) {
-                        $zip->addFile($filePath, basename($filePath));
-                        $index = $zip->lastId;
-                        // set no compression for this zip file (best optimize for server performance)
-                        $zip->setCompressionIndex($index, ZipArchive::CM_STORE);
+                        $imageUrls[] = [
+                            'url' => asset($image->url),
+                            'name' => basename($filePath)
+                        ];
                     }
                 }
-                $zip->close();
+                return response()->json([
+                    'images' => $imageUrls,
+                    'product_name' => $product->slug
+                ]);
             } else {
-                abort(500);
+                $directory = storage_path('app/public/images/designs');
+                if (!is_dir($directory)) {
+                    mkdir($directory, 0755, true);
+                }
+                $zipFileName = 'tai-nguyen-' . $product->slug . '.zip';
+                $zipFilePath = $directory . DIRECTORY_SEPARATOR . $zipFileName;
+                $zip = new ZipArchive;
+                $result = $zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE);
+                if ($result === true) {
+                    $zip->setCompressionIndex(0, ZipArchive::CM_STORE);
+                    foreach ($product->Images as $image) {
+                        $filePath = public_path($image->url);
+                        if (file_exists($filePath)) {
+                            $zip->addFile($filePath, basename($filePath));
+                            $index = $zip->lastId;
+                            // set no compression for this zip file (best optimize for server performance)
+                            $zip->setCompressionIndex($index, ZipArchive::CM_STORE);
+                        }
+                    }
+                    $zip->close();
+                } else {
+                    abort(500);
+                }
+                return response()->download($zipFilePath, null, [
+                    'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
+                ])->deleteFileAfterSend(true);
             }
-            return response()->download($zipFilePath, null, [
+        }
+    }
+
+    // function to download one image
+    public function downloadOneImage($imageUrl): BinaryFileResponse
+    {
+        $filePath = public_path($imageUrl);
+        if (file_exists($filePath)) {
+            return response()->download($filePath, null, [
                 'Cache-Control' => 'no-store, no-cache, must-revalidate, max-age=0',
-            ])->deleteFileAfterSend(true);
+            ]);
+        } else {
+            abort(404);
         }
     }
 
