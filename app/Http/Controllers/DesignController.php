@@ -37,6 +37,16 @@ class DesignController extends Controller
     {
         try {
             $design = Product::find($id);
+
+            if ($request->code != $design->code) {
+                $request->validate([
+                    'code' => 'max:255|unique:products,code'
+                ], [
+                    'code.max' => 'Trường mã không được vượt quá 255 ký tự.',
+                    'code.unique' => 'Mã đã tồn tại.'
+                ]);
+            }
+
             $design->update([
                 'name' => $request->name,
                 'price' => $request->price,

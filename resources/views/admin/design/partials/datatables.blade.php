@@ -12,7 +12,6 @@
                                 <th>Tên</th>
                                 <th>Mã</th>
                                 <th>Giá</th>
-                                <th>Miêu tả</th>
                                 <th>Ảnh chính</th>
                                 <th>Danh mục</th>
                                 <th>Nhãn</th>
@@ -26,8 +25,7 @@
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $design->name }}</td>
                                     <td>{{ $design->code }}</td>
-                                    <td>{{ number_format($design->price) }} VNĐ</td>
-                                    <td class="w-[15%]">{{ $design->description }}</td>
+                                    <td class="w-[15%]">{{ $design->price }}</td>
                                     <td>
                                         @if ($design->MainImage && $design->MainImage->count() > 0)
                                             <img class="w-24 h-24 object-contain mx-auto"
@@ -66,7 +64,6 @@
                                 <th>Tên</th>
                                 <th>Mã</th>
                                 <th>Giá</th>
-                                <th>Miêu tả</th>
                                 <th>Ảnh chính</th>
                                 <th>Danh mục</th>
                                 <th>Nhãn</th>

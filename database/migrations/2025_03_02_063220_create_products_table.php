@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id(); // Auto-incrementing primary key
             $table->string('name');
             $table->text('description')->nullable();
-            $table->integer('price');
+            $table->text('price');
             $table->string('code')->unique()->nullable();
             $table->text('slug');
             $table->unsignedBigInteger('category_id'); // Foreign key to category

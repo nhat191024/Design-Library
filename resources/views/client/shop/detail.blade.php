@@ -64,48 +64,54 @@
             {{-- Price --}}
             <div class="flex items-center gap-4">
                 @if($product->price)
-                    <span class="text-2xl font-bold text-primary">{{ number_format($product->price) }}đ</span>
+                    <span class="text-3xl font-bold text-primary">{{ $product->price }}</span>
                 @else
                     <span class="text-2xl font-bold text-error">Giá liên hệ</span>
                 @endif
             </div>
 
+            <div class="flex items-center gap-4">
+                {{-- Description --}}
+                <div id="description-content" class="tab-content block">
+                    <h3 class="text-xl font-semibold mb-4"></h3>
+                    <p class="text-md text-gray-500">Mã SP: {{ $product->code }}</p>
+                    <p class="text-lg">{{ $product->description }}</p>
+                </div>
+            </div>
+
             {{-- Category --}}
             <div>
-            <span class="text-gray-600 text-lg">Danh mục: </span>
-            <a href="{{ route('client.shop.category', ['slug' => $product->Category->slug]) }}" class="font-semibold text-lg link link-hover">{{ $product->Category->name }}</a>
+                <span class="text-gray-600 text-lg">Danh mục: </span>
+                <a href="{{ route('client.shop.category', ['slug' => $product->Category->slug]) }}" class="font-semibold text-lg link link-hover">{{ $product->Category->name }}</a>
             </div>
 
             <div class="flex flex-wrap gap-2 mb-6">
-            <span class="text-gray-600 text-lg">Tags: </span>
-            @foreach ($tags as $tag)
-            <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
-                <span class="text-base-content/70 text-lg font-semibold">{{ $tag->name }}</span>
-            </a>
-            @endforeach
-            <div id="description-content" class="tab-content block">
-                <h3 class="text-xl font-semibold mb-4"></h3>
-                <p class="text-md text-gray-500">Mã SP: {{ $product->code }}</p>
-                <p class="text-lg">{{ $product->description }}</p>
-            </div>
+                <span class="text-gray-600 text-lg">Tags: </span>
+                @foreach ($tags as $tag)
+                <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
+                    <span class="text-base-content/70 text-lg font-semibold">{{ $tag->name }}</span>
+                </a>
+                @endforeach
             </div>
 
             {{-- Action Buttons --}}
             <div class="flex flex-wrap gap-4">
-            <button id="downloadButton" class="btn btn-soft text-lg" onclick="downloadImage('x')"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 28 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8" />
-              </svg>Tải xuống</button>
-            <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">Liên hệ ngay</button>
+                <button id="downloadButton" class="btn btn-soft text-lg" onclick="downloadImage('x')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 28 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8" />
+                    </svg>Tải xuống
+                </button>
+                <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">Liên hệ ngay</button>
             </div>
 
             {{-- Social Share --}}
             <div class="flex gap-2 mt-4" onclick="location.href='{{ route('client.contact.index') }}'">
-            <button class="btn btn-circle btn-ghost">
-                <img src="{{ asset('images/logos/zalo.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
-            </button>
-            <button class="btn btn-circle btn-ghost">
-                <img src="{{ asset('images/logos/facebook.png') }}" alt="Facebook Icon" class="h-6 w-6 text-primary">
-            </button>
+                <button class="btn btn-circle btn-ghost">
+                    <img src="{{ asset('images/logos/zalo.png') }}" alt="Zalo Icon" class="h-6 w-6 text-primary">
+                </button>
+                <button class="btn btn-circle btn-ghost">
+                    <img src="{{ asset('images/logos/facebook.png') }}" alt="Facebook Icon" class="h-6 w-6 text-primary">
+                </button>
             </div>
         </div>
     </div>
@@ -122,6 +128,43 @@
         </div>
     </div>
 </div>
+
+<button class="hidden" id="download_modal_button" class="btn" onclick="download_modal.showModal()">open modal</button>
+<dialog id="download_modal" class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-bold mb-4">Tải xuống hình ảnh</h3>
+        <div class="overflow-x-auto">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Ảnh</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="download_modal_body">
+                    @foreach($product->Images as $index => $image)
+                        <tr>
+                            <td><img src="{{ asset($image->url) }}" alt="{{ $image->name }}" width="50%"></td>
+                            <td>
+                                <a href="{{ asset($image->url) }}" download="{{ $image->name }}" class="btn btn-sm btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-action">
+            <form method="dialog">
+                <button class="btn">Đóng</button>
+            </form>
+        </div>
+    </div>
+</dialog>
+
 <script>
     function setActiveThumbnail(activeIndex) {
         $('[id^="thumb"]').removeClass('border-primary').addClass('border-gray-200');
@@ -131,6 +174,12 @@
             block: 'nearest',
             inline: 'center'
         });
+    }
+
+    function initDownloadModal()
+    {
+        $('#download_modal_button').click();
+
     }
 
     $(document).ready(function() {
@@ -144,12 +193,40 @@
     });
 
     downloadImage = (x) => {
+        isMobile = /iPhone|iPad|iPod|Android|webOS|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+        if (isMobile) {
+            $.ajax({
+                url: `{{ route('client.product.detail.download-mobile', ['slug' => $product->slug, 'is_mobile' => true]) }}`,
+                type: 'GET',
+                success: function(res) {
+                    // check if response type is blob
+                        console.log('got many data...', res);
+                        if (res.length > 200) {
+                            console.log('too much data...');
+                            location.href = `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`;
+                        } else {
+                            initDownloadModal(res.images);
+                        }
+                    $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg> Đã tải xuống`).prop('disabled', false);
+                },
+                beforeSend: function() {
+                    $('#downloadButton').html('<span class="loading loading-spinner"></span> Đang tải xuống').prop('disabled', true);
+                    console.log('beforeSend...');
+                },
+                error: function(xhr, status, error) {
+                    $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg> Vui lòng thử lại sau`).prop('disabled', false);
+                }
+            });
+            return;
+        }
+
         $.ajax({
             url: `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`,
             type: 'GET',
-            xhrFields: {
-                responseType: 'blob'
-            },
             success: function(blob) {
                 location.href = `{{ route('client.product.detail.download', ['slug' => $product->slug]) }}`;
                 $('#downloadButton').html(`<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">

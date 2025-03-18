@@ -10,23 +10,23 @@
     ],
 
     "categories": [
-        { "id": 1, "name": "Website", "parent_id": null, "is_show": 1 },
-        { "id": 2, "name": "Landing Pages", "parent_id": 1, "is_show": 1 },
-        { "id": 3, "name": "Mobile UI", "parent_id": null, "is_show": 1 },
-        { "id": 4, "name": "Admin", "parent_id": 1, "is_show": 1 },
-        { "id": 5, "name": "E-commerce", "parent_id": 1, "is_show": 1 },
-        { "id": 6, "name": "Dashboard", "parent_id": 1, "is_show": 1 },
-        { "id": 7, "name": "Blog", "parent_id": 1, "is_show": 1 },
-        { "id": 8, "name": "Portfolio", "parent_id": 1, "is_show": 1 }
+        { "id": 1, "name": "UI/UX", "parent_id": null, "is_show": 1 },
+        { "id": 2, "name": "Design", "parent_id": null, "is_show": 1 },
+        { "id": 3, "name": "Website", "parent_id": 1, "is_show": 1 },
+        { "id": 4, "name": "Landing Pages", "parent_id": 1, "is_show": 1 },
+        { "id": 5, "name": "Mobile UI", "parent_id": 2, "is_show": 1 },
+        { "id": 6, "name": "Admin", "parent_id": 2, "is_show": 1 },
+        { "id": 7, "name": "E-commerce", "parent_id": 2, "is_show": 1 },
+        { "id": 8, "name": "Portfolio", "parent_id": 2, "is_show": 1 }
     ],
 
     "products": [
-        { "id": 1, "price":94000, "name": "Portfolio Template 1", "description": "A sleek portfolio template", "category_id": 2, "is_showcase": "1" },
-        { "id": 2, "price":104000, "name": "E-commerce UI Kit 1", "description": "A modern e-commerce UI kit", "category_id": 1 , "is_showcase": "1"},
-        { "id": 3, "price":114000, "name": "Mobile App UI 1", "description": "A clean and simple mobile app UI", "category_id": 3, "is_showcase": "1" },
-        { "id": 4, "price":124000, "name": "Portfolio Template 2", "description": "A sleek portfolio template 2", "category_id": 2, "is_showcase": "0" },
-        { "id": 5, "price":134000, "name": "E-commerce UI Kit 2", "description": "A modern e-commerce UI kit 2", "category_id": 1 , "is_showcase": "0"},
-        { "id": 6, "price":144000, "name": "Mobile App UI 2", "description": "A clean and simple mobile app UI 2", "category_id": 3, "is_showcase": "0" }
+        { "id": 1, "price":94000, "name": "Portfolio Template 1", "description": "A sleek portfolio template", "category_id": 3, "is_showcase": "1" },
+        { "id": 2, "price":104000, "name": "E-commerce UI Kit 1", "description": "A modern e-commerce UI kit", "category_id": 4 , "is_showcase": "1"},
+        { "id": 3, "price":114000, "name": "Mobile App UI 1", "description": "A clean and simple mobile app UI", "category_id": 5, "is_showcase": "1" },
+        { "id": 4, "price":124000, "name": "Portfolio Template 2", "description": "A sleek portfolio template 2", "category_id": 6, "is_showcase": "0" },
+        { "id": 5, "price":134000, "name": "E-commerce UI Kit 2", "description": "A modern e-commerce UI kit 2", "category_id": 7 , "is_showcase": "0"},
+        { "id": 6, "price":144000, "name": "Mobile App UI 2", "description": "A clean and simple mobile app UI 2", "category_id": 8, "is_showcase": "0" }
     ],
 
     "images": [

@@ -17,11 +17,11 @@
         </div>
 
         {{-- Tags - Second Row --}}
-        <div class="flex flex-wrap gap-2 mb-6">
+        <div class="flex flex-wrap gap-2 mb-6 overflow-x-auto" style="flex-flow: nowrap">
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
                 <span class="text-base-content/70 text-sm">Tags:</span>
             </button>
-            @foreach ($tags->take(10) as $tag)
+            @foreach ($tags as $tag)
                     <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
                         <span class="text-base-content/70 text-sm">{{ $tag->name }}</span>
                     </a>

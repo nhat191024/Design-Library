@@ -67,29 +67,10 @@
 
     {{-- main page content --}}
     <main class="pb-10 container mx-auto px-4">
-        @foreach ($categories as $category)
-            <div class="mb-4 mt-6">
-                <a href="javascript:void(0)">
-                    <h1 onclick="location.href='{{ route('client.shop.category', ['slug' => $category->slug]) }}'" class="text-lg md:text-xl lg:text-2xl font-bold">
-                        {{ $category->name }}
-                    </h1>
-                </a>
-                <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                @php
-                    $products = $category->ProductsShowCase()->get();
-                    if ($products->isEmpty()) {
-                        $products = $category->Products->take(8);
-                    }
-                @endphp
-                @include('client.partials.products-loop', ['products' => $products])
-            </div>
-        @endforeach
         <div class="mt-12 mb-4">
             <a href="javascript:void(0)">
                 <h1 onclick="location.href='{{ route('client.shop.index') }}'" class="text-lg md:text-xl lg:text-2xl font-bold">
-                    Mới nhất
+                    Design Nổi Bật
                 </h1>
             </a>
             <div class="mt-2 h-1 w-20 bg-primary rounded-full"></div>
