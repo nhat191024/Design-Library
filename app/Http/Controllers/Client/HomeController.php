@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $tags = Tag::latest()->limit(50)->get();
         $categories = Category::whereNull('parent_id')->latest()->limit(15)->get();
-        $products = Product::where('is_showcase', 1)->get();
+        $products = Product::where('is_showcase', 1)->latest()->get();
         $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->latest()->get();
         return view('client.home.home')->with([
             'title' => $this->PAGE_TITLE,
