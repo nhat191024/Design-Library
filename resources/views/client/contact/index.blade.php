@@ -89,10 +89,10 @@
             </div>
             {{-- Map Card --}}
             <div class="">
-                <div class="card bg-base-100 shadow-lg h-[60%]">
+                <div class="card bg-base-100 shadow-lg h-[90%]">
                     <div class="card-body p-0 overflow-hidden rounded-box">
                         <div class="aspect-[16/9]">
-                            <img src="{{ asset('images/designs/placeholder.jpg') }}" alt="Placeholder Image" class="h-[50%] w-full object-cover" />
+                            <img src="{{ asset('images/logos/tag_web_tam_thoi.jpg') }}" alt="Placeholder Image" class="h-[100%] w-full object-cover" />
                         </div>
                     </div>
                 </div>

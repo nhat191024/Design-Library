@@ -21,9 +21,8 @@ class ShopController extends Controller
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
-            $products = Product::with('Category', 'Images', 'Tags')->paginate(48);
+            $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(48);
         }
-
         $tags = Tag::latest()->get()->unique('name');
         $categories = Category::whereNull('parent_id')->get();
 

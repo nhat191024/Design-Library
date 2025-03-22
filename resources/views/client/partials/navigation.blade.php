@@ -31,7 +31,7 @@
         <!-- Your existing logo link -->
         <a class="btn btn-ghost swap swap-flip w-20 md:w-24 h-20 md:h-24 px-0" href="/">
             <img src="{{ asset('images/logos/logo-nav.png') }}" alt="Logo" class="absolute h-18 w-18 md:h-24 md:w-24 lg:h-24 lg:w-24 xl:h-24 xl:w-24 text-primary swap-off">
-            <img src="{{ asset('images/logos/logo-footer.png') }}" alt="Logo" class="absolute h-18 w-18 md:h-24 md:w-24 lg:h-24 lg:w-24 xl:h-24 xl:w-24 text-primary swap-on">
+            <img src="{{ asset('images/logos/logo-nav.png') }}" alt="Logo" class="absolute h-18 w-18 md:h-24 md:w-24 lg:h-24 lg:w-24 xl:h-24 xl:w-24 text-primary swap-on">
         </a>
         <a class="btn btn-ghost px-0" href="/">
             <span class="ml-1 font-semibold text-xl hidden md:block"
