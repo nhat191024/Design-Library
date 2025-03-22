@@ -34,7 +34,7 @@
             <p class="link link-hover">Nhận thiết kế & thương mại file Event, Birthday, Wedding,...</p>
             <p class="link link-hover">Cung cấp nguồn tài nguyên thiết kế đa dạng, chất lượng.</p>
             <p class="link link-hover">Tìm kiếm tài nguyên theo yêu cầu, Tải tài nguyên từ các trang web như: Etsy,
-                Freepik, PNGtreeShutterstock, Istock, Pikbest, Adobe Stock,...</p>
+                Freepik, PNGtree, Shutterstock, Istock, Pikbest, Adobe Stock,...</p>
         </nav>
     </div>
 </footer>
