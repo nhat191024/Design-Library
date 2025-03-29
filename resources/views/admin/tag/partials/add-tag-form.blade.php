@@ -19,6 +19,17 @@
                         </div>
 
                         <div>
+                            <x-input-label for="isShow" :value="__('Hiển thị ở khung tìm kiếm')" />
+                            <select id="isShow" name="isShow"
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500
+                            dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                                <option value="1">Có</option>
+                                <option value="0">Không</option>
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('isShow')" />
+                        </div>
+
+                        <div>
                             <a class="btn btn-error" href="{{ route('tags.index') }}">
                                 Hủy
                             </a>

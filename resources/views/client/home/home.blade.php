@@ -38,7 +38,7 @@
 
                 <!-- Popular Tags -->
                 <div class="flex flex-wrap justify-center gap-2 mt-5">
-                    @foreach ($tags->take(15) as $tag)
+                    @foreach ($tagSuggestions as $tag)
                         <a href="/products?q={{ $tag->name }}"
                             class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200">
                             <i class="las la-search"></i>

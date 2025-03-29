@@ -9,7 +9,8 @@ class Tag extends Model
     protected $table = 'tags';
 
     protected $fillable = [
-        'name'
+        'name',
+        'is_show'
     ];
 
     public function Products()

@@ -10,6 +10,7 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên</th>
+                                <th>Hiển thị</th>
                                 <th>Hành động</th>
                             </tr>
                         </thead>
@@ -18,6 +19,7 @@
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td>{{ $tag->name }}</td>
+                                    <td>{{ $tag->is_show ? 'Có' : 'Không' }}</td>
                                     <td>
                                         <a href="{{ route('tags.edit', $tag->id) }}"
                                             class="btn btn-sm btn-primary">Sửa</a>
@@ -31,6 +33,7 @@
                             <tr>
                                 <th>STT</th>
                                 <th>Tên</th>
+                                <th>Hiển thị</th>
                                 <th>Hành động</th>
                             </tr>
                         </tfoot>

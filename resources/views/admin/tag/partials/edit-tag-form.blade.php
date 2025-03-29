@@ -18,6 +18,17 @@
                                 :value="old('name', $tag['name'])" required autofocus autocomplete="name" />
                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
+                        
+                        <div>
+                            <x-input-label for="isShow" :value="__('Hiển thị')" />
+                            <select id="isShow" name="isShow" 
+                                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-500 focus:border-indigo-500
+                                       dark:bg-gray-800 dark:text-white dark:border-gray-600">
+                                <option value="1" {{ old('isShow', $tag->is_show) == 1 ? 'selected' : '' }}>Có</option>
+                                <option value="0" {{ old('isShow', $tag->is_show) == 0 ? 'selected' : '' }}>Không</option>
+                            </select>
+                            <x-input-error class="mt-2" :messages="$errors->get('isShow')" />
+                        </div>
 
                         <div>
                             <a class="btn btn-error" href="{{ route('tags.index') }}">

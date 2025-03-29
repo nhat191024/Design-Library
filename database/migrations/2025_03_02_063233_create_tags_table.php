@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->tinyInteger('is_show')->default(0);
             $table->timestamps();
         });
     }

@@ -38,6 +38,7 @@ class TagController extends Controller
             $tag = Tag::find($id);
             $tag->update([
                 'name' => $request->name,
+                'is_show' => $request->isShow,
             ]);
             $tag->save();
 
@@ -87,6 +88,7 @@ class TagController extends Controller
         try {
             Tag::create([
                 'name' => $request->name,
+                'is_show' => $request->isShow,
             ]);
 
             return redirect()->route('tags.index')
