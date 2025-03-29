@@ -23,6 +23,7 @@ class ShopController extends Controller
         } else {
             $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(48);
         }
+        $tagSuggestions = Tag::where('is_show', true)->get();
         $tags = Tag::latest()->get()->unique('name');
         $categories = Category::whereNull('parent_id')->get();
 
@@ -31,7 +32,8 @@ class ShopController extends Controller
             'products' => $products,
             'tags' => $tags,
             'categories' => $categories,
-            'query' => $request->q ?? ''
+            'query' => $request->q ?? '',
+            'tagSuggestions' => $tagSuggestions,
         ]);
     }
 
@@ -201,13 +203,15 @@ class ShopController extends Controller
                 $query->where('parent_id', $category->id);
             })->with('Category', 'Images', 'Tags')->paginate(48);
         }
-        $tags = Tag::latest()->get()->unique('name');
+        $tagSuggestions = Tag::where('is_show', true)->get();
+        $tags = Tag::where('is_show', '1')->latest()->get()->unique('name');
         return view('client.shop.index')->with([
             'title' => $category->name,
             'products' => $products,
             'tags' => $tags,
             'categories' => $categories,
-            'query' => $category->name
+            'query' => $category->name,
+            'tagSuggestions' => $tagSuggestions,
         ]);
     }
 

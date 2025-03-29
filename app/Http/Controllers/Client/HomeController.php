@@ -14,7 +14,8 @@ class HomeController extends Controller
 
     public function index()
     {
-        $tags = Tag::latest()->limit(50)->get();
+        $tagSuggestions = Tag::where('is_show', true)->get();
+        $tags = Tag::latest()->get();
         $categories = Category::whereNull('parent_id')->latest()->limit(15)->get();
         $products = Product::where('is_showcase', 1)->latest()->get();
         $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->latest()->get();
@@ -23,7 +24,8 @@ class HomeController extends Controller
             'tags' => $tags,
             'categories' => $categories,
             'products' => $products,
-            'showcaseCategories' => $showcaseCategories
+            'showcaseCategories' => $showcaseCategories,
+            'tagSuggestions' => $tagSuggestions,
         ]);
     }
 }

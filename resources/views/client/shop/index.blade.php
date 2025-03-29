@@ -21,7 +21,7 @@
             <button class="btn btn-sm btn-ghost bg-base-200md" disabled>
                 <span class="text-base-content/70 text-sm">Tags:</span>
             </button>
-            @foreach ($tags as $tag)
+            @foreach ($tagSuggestions as $tag)
                     <a href="/products?q={{ $tag->name }}" class="btn btn-sm btn-ghost bg-base-200">
                         <span class="text-base-content/70 text-sm">{{ $tag->name }}</span>
                     </a>
