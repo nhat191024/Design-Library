@@ -48,20 +48,20 @@ class ShopController extends Controller
     {
         try {
             $products = Product::search($query, function ($meilisearch, $query, $options) {
-            $options['typoTolerance'] = [
-                'enabled' => true,
-                'minWordSizeForTypos' => [
-                'oneTypo' => 3,
-                'twoTypos' => 6
-                ],
-                'disableOnWords' => [],
-                'disableOnAttributes' => []
-            ];
+                $options['typoTolerance'] = [
+                    'enabled' => true,
+                    'minWordSizeForTypos' => [
+                        'oneTypo' => 3,
+                        'twoTypos' => 6
+                    ],
+                    'disableOnWords' => [],
+                    'disableOnAttributes' => []
+                ];
 
-            return $meilisearch->search($query, $options);
+                return $meilisearch->search($query, $options);
             })
-            ->with('Category', 'Images', 'Tags')
-            ->paginate(48);
+                ->with('Category', 'Images', 'Tags')
+                ->paginate(48);
             return $products;
         } catch (\Exception $e) {
             return null;
@@ -78,6 +78,27 @@ class ShopController extends Controller
      */
     public function fallbackToBasicSearch($searchTerm)
     {
+
+        $query  = null;
+
+        $query = Tag::where('name', 'like', '%' . $searchTerm . '%')->first();
+
+        if ($query) {
+            $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
+                $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
+            })->with('Category', 'Images', 'Tags')->paginate(48);
+            return $products;
+        }
+
+        $query = Category::where('name', 'like', '%' . $searchTerm . '%')->first();
+
+        if ($query) {
+            $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
+                $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
+            })->with('Category', 'Images', 'Tags')->paginate(48);
+            return $products;
+        }
+
         $query = Product::query();
         $query->with('Category', 'Images', 'Tags');
         $query->where(function ($q) use ($searchTerm) {
@@ -101,6 +122,7 @@ class ShopController extends Controller
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
             });
         });
+
         $products = $query->paginate(48);
         return $products;
     }
@@ -108,7 +130,7 @@ class ShopController extends Controller
     public function downloadImage($slug, Request $request)
     {
         $product = Product::where('slug', $slug)->first();
-        $isMobile = $request->is_mobile?? false;
+        $isMobile = $request->is_mobile ?? false;
         try {
             $imageCount = $product->Images->count();
         } catch (\Exception $e) {
