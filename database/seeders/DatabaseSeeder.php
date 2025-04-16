@@ -60,6 +60,7 @@ class DatabaseSeeder extends Seeder
         foreach ($dataArray['tags'] as $row) {
             Tag::create([
                 "name" => $row['name'],
+                "is_show" => $row['is_show']
             ]);
         }
 
