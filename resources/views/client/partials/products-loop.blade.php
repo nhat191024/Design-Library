@@ -5,7 +5,8 @@
             src="{{ asset($product->MainImage ? $product->MainImage->url : ($product->images->first() ? $product->images->first()->url : null)) }}"
             onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';"
             alt="{{ $product->name }}"
-            class="w-full h-full object-cover" />
+            loading="lazy"
+            class="w-full h-full object-cover lazy-image" />
         <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
     </figure>
     <div class="card-body absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-white flex flex-col justify-center p-4 overflow-hidden">
@@ -39,7 +40,7 @@
         if (event.type === "touchend") {
             event.preventDefault();
         }
-        console.log('going to: '+ link);
+        // console.log('going to: '+ link);
         window.location.href = link;
     }
 </script>
