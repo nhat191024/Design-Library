@@ -20,18 +20,18 @@
                                         </g>
                                     </svg>
                                     <input type="search" class="grow input input-ghost focus:outline-none text-lg"
-                                        id="search-input"
-                                        placeholder="Gõ từ khóa tài nguyên bạn cần"
-                                        autocomplete="off" />
+                                        id="search-input" placeholder="Gõ từ khóa tài nguyên bạn cần" autocomplete="off" />
                                 </label>
                                 <div class="validator-hint hidden">Vui lòng nhập khóa</div>
 
                                 {{-- Suggestions Dropdown --}}
-                                <div id="search-suggestions" class="absolute z-20 w-full mt-1 bg-base-100 shadow-lg rounded-md border border-base-300 hidden">
+                                <div id="search-suggestions"
+                                    class="absolute z-20 w-full mt-1 bg-base-100 shadow-lg rounded-md border border-base-300 hidden">
                                     <ul class="py-2 max-h-60 overflow-y-auto text-left"></ul>
                                 </div>
                             </div>
-                            <button onclick="search()" id="btn-search-submit" class="btn btn-soft join-item whitespace-nowrap font-semibold">Tìm kiếm</button>
+                            <button onclick="search()" id="btn-search-submit"
+                                class="btn btn-soft join-item whitespace-nowrap font-semibold">Tìm kiếm</button>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,9 @@
                             class="flex flex-col items-center hover:opacity-80 transition-opacity">
                             <div class="avatar">
                                 <div class="w-10 h-10 md:w-14 md:h-14 rounded-full ring ring-warning ring-offset-2">
-                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';" />
+                                    <img src="{{ asset($category->image) }}" alt="{{ $category->name }}" loading="lazy"
+                                        class="lazy-image"
+                                        onerror="this.onerror=null;this.src='{{ asset('/images/designs/placeholder.jpg') }}';" />
                                 </div>
                             </div>
                             <div class="mt-2 text-lg md:text-base font-semibold">{{ $category->name }}</div>
@@ -69,7 +71,8 @@
     <main class="pb-10 container mx-auto px-4">
         <div class="mt-12 mb-4">
             <a href="javascript:void(0)">
-                <h1 onclick="location.href='{{ route('client.shop.index') }}'" class="text-lg md:text-xl lg:text-2xl font-bold">
+                <h1 onclick="location.href='{{ route('client.shop.index') }}'"
+                    class="text-lg md:text-xl lg:text-2xl font-bold">
                     Design Nổi Bật
                 </h1>
             </a>
@@ -81,9 +84,34 @@
     </main>
     <script>
         function search() {
-            const query = document.querySelector('input[type="search"]').value;
+            const query = $('#search-input').val();
             window.location.href = `/products?q=${query}`;
         }
+
+        $(document).ready(function() {
+            if ('IntersectionObserver' in window) {
+                const lazyImages = $('.lazy-image');
+                
+                const imageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            const img = $(entry.target);
+                            
+                            if (img.data('src')) {
+                                img.attr('src', img.data('src'));
+                                img.removeAttr('data-src');
+                            }
+
+                            imageObserver.unobserve(entry.target);
+                        }
+                    });
+                });
+
+                lazyImages.each(function() {
+                    imageObserver.observe(this);
+                });
+            }
+        });
     </script>
     @include('client.partials.search-suggestions')
 @endsection
