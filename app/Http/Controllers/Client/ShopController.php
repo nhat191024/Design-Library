@@ -11,7 +11,10 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
 class ShopController extends Controller
+
 {
+    private const ITEM_PER_PAGE = 24;
+
     public function index(Request $request)
     {
         if ($request->has('q')) {
@@ -21,7 +24,7 @@ class ShopController extends Controller
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
-            $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(48);
+            $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(self::ITEM_PER_PAGE);
         }
         $tagSuggestions = Tag::where('is_show', true)->get();
         $tags = Tag::latest()->get()->unique('name');
@@ -61,7 +64,7 @@ class ShopController extends Controller
                 return $meilisearch->search($query, $options);
             })
                 ->with('Category', 'Images', 'Tags')
-                ->paginate(48);
+                ->paginate(self::ITEM_PER_PAGE);
             return $products;
         } catch (\Exception $e) {
             return null;
@@ -86,7 +89,7 @@ class ShopController extends Controller
         if ($query) {
             $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
                 $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })->with('Category', 'Images', 'Tags')->paginate(48);
+            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
             return $products;
         }
 
@@ -95,7 +98,7 @@ class ShopController extends Controller
         if ($query) {
             $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })->with('Category', 'Images', 'Tags')->paginate(48);
+            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
             return $products;
         }
 
@@ -123,7 +126,7 @@ class ShopController extends Controller
             });
         });
 
-        $products = $query->paginate(48);
+        $products = $query->paginate(self::ITEM_PER_PAGE);
         return $products;
     }
 
@@ -214,16 +217,19 @@ class ShopController extends Controller
     {
         $category = Category::where('slug', $slug)->first();
         $categories = Category::whereNull('parent_id')->get();
-        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(48);
+        if (!$category) {
+            return redirect()->route('client.shop.index');
+        }
+        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
         if ($category->parent_id) {
-            $products = Product::latest()->where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(48);
+            $products = Product::latest()->where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
         } else {
             $products = Product::latest()->whereHas('Category', function ($query) use ($category) {
                 $query->where('parent_id', $category->id);
-            })->with('Category', 'Images', 'Tags')->paginate(48);
+            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
         }
         $tagSuggestions = Tag::where('is_show', true)->get();
         $tags = Tag::where('is_show', '1')->latest()->get()->unique('name');
@@ -244,7 +250,7 @@ class ShopController extends Controller
             return redirect()->route('client.shop.index');
         }
         try {
-            $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->with('Category', 'Images', 'Tags')->paginate(48);
+            $relatedProducts = Product::where('category_id', $product->category_id)->where('id', '!=', $product->id)->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
         } catch (\Exception $e) {
             $relatedProducts = [];
         }

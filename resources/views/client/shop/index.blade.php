@@ -69,18 +69,20 @@
     <main class="pb-10 container mx-auto px-4">
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             <div class="flex-col justify-center col-span-full mt-4">
-                {{ $products->links() }}
+                {{ $products->appends(request()->except('page'))->links() }}
             </div>
             @include('client.partials.products-loop')
             <div class="flex-col justify-center col-span-full mt-4">
-                {{ $products->links() }}
+                {{ $products->appends(request()->except('page'))->links() }}
             </div>
         </div>
     </main>
     <script>
         function search() {
             const query = document.querySelector('input[type="search"]').value;
-            window.location.href = `/products?q=${query}`;
+            if (query) {
+                window.location.href = `/products?q=${encodeURIComponent(query)}`;
+            }
         }
     </script>
     @include('client.partials.search-suggestions')
