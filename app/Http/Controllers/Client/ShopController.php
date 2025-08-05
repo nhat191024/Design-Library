@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Client;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 
 class ShopController extends Controller
@@ -81,15 +81,17 @@ class ShopController extends Controller
      */
     public function fallbackToBasicSearch($searchTerm)
     {
-
-        $query  = null;
+        $query = null;
 
         $query = Tag::where('name', 'like', '%' . $searchTerm . '%')->first();
 
         if ($query) {
             $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
                 $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
+            })
+            ->with('Category', 'Images', 'Tags')
+            ->orderBy('created_at', 'desc')
+            ->paginate(self::ITEM_PER_PAGE);
             return $products;
         }
 
@@ -98,7 +100,10 @@ class ShopController extends Controller
         if ($query) {
             $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
+            })
+            ->with('Category', 'Images', 'Tags')
+            ->orderBy('created_at', 'desc')
+            ->paginate(self::ITEM_PER_PAGE);
             return $products;
         }
 
@@ -125,6 +130,8 @@ class ShopController extends Controller
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
             });
         });
+
+        $query->orderBy('created_at', 'desc');
 
         $products = $query->paginate(self::ITEM_PER_PAGE);
         return $products;
