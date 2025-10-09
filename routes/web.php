@@ -7,7 +7,7 @@ use App\Http\Controllers\CategoryController;
 
 use Illuminate\Support\Facades\Route;
 
-require __DIR__.'/client.php';
+require __DIR__ . '/client.php';
 
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/contact/delete/{contact}', [ProfileController::class, 'deleteContact'])->name('profile.delete-contact');
 
     Route::get('/designs', [DesignController::class, 'index'])->name('designs.index');
+    Route::get('/designs/data', [DesignController::class, 'getDesignsData'])->name('designs.data');
     Route::get('/designs/create', [DesignController::class, 'create'])->name('designs.create');
     Route::post('/designs/store', [DesignController::class, 'store'])->name('designs.store');
     Route::get('/designs/edit/{id}', [DesignController::class, 'showEditForm'])->name('designs.edit');
@@ -45,4 +46,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

@@ -19,8 +19,97 @@ class DesignController extends Controller
      */
     public function index()
     {
-        $designs = Product::all();
-        return view('admin.design.index', compact('designs'));
+        return view('admin.design.index');
+    }
+
+    /**
+     * Get designs data for DataTable with server-side processing
+     */
+    public function getDesignsData(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Product::with(['MainImage', 'category', 'tags'])
+                ->select('products.*');
+
+            $totalRecords = Product::count();
+
+            // Search functionality
+            if ($search = $request->get('search')['value']) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('code', 'like', "%{$search}%")
+                        ->orWhere('price', 'like', "%{$search}%");
+                });
+                $filteredRecords = $query->count();
+            } else {
+                $filteredRecords = $totalRecords;
+            }
+
+            // Order
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->get('order')[0]['column'];
+                $orderDirection = $request->get('order')[0]['dir'];
+                $columns = ['id', 'name', 'code', 'price', 'main_image', 'category_id', 'tags', 'is_showcase'];
+
+                if (isset($columns[$orderColumnIndex])) {
+                    $query->orderBy($columns[$orderColumnIndex], $orderDirection);
+                }
+            } else {
+                $query->latest();
+            }
+
+            // Pagination
+            $start = $request->get('start', 0);
+            $length = $request->get('length', 10);
+            $designs = $query->skip($start)->take($length)->get();
+
+            // Format data for DataTable
+            $data = [];
+            foreach ($designs as $key => $design) {
+                $mainImage = '';
+                if ($design->MainImage) {
+                    $mainImage = '<img class="w-24 h-24 object-contain mx-auto" src="' . asset($design->MainImage->url) . '" alt="">';
+                } else {
+                    $mainImage = '<p>Lỗi Ảnh</p>';
+                }
+
+                $tags = '';
+                foreach ($design->tags as $tag) {
+                    $tags .= '<span class="badge badge-info mr-1">' . $tag->name . '</span>';
+                }
+
+                $showcase = $design->is_showcase
+                    ? '<span class="badge badge-success">Hiển thị</span>'
+                    : '<span class="badge badge-danger">Không hiển thị</span>';
+
+                $actions = '
+                    <a href="' . route('designs.edit', $design->id) . '" class="btn btn-sm btn-primary">Sửa</a>
+                    <button class="btn btn-sm btn-error" onclick="deleteDesign(' . $design->id . ')">Xóa</button>
+                ';
+
+                $data[] = [
+                    'DT_RowId' => 'row_' . $design->id,
+                    $start + $key + 1,
+                    $design->name,
+                    $design->code,
+                    $design->price,
+                    $mainImage,
+                    $design->category->name ?? 'N/A',
+                    $tags,
+                    $showcase,
+                    $actions
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->get('draw')),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $data
+            ]);
+        }
+
+        return response()->json(['error' => 'Invalid request'], 400);
     }
 
     public function showEditForm($id)
