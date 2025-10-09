@@ -24,15 +24,33 @@ class ShopController extends Controller
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
-            $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(self::ITEM_PER_PAGE);
+            $products = Product::with([
+                'Category:id,name,slug',
+                'MainImage:id,url',
+                'images' => function ($query) {
+                    $query->select('id', 'url', 'product_id')->limit(1);
+                }
+            ])
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->latest()
+                ->paginate(self::ITEM_PER_PAGE);
         }
-        $tagSuggestions = Tag::where('is_show', true)->get();
+
+        $tagSuggestions = Tag::where('is_show', true)
+            ->select('id', 'name')
+            ->get();
+
+        $categories = Category::whereNull('parent_id')
+            ->select('id', 'name', 'slug')
+            ->limit(9)
+            ->get();
 
         return view('client.shop.index')->with([
             'title' => "Cửa hàng - Design showcase",
             'products' => $products,
             'query' => $request->q ?? '',
             'tagSuggestions' => $tagSuggestions,
+            'categories' => $categories,
         ]);
     }
 
@@ -59,7 +77,14 @@ class ShopController extends Controller
 
                 return $meilisearch->search($query, $options);
             })
-                ->with('Category', 'Images', 'Tags')
+                ->query(fn($query) => $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at'))
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
                 ->paginate(self::ITEM_PER_PAGE);
             return $products;
         } catch (\Exception $e) {
@@ -85,7 +110,14 @@ class ShopController extends Controller
             $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
                 $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
             })
-                ->with('Category', 'Images', 'Tags')
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
                 ->orderBy('created_at', 'desc')
                 ->paginate(self::ITEM_PER_PAGE);
             return $products;
@@ -97,14 +129,28 @@ class ShopController extends Controller
             $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
                 $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
             })
-                ->with('Category', 'Images', 'Tags')
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
                 ->orderBy('created_at', 'desc')
                 ->paginate(self::ITEM_PER_PAGE);
             return $products;
         }
 
         $query = Product::query();
-        $query->with('Category', 'Images', 'Tags');
+        $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at');
+        $query->with([
+            'Category:id,name,slug',
+            'MainImage:id,url',
+            'images' => function ($query) {
+                $query->select('id', 'url', 'product_id')->limit(1);
+            }
+        ]);
         $query->where(function ($q) use ($searchTerm) {
             $q->where('name', 'like', '%' . $searchTerm . '%');
             $words = explode(' ', $searchTerm);
@@ -218,23 +264,51 @@ class ShopController extends Controller
 
     public function category($slug)
     {
-        $category = Category::where('slug', $slug)->first();
-        $categories = Category::whereNull('parent_id')->get();
+        $category = Category::where('slug', $slug)
+            ->select('id', 'name', 'slug', 'parent_id')
+            ->first();
+
         if (!$category) {
             return redirect()->route('client.shop.index');
         }
-        $products = $category->Products()->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
-        if (!$category) {
-            return redirect()->route('client.shop.index');
-        }
+
+        $categories = Category::whereNull('parent_id')
+            ->select('id', 'name', 'slug')
+            ->limit(9)
+            ->get();
+
         if ($category->parent_id) {
-            $products = Product::latest()->where('category_id', $category->id)->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
+            $products = Product::latest()
+                ->where('category_id', $category->id)
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
+                ->paginate(self::ITEM_PER_PAGE);
         } else {
-            $products = Product::latest()->whereHas('Category', function ($query) use ($category) {
-                $query->where('parent_id', $category->id);
-            })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
+            $products = Product::latest()
+                ->whereHas('Category', function ($query) use ($category) {
+                    $query->where('parent_id', $category->id);
+                })
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
+                ->paginate(self::ITEM_PER_PAGE);
         }
-        $tagSuggestions = Tag::where('is_show', true)->get();
+
+        $tagSuggestions = Tag::where('is_show', true)
+            ->select('id', 'name')
+            ->get();
+
         return view('client.shop.index')->with([
             'title' => $category->name,
             'products' => $products,
