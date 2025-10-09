@@ -6,24 +6,26 @@
         let currentFocus = -1;
 
         const fetchSuggestions = function(keyword) {
-            // This is where you would normally make an AJAX call to your backend
-            // For demonstration, we'll use a static list with filtering
+            // AJAX call để lấy suggestions từ backend
+            if (!keyword) {
+                showSuggestions([]);
+                return;
+            }
 
-            // Example static suggestions
-            const sampleSuggestions = [
-                @foreach ($tags as $tag)
-                    '{{ $tag->name }}',
-                @endforeach
-                @foreach ($categories as $category)
-                    '{{ $category->name }}',
-                @endforeach
-            ];
-
-            if (!keyword) return [];
-
-            return sampleSuggestions.filter(item =>
-                item.toLowerCase().includes(keyword.toLowerCase())
-            );
+            $.ajax({
+                url: '/api/search-suggestions',
+                method: 'GET',
+                data: {
+                    keyword: keyword
+                },
+                success: function(suggestions) {
+                    showSuggestions(suggestions);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error fetching suggestions:', error);
+                    showSuggestions([]);
+                }
+            });
         };
 
         const showSuggestions = function(suggestions) {
@@ -54,12 +56,17 @@
             return text.replace(regex, '<strong class="text-primary">$1</strong>');
         };
 
+        // Debounce function để tránh gọi API quá nhiều lần
+        let debounceTimer;
         searchInput.on('input', function() {
             const keyword = $(this).val().trim();
 
+            clearTimeout(debounceTimer);
+
             if (keyword.length > 0) {
-                const suggestions = fetchSuggestions(keyword);
-                showSuggestions(suggestions);
+                debounceTimer = setTimeout(function() {
+                    fetchSuggestions(keyword);
+                }, 300); // Đợi 300ms sau khi user ngừng gõ
             } else {
                 suggestionsContainer.addClass('hidden');
             }

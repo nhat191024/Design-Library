@@ -27,14 +27,10 @@ class ShopController extends Controller
             $products = Product::with('Category', 'Images', 'Tags')->latest()->paginate(self::ITEM_PER_PAGE);
         }
         $tagSuggestions = Tag::where('is_show', true)->get();
-        $tags = Tag::latest()->get()->unique('name');
-        $categories = Category::whereNull('parent_id')->get();
 
         return view('client.shop.index')->with([
             'title' => "Cửa hàng - Design showcase",
             'products' => $products,
-            'tags' => $tags,
-            'categories' => $categories,
             'query' => $request->q ?? '',
             'tagSuggestions' => $tagSuggestions,
         ]);
@@ -239,11 +235,9 @@ class ShopController extends Controller
             })->with('Category', 'Images', 'Tags')->paginate(self::ITEM_PER_PAGE);
         }
         $tagSuggestions = Tag::where('is_show', true)->get();
-        $tags = Tag::where('is_show', '1')->latest()->get()->unique('name');
         return view('client.shop.index')->with([
             'title' => $category->name,
             'products' => $products,
-            'tags' => $tags,
             'categories' => $categories,
             'query' => $category->name,
             'tagSuggestions' => $tagSuggestions,

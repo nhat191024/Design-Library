@@ -15,8 +15,6 @@ class HomeController extends Controller
     public function index()
     {
         $tagSuggestions = Tag::where('is_show', true)->get();
-        $tags = Tag::latest()->get();
-        $categories = Category::whereNull('parent_id')->latest()->limit(15)->get();
 
         // Chỉ load 16 sản phẩm cho trang chủ và eager load images để tránh N+1 query
         $products = Product::where('is_showcase', 1)
@@ -30,8 +28,6 @@ class HomeController extends Controller
         $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->latest()->get();
         return view('client.home.home')->with([
             'title' => $this->PAGE_TITLE,
-            'tags' => $tags,
-            'categories' => $categories,
             'products' => $products,
             'showcaseCategories' => $showcaseCategories,
             'tagSuggestions' => $tagSuggestions,
@@ -63,5 +59,33 @@ class HomeController extends Controller
         }
 
         return response()->json(['error' => 'Invalid request'], 400);
+    }
+
+    // API endpoint để lấy search suggestions
+    public function searchSuggestions(Request $request)
+    {
+        $keyword = $request->get('keyword', '');
+
+        if (empty($keyword) || strlen($keyword) < 1) {
+            return response()->json([]);
+        }
+
+        $tags = Tag::where('is_show', true)
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->limit(10)
+            ->pluck('name');
+
+        $categories = Category::whereNull('parent_id')
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->limit(10)
+            ->pluck('name');
+
+        // Merge và loại bỏ duplicates
+        $suggestions = $tags->concat($categories)
+            ->unique()
+            ->take(15)
+            ->values();
+
+        return response()->json($suggestions);
     }
 }

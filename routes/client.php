@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('client.profile.edit');
 Route::get('/load-more-products', [HomeController::class, 'loadMore'])->name('client.home.loadMore'); // infinite scroll
+Route::get('/api/search-suggestions', [HomeController::class, 'searchSuggestions'])->name('client.api.search-suggestions'); // search suggestions API
 Route::get('/products', [ShopController::class, 'index'])->name('client.shop.index'); // shop index
 Route::get('/products?q={query?}', [ShopController::class, 'search'])->name('client.shop.search'); // shop search
 Route::get('/products/category/{slug}', [ShopController::class, 'category'])->name('client.shop.category'); // shop category filter
