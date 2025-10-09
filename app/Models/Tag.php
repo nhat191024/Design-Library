@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 
 class Tag extends Model
 {
@@ -12,6 +13,22 @@ class Tag extends Model
         'name',
         'is_show'
     ];
+
+    protected static function booted()
+    {
+        // Clear cache khi tag được tạo, cập nhật hoặc xóa
+        static::created(function () {
+            Cache::forget('all_tags');
+        });
+
+        static::updated(function () {
+            Cache::forget('all_tags');
+        });
+
+        static::deleted(function () {
+            Cache::forget('all_tags');
+        });
+    }
 
     public function Products()
     {

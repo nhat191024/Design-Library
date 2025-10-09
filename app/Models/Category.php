@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Cache;
 
 class Category extends Model
 {
@@ -46,6 +47,19 @@ class Category extends Model
 
         static::updating(function ($category) {
             $category->slug = self::generateSlug($category);
+        });
+
+        // Clear cache khi category được tạo, cập nhật hoặc xóa
+        static::created(function () {
+            Cache::forget('categories_with_parent');
+        });
+
+        static::updated(function () {
+            Cache::forget('categories_with_parent');
+        });
+
+        static::deleted(function () {
+            Cache::forget('categories_with_parent');
         });
     }
     public static function generateSlug($category)
