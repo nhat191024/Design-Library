@@ -1,10 +1,10 @@
 <section>
     <div class="py-12">
-        <div class="max-w-full mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="mx-auto max-w-full sm:px-6 lg:px-8">
+            <div class="overflow-hidden bg-white shadow-sm dark:bg-gray-800 sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
 
-                    <a href="{{ route('tags.create') }}" class="btn btn-success float-end mb-5">Thêm nhãn</a>
+                    <a class="btn btn-success float-end mb-5" href="{{ route('tags.create') }}">Thêm nhãn</a>
                     <table id="tag-table" class="display order-column">
                         <thead>
                             <tr>
@@ -15,19 +15,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($tags as $key => $tag)
-                                <tr>
-                                    <td>{{ ++$key }}</td>
-                                    <td>{{ $tag->name }}</td>
-                                    <td>{{ $tag->is_show ? 'Có' : 'Không' }}</td>
-                                    <td>
-                                        <a href="{{ route('tags.edit', $tag->id) }}"
-                                            class="btn btn-sm btn-primary">Sửa</a>
-                                        <button class="btn btn-sm btn-error"
-                                            onclick="deleteTag({{ $tag->id }})">Xóa</button>
-                                    </td>
-                                </tr>
-                            @endforeach
+                            {{-- Data will be loaded via AJAX --}}
                         </tbody>
                         <tfoot>
                             <tr>

@@ -16,8 +16,77 @@ class TagController extends Controller
      */
     public function index()
     {
-        $tags = Tag::all();
-        return view('admin.tag.index', compact('tags'));
+        return view('admin.tag.index');
+    }
+
+    /**
+     * Get tags data for DataTable with server-side processing
+     */
+    public function getTagsData(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Tag::select('tags.*');
+
+            $totalRecords = Tag::count();
+
+            // Search functionality
+            if ($search = $request->get('search')['value']) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%");
+                });
+                $filteredRecords = $query->count();
+            } else {
+                $filteredRecords = $totalRecords;
+            }
+
+            // Order
+            if ($request->has('order')) {
+                $orderColumnIndex = $request->get('order')[0]['column'];
+                $orderDirection = $request->get('order')[0]['dir'];
+                $columns = ['id', 'name', 'is_show'];
+
+                if (isset($columns[$orderColumnIndex])) {
+                    $query->orderBy($columns[$orderColumnIndex], $orderDirection);
+                }
+            } else {
+                $query->latest();
+            }
+
+            // Pagination
+            $start = $request->get('start', 0);
+            $length = $request->get('length', 10);
+            $tags = $query->skip($start)->take($length)->get();
+
+            // Format data for DataTable
+            $data = [];
+            foreach ($tags as $key => $tag) {
+                $isShow = $tag->is_show
+                    ? '<span class="badge badge-success">Có</span>'
+                    : '<span class="badge badge-danger">Không</span>';
+
+                $actions = '
+                    <a href="' . route('tags.edit', $tag->id) . '" class="btn btn-sm btn-primary">Sửa</a>
+                    <button class="btn btn-sm btn-error" onclick="deleteTag(' . $tag->id . ')">Xóa</button>
+                ';
+
+                $data[] = [
+                    'DT_RowId' => 'row_' . $tag->id,
+                    $start + $key + 1,
+                    $tag->name,
+                    $isShow,
+                    $actions
+                ];
+            }
+
+            return response()->json([
+                'draw' => intval($request->get('draw')),
+                'recordsTotal' => $totalRecords,
+                'recordsFiltered' => $filteredRecords,
+                'data' => $data
+            ]);
+        }
+
+        return response()->json(['error' => 'Invalid request'], 400);
     }
 
     /**

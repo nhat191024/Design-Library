@@ -32,6 +32,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/designs/delete/{id}', [DesignController::class, 'destroy'])->name('designs.destroy');
 
     Route::get('/tags', [TagController::class, 'index'])->name('tags.index');
+    Route::get('/tags/data', [TagController::class, 'getTagsData'])->name('tags.data');
     Route::get('/tags/create', [TagController::class, 'create'])->name('tags.create');
     Route::post('/tags/store', [TagController::class, 'store'])->name('tags.store');
     Route::get('/tags/edit/{id}', [TagController::class, 'showEditForm'])->name('tags.edit');
