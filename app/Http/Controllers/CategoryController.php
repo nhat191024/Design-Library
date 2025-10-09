@@ -8,6 +8,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 
 class CategoryController extends Controller
@@ -161,6 +162,12 @@ class CategoryController extends Controller
 
             $category->save();
 
+            // Clear và refresh cache
+            Cache::forget('categories_with_parent');
+            Cache::remember('categories_with_parent', 3600, function () {
+                return Category::whereNotNull('parent_id')->select('id', 'name')->get();
+            });
+
             return redirect()->route('categories.index')
                 ->with('success', 'Cập nhật danh mục thành công');
         } catch (\Exception $e) {
@@ -178,6 +185,13 @@ class CategoryController extends Controller
             }
             $category = Category::find($id);
             $category->delete();
+
+            // Clear và refresh cache
+            Cache::forget('categories_with_parent');
+            Cache::remember('categories_with_parent', 3600, function () {
+                return Category::whereNotNull('parent_id')->select('id', 'name')->get();
+            });
+
             return redirect()->route('categories.index')
                 ->with('success', 'Xoá danh mục thành công');
         } catch (\Exception $e) {
@@ -208,6 +222,12 @@ class CategoryController extends Controller
             }
 
             $category->save();
+
+            // Clear và refresh cache
+            Cache::forget('categories_with_parent');
+            Cache::remember('categories_with_parent', 3600, function () {
+                return Category::whereNotNull('parent_id')->select('id', 'name')->get();
+            });
 
             return redirect()->route('categories.index')
                 ->with('success', 'Tạo danh mục thành công');

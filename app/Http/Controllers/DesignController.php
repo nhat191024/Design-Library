@@ -114,9 +114,13 @@ class DesignController extends Controller
 
     public function showEditForm($id)
     {
-        $design = Product::find($id);
-        $categories = Category::whereNotNull('parent_id')->get();
-        $tags = Tag::all();
+        $design = Product::with(['tags:id', 'MainImage', 'Images'])->find($id);
+        $categories = cache()->remember('categories_with_parent', 3600, function () {
+            return Category::whereNotNull('parent_id')->select('id', 'name')->get();
+        });
+        $tags = cache()->remember('all_tags', 3600, function () {
+            return Tag::select('id', 'name')->get();
+        });
         $designTags = $design->tags->pluck('id')->toArray();
 
         return view('admin.design.index', compact('design', 'categories', 'tags', 'designTags'));
@@ -248,8 +252,10 @@ class DesignController extends Controller
 
     public function create()
     {
-        $categories = Category::whereNotNull('parent_id')->get();
-        $tags = Tag::all();
+        $categories = Category::whereNotNull('parent_id')->select('id', 'name')->get();
+        $tags = cache()->remember('all_tags', 3600, function () {
+            return Tag::select('id', 'name')->get();
+        });
         return view('admin.design.index', compact('categories', 'tags'));
     }
 

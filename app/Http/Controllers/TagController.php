@@ -8,6 +8,7 @@ use App\Models\TagProduct;
 use App\Http\Requests\StoreTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class TagController extends Controller
 {
@@ -111,6 +112,12 @@ class TagController extends Controller
             ]);
             $tag->save();
 
+            // Clear và refresh cache
+            Cache::forget('all_tags');
+            Cache::remember('all_tags', 3600, function () {
+                return Tag::select('id', 'name')->get();
+            });
+
             return redirect()->route('tags.index')
                 ->with('success', 'Cập nhật nhãn thành công');
         } catch (\Exception $e) {
@@ -132,6 +139,13 @@ class TagController extends Controller
             }
             $design = Tag::find($id);
             $design->delete();
+
+            // Clear và refresh cache
+            Cache::forget('all_tags');
+            Cache::remember('all_tags', 3600, function () {
+                return Tag::select('id', 'name')->get();
+            });
+
             return redirect()->route('tags.index')
                 ->with('success', 'Xóa nhãn thành công');
         } catch (\Exception $e) {
@@ -159,6 +173,12 @@ class TagController extends Controller
                 'name' => $request->name,
                 'is_show' => $request->isShow,
             ]);
+
+            // Clear và refresh cache
+            Cache::forget('all_tags');
+            Cache::remember('all_tags', 3600, function () {
+                return Tag::select('id', 'name')->get();
+            });
 
             return redirect()->route('tags.index')
                 ->with('success', 'Tạo nhãn thành công');
