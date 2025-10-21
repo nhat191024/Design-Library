@@ -75,13 +75,20 @@ class HomeController extends Controller
             ->limit(10)
             ->pluck('name');
 
-        $categories = Category::whereNull('parent_id')
-            ->where('name', 'LIKE', "%{$keyword}%")
+        $categories = Category::where('name', 'LIKE', "%{$keyword}%")
             ->limit(10)
             ->pluck('name');
 
-        // Merge và loại bỏ duplicates
-        $suggestions = $tags->concat($categories)
+        $products = Product::where(function ($query) use ($keyword) {
+            $query->where('name', 'LIKE', "%{$keyword}%")
+                ->orWhere('description', 'LIKE', "%{$keyword}%");
+        })
+            ->limit(10)
+            ->pluck('name');
+
+        $suggestions = $tags
+            ->concat($categories)
+            ->concat($products)
             ->unique()
             ->take(15)
             ->values();
