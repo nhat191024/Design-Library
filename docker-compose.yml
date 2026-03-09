@@ -6,7 +6,7 @@ services:
         container_name: design_library #rename container for each project
         restart: unless-stopped
         ports:
-            - '10010:80' #change port for each project
+            - '10013:80' #change port for each project
         volumes:
             # Mount source code (excluding vendor)
             - ./app:/var/www/html/app
