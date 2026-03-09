@@ -12,6 +12,8 @@
 
     <title>{{ $title }}</title>
 
+    <meta name="google-site-verification" content="wEhYpwITkXOEa4-beZO8RSuQM9UWA8-_DK9rS7N5fjc" />
+
     <!-- Fix UI flickering script -->
     <script>
         (function() {
