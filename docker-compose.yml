@@ -35,6 +35,7 @@ services:
             # - ./vite.config.ts:/var/www/html/vite.config.ts
             - ./vite.config.js:/var/www/html/vite.config.js
             - ./postcss.config.js:/var/www/html/postcss.config.js
+            - ./tailwind.config.js:/var/www/html/tailwind.config.js
             # - ./tsconfig.json:/var/www/html/tsconfig.json //enabled when using vite
             - ./phpunit.xml:/var/www/html/phpunit.xml
 
