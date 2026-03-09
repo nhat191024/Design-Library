@@ -80,7 +80,6 @@ class HomeController extends Controller
             ->limit(10)
             ->pluck('name');
 
-        // Merge và loại bỏ duplicates
         $suggestions = $tags->concat($categories)
             ->unique()
             ->take(15)
