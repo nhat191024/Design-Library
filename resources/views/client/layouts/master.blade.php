@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('images/logos/favicon.ico') }}" type="image/x-icon">
-    {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> --}}
+    <link type="image/x-icon" rel="icon" href="{{ asset('images/logos/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <title>Thiết kế decor</title>
 
     <title>{{ $title }}</title>
 
     <!-- Fix UI flickering script -->
     <script>
-        (function () {
+        (function() {
             let theme = localStorage.getItem("theme") || "light";
             document.documentElement.setAttribute("data-theme", theme);
         })();
