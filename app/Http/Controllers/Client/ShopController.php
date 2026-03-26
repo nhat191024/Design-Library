@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Tag;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
+use App\Http\Services\SearchService;
 
 class ShopController extends Controller
 
@@ -19,10 +20,10 @@ class ShopController extends Controller
     {
         if ($request->has('q')) {
             $searchTerm = $request->q;
-            $products = $this->tryWithMeilisearch($searchTerm);
-            if (!$products) {
-                $products = $this->fallbackToBasicSearch($searchTerm);
-            }
+            // $products = $this->tryWithMeilisearch($searchTerm);
+            // if (!$products) {
+            $products = $this->fallbackToBasicSearch($searchTerm);
+            // }
         } else {
             $products = Product::with([
                 'Category:id,name,slug',
@@ -102,81 +103,8 @@ class ShopController extends Controller
      */
     public function fallbackToBasicSearch($searchTerm)
     {
-        $query = null;
-
-        $query = Tag::where('name', 'like', '%' . $searchTerm . '%')->first();
-
-        if ($query) {
-            $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
-                $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })
-                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(self::ITEM_PER_PAGE);
-            return $products;
-        }
-
-        $query = Category::where('name', 'like', '%' . $searchTerm . '%')->first();
-
-        if ($query) {
-            $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
-                $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })
-                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(self::ITEM_PER_PAGE);
-            return $products;
-        }
-
-        $query = Product::query();
-        $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at');
-        $query->with([
-            'Category:id,name,slug',
-            'MainImage:id,url',
-            'images' => function ($query) {
-                $query->select('id', 'url', 'product_id')->limit(1);
-            }
-        ]);
-        $query->where(function ($q) use ($searchTerm) {
-            $q->where('name', 'like', '%' . $searchTerm . '%');
-            $words = explode(' ', $searchTerm);
-            foreach ($words as $word) {
-                if (strlen($word) >= 2) {
-                    $q->orWhere('name', 'like', '%' . $word . '%');
-                }
-            }
-            $q->orWhere('description', 'like', '%' . $searchTerm . '%');
-            $q->orWhereHas('Tags', function ($tagQuery) use ($searchTerm, $words) {
-                $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-                foreach ($words as $word) {
-                    if (strlen($word) >= 2) {
-                        $tagQuery->orWhere('name', 'like', '%' . $word . '%');
-                    }
-                }
-            });
-            $q->orWhereHas('Category', function ($categoryQuery) use ($searchTerm) {
-                $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            });
-        });
-
-        $query->orderBy('created_at', 'desc');
-
-        $products = $query->paginate(self::ITEM_PER_PAGE);
-        return $products;
+        $searchService = new SearchService();
+        return $searchService->searchProducts($searchTerm, self::ITEM_PER_PAGE);
     }
 
     public function downloadImage($slug, Request $request)
