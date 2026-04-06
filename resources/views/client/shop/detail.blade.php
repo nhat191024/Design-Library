@@ -77,7 +77,7 @@
                 <div class="mb-6 flex flex-wrap gap-2">
                     <span class="text-lg text-gray-600">Tags: </span>
                     @foreach ($tags as $tag)
-                        <a class="btn btn-ghost btn-sm bg-base-200" href="/products?q={{ $tag->name }}">
+                        <a class="btn btn-ghost btn-sm bg-base-200" href="/products?tag={{ $tag->name }}">
                             <span class="text-base-content/70 text-lg font-semibold">{{ $tag->name }}</span>
                         </a>
                     @endforeach

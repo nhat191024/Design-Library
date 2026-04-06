@@ -18,7 +18,22 @@ class ShopController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->has('q')) {
+        if ($request->has('tag')) {
+            $tagName = $request->tag;
+            $products = Product::whereHas('Tags', function ($query) use ($tagName) {
+                $query->where('name', $tagName);
+            })
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->latest()
+                ->paginate(self::ITEM_PER_PAGE);
+        } elseif ($request->has('q')) {
             $searchTerm = $request->q;
             // $products = $this->tryWithMeilisearch($searchTerm);
             // if (!$products) {
@@ -50,6 +65,7 @@ class ShopController extends Controller
             'title' => "Cửa hàng - Design showcase",
             'products' => $products,
             'query' => $request->q ?? '',
+            'activeTag' => $request->tag ?? null,
             'tagSuggestions' => $tagSuggestions,
             'categories' => $categories,
         ]);
