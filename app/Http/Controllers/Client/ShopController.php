@@ -20,6 +20,15 @@ class ShopController extends Controller
     public function index(Request $request)
     {
         if (!$request->filled('tag') && $request->filled('q')) {
+            $exactCategoryName = trim($request->q);
+            $matchedCategory = Category::where('name', $exactCategoryName)
+                ->select('slug')
+                ->first();
+
+            if ($matchedCategory) {
+                return redirect()->route('client.shop.category', ['slug' => $matchedCategory->slug]);
+            }
+
             $exactTagName = trim($request->q);
             $matchedTag = Tag::where('name', $exactTagName)
                 ->select('name')
