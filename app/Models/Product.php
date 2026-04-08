@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Laravel\Scout\Searchable;
 
 class Product extends Model
 {
+    use Searchable;
+
     protected $table = 'products';
 
     protected $fillable = [
@@ -37,6 +40,23 @@ class Product extends Model
     public function MainImage()
     {
         return $this->hasOne(Image::class, 'id', 'main_image');
+    }
+
+    /**
+     * Build the data that gets indexed by Scout.
+     */
+    public function toSearchableArray(): array
+    {
+        $this->loadMissing(['Category', 'Tags']);
+
+        return [
+            'name' => $this->name,
+            'slug' => $this->slug,
+            'description' => $this->description,
+            'code' => $this->code,
+            'category_name' => $this->Category?->name,
+            'tag_names' => $this->Tags->pluck('name')->values()->all(),
+        ];
     }
 
     public static function boot()

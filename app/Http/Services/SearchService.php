@@ -134,6 +134,13 @@ class SearchService
      */
     public function searchProducts(string $keyword, int $perPage = 16)
     {
+        $keyword = trim($keyword);
+        if ($keyword === '') {
+            return Product::query()
+                ->whereRaw('1 = 0')
+                ->paginate($perPage);
+        }
+
         $escapedKeyword = str_replace(['%', '_'], ['\\%', '\\_'], $keyword);
         $words = $this->tokenize($keyword);
 
@@ -152,7 +159,9 @@ class SearchService
                 $ew = str_replace(['%', '_'], ['\\%', '\\_'], $word);
                 $q->orWhere('name', 'LIKE', "%{$ew}%");
             }
-        })->pluck('id');
+        })
+            ->where('is_show', true)
+            ->pluck('id');
 
         return Product::query()
             ->select('products.*')
