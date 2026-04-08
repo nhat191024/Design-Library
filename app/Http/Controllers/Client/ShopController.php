@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
 use App\Http\Services\SearchService;
@@ -18,6 +19,17 @@ class ShopController extends Controller
 
     public function index(Request $request)
     {
+        if (!$request->filled('tag') && $request->filled('q')) {
+            $exactTagName = trim($request->q);
+            $matchedTag = Tag::where('name', $exactTagName)
+                ->select('name')
+                ->first();
+
+            if ($matchedTag) {
+                $request->merge(['tag' => $matchedTag->name]);
+            }
+        }
+
         if ($request->has('tag')) {
             $tagName = $request->tag;
             $products = Product::whereHas('Tags', function ($query) use ($tagName) {
@@ -35,10 +47,11 @@ class ShopController extends Controller
                 ->paginate(self::ITEM_PER_PAGE);
         } elseif ($request->has('q')) {
             $searchTerm = $request->q;
-            // $products = $this->tryWithMeilisearch($searchTerm);
-            // if (!$products) {
-            $products = $this->fallbackToBasicSearch($searchTerm);
-            // }
+            $products = $this->tryWithMeilisearch($searchTerm);
+
+            if (!$products) {
+                $products = $this->fallbackToBasicSearch($searchTerm);
+            }
         } else {
             $products = Product::with([
                 'Category:id,name,slug',
@@ -94,17 +107,24 @@ class ShopController extends Controller
 
                 return $meilisearch->search($query, $options);
             })
-                ->query(fn($query) => $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at'))
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
+                ->query(function ($eloquentQuery) {
+                    $eloquentQuery
+                        ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                        ->with([
+                            'Category:id,name,slug',
+                            'MainImage:id,url',
+                            'images' => function ($query) {
+                                $query->select('id', 'url', 'product_id')->limit(1);
+                            }
+                        ]);
+                })
                 ->paginate(self::ITEM_PER_PAGE);
             return $products;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            Log::warning('Meilisearch search failed', [
+                'query' => $query,
+                'error' => $e->getMessage(),
+            ]);
             return null;
         }
     }
@@ -115,7 +135,6 @@ class ShopController extends Controller
      * This method is used as a fallback when Meilisearch is not available.
      *
      * @param string $searchTerm
-     * @return \Illuminate\Database\Eloquent\Collection|null
      */
     public function fallbackToBasicSearch($searchTerm)
     {
