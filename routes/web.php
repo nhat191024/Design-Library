@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Route;
 
 require __DIR__ . '/client.php';
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'OK']);
+})->name('health');
+
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
