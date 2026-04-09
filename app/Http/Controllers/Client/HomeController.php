@@ -7,6 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use App\Http\Services\SearchService;
 
 class HomeController extends Controller
 {
@@ -62,30 +65,9 @@ class HomeController extends Controller
     }
 
     // API endpoint để lấy search suggestions
-    public function searchSuggestions(Request $request)
+    public function searchSuggestions(Request $request, SearchService $searchService)
     {
         $keyword = $request->get('keyword', '');
-
-        if (empty($keyword) || strlen($keyword) < 1) {
-            return response()->json([]);
-        }
-
-        $tags = Tag::where('is_show', true)
-            ->where('name', 'LIKE', "%{$keyword}%")
-            ->limit(10)
-            ->pluck('name');
-
-        $categories = Category::whereNull('parent_id')
-            ->where('name', 'LIKE', "%{$keyword}%")
-            ->limit(10)
-            ->pluck('name');
-
-        // Merge và loại bỏ duplicates
-        $suggestions = $tags->concat($categories)
-            ->unique()
-            ->take(15)
-            ->values();
-
-        return response()->json($suggestions);
+        return response()->json($searchService->getSuggestions($keyword));
     }
 }

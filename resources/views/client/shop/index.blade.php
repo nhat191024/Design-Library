@@ -22,7 +22,7 @@
                 <span class="text-base-content/70 text-sm">Tags:</span>
             </button>
             @foreach ($tagSuggestions as $tag)
-                <a class="btn btn-ghost btn-sm bg-base-200" href="/products?q={{ $tag->name }}">
+                <a class="btn btn-ghost btn-sm bg-base-200" href="/products?tag={{ $tag->name }}">
                     <span class="text-base-content/70 text-sm">{{ $tag->name }}</span>
                 </a>
             @endforeach
@@ -48,10 +48,15 @@
             <button class="btn btn-soft font-bold" onclick="search()">Tìm kiếm</button>
         </div>
 
-        @if (request('q'))
+        @if (request('tag'))
+            {{-- Tag Results Title --}}
+            <div class="mb-6 text-xl font-medium">
+                Kết quả cho tag: <span class="font-bold">{{ request('tag') }}</span>
+            </div>
+        @elseif (request('q'))
             {{-- Search Results Title --}}
             <div class="mb-6 text-xl font-medium">
-                Kết quả cho {{ 'từ khóa' }}: <span class="font-bold">{{ request('q') ?? isset($query) ? $query : '' }}</span>
+                Kết quả cho từ khóa: <span class="font-bold">{{ request('q') }}</span>
             </div>
         @endif
     </div>

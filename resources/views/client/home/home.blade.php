@@ -35,7 +35,7 @@
                 <!-- Popular Tags -->
                 <div class="mt-5 flex flex-wrap justify-center gap-2">
                     @foreach ($tagSuggestions as $tag)
-                        <a class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200" href="/products?q={{ $tag->name }}">
+                        <a class="badge badge-soft badge-accent gap-1 p-2 hover:bg-base-200" href="/products?tag={{ $tag->name }}">
                             <i class="las la-search"></i>
                             <span class="text-lg">{{ $tag->name }}</span>
                         </a>

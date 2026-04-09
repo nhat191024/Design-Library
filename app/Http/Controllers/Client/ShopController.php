@@ -7,8 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Tag;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use ZipArchive;
+use App\Http\Services\SearchService;
 
 class ShopController extends Controller
 
@@ -17,9 +19,45 @@ class ShopController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->has('q')) {
+        if (!$request->filled('tag') && $request->filled('q')) {
+            $exactCategoryName = trim($request->q);
+            $matchedCategory = Category::where('name', $exactCategoryName)
+                ->select('slug')
+                ->first();
+
+            if ($matchedCategory) {
+                return redirect()->route('client.shop.category', ['slug' => $matchedCategory->slug]);
+            }
+
+            $exactTagName = trim($request->q);
+            $matchedTag = Tag::where('name', $exactTagName)
+                ->select('name')
+                ->first();
+
+            if ($matchedTag) {
+                $request->merge(['tag' => $matchedTag->name]);
+            }
+        }
+
+        if ($request->has('tag')) {
+            $tagName = $request->tag;
+            $products = Product::whereHas('Tags', function ($query) use ($tagName) {
+                $query->where('name', $tagName);
+            })
+                ->with([
+                    'Category:id,name,slug',
+                    'MainImage:id,url',
+                    'images' => function ($query) {
+                        $query->select('id', 'url', 'product_id')->limit(1);
+                    }
+                ])
+                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                ->latest()
+                ->paginate(self::ITEM_PER_PAGE);
+        } elseif ($request->has('q')) {
             $searchTerm = $request->q;
             $products = $this->tryWithMeilisearch($searchTerm);
+
             if (!$products) {
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
@@ -49,6 +87,7 @@ class ShopController extends Controller
             'title' => "Cửa hàng - Design showcase",
             'products' => $products,
             'query' => $request->q ?? '',
+            'activeTag' => $request->tag ?? null,
             'tagSuggestions' => $tagSuggestions,
             'categories' => $categories,
         ]);
@@ -77,17 +116,24 @@ class ShopController extends Controller
 
                 return $meilisearch->search($query, $options);
             })
-                ->query(fn($query) => $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at'))
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
+                ->query(function ($eloquentQuery) {
+                    $eloquentQuery
+                        ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                        ->with([
+                            'Category:id,name,slug',
+                            'MainImage:id,url',
+                            'images' => function ($query) {
+                                $query->select('id', 'url', 'product_id')->limit(1);
+                            }
+                        ]);
+                })
                 ->paginate(self::ITEM_PER_PAGE);
             return $products;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            Log::warning('Meilisearch search failed', [
+                'query' => $query,
+                'error' => $e->getMessage(),
+            ]);
             return null;
         }
     }
@@ -98,85 +144,11 @@ class ShopController extends Controller
      * This method is used as a fallback when Meilisearch is not available.
      *
      * @param string $searchTerm
-     * @return \Illuminate\Database\Eloquent\Collection|null
      */
     public function fallbackToBasicSearch($searchTerm)
     {
-        $query = null;
-
-        $query = Tag::where('name', 'like', '%' . $searchTerm . '%')->first();
-
-        if ($query) {
-            $products = Product::whereHas('Tags', function ($tagQuery) use ($searchTerm) {
-                $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })
-                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(self::ITEM_PER_PAGE);
-            return $products;
-        }
-
-        $query = Category::where('name', 'like', '%' . $searchTerm . '%')->first();
-
-        if ($query) {
-            $products = Product::whereHas('Category', function ($categoryQuery) use ($searchTerm) {
-                $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            })
-                ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
-                ->with([
-                    'Category:id,name,slug',
-                    'MainImage:id,url',
-                    'images' => function ($query) {
-                        $query->select('id', 'url', 'product_id')->limit(1);
-                    }
-                ])
-                ->orderBy('created_at', 'desc')
-                ->paginate(self::ITEM_PER_PAGE);
-            return $products;
-        }
-
-        $query = Product::query();
-        $query->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at');
-        $query->with([
-            'Category:id,name,slug',
-            'MainImage:id,url',
-            'images' => function ($query) {
-                $query->select('id', 'url', 'product_id')->limit(1);
-            }
-        ]);
-        $query->where(function ($q) use ($searchTerm) {
-            $q->where('name', 'like', '%' . $searchTerm . '%');
-            $words = explode(' ', $searchTerm);
-            foreach ($words as $word) {
-                if (strlen($word) >= 2) {
-                    $q->orWhere('name', 'like', '%' . $word . '%');
-                }
-            }
-            $q->orWhere('description', 'like', '%' . $searchTerm . '%');
-            $q->orWhereHas('Tags', function ($tagQuery) use ($searchTerm, $words) {
-                $tagQuery->where('name', 'like', '%' . $searchTerm . '%');
-                foreach ($words as $word) {
-                    if (strlen($word) >= 2) {
-                        $tagQuery->orWhere('name', 'like', '%' . $word . '%');
-                    }
-                }
-            });
-            $q->orWhereHas('Category', function ($categoryQuery) use ($searchTerm) {
-                $categoryQuery->where('name', 'like', '%' . $searchTerm . '%');
-            });
-        });
-
-        $query->orderBy('created_at', 'desc');
-
-        $products = $query->paginate(self::ITEM_PER_PAGE);
-        return $products;
+        $searchService = new SearchService();
+        return $searchService->searchProducts($searchTerm, self::ITEM_PER_PAGE);
     }
 
     public function downloadImage($slug, Request $request)
