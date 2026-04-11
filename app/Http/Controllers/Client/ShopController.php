@@ -58,7 +58,7 @@ class ShopController extends Controller
             $searchTerm = $request->q;
             $products = $this->tryWithMeilisearch($searchTerm);
 
-            if (!$products) {
+            if (!$products || ($products->total() ?? 0) === 0) {
                 $products = $this->fallbackToBasicSearch($searchTerm);
             }
         } else {
@@ -98,24 +98,22 @@ class ShopController extends Controller
      * If Meilisearch is down or throws an exception, return null.
      *
      * @param string $query
-     * @return \Illuminate\Database\Eloquent\Collection|null
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|null
      */
     private function tryWithMeilisearch($query)
     {
         try {
-            $products = Product::search($query, function ($meilisearch, $query, $options) {
-                $options['typoTolerance'] = [
-                    'enabled' => true,
-                    'minWordSizeForTypos' => [
-                        'oneTypo' => 3,
-                        'twoTypos' => 6
-                    ],
-                    'disableOnWords' => [],
-                    'disableOnAttributes' => []
-                ];
+            $query = preg_replace('/\s+/u', ' ', trim((string) $query));
+            if ($query === '') {
+                return null;
+            }
 
-                return $meilisearch->search($query, $options);
-            })
+            $words = preg_split('/\s+/u', $query, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $phraseQuery = count($words) >= 2 ? ('"' . $query . '"') : null;
+
+            $search = $phraseQuery ? Product::search($phraseQuery) : Product::search($query);
+
+            $products = $search
                 ->query(function ($eloquentQuery) {
                     $eloquentQuery
                         ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
@@ -128,6 +126,25 @@ class ShopController extends Controller
                         ]);
                 })
                 ->paginate(self::ITEM_PER_PAGE);
+
+            if (
+                $phraseQuery &&
+                (($products->total() ?? 0) === 0)
+            ) {
+                $products = Product::search($query)
+                    ->query(function ($eloquentQuery) {
+                        $eloquentQuery
+                            ->select('id', 'name', 'slug', 'description', 'category_id', 'main_image', 'created_at')
+                            ->with([
+                                'Category:id,name,slug',
+                                'MainImage:id,url',
+                                'images' => function ($query) {
+                                    $query->select('id', 'url', 'product_id')->limit(1);
+                                }
+                            ]);
+                    })
+                    ->paginate(self::ITEM_PER_PAGE);
+            }
             return $products;
         } catch (\Throwable $e) {
             Log::warning('Meilisearch search failed', [
