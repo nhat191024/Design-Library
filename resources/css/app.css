@@ -1,3 +1,36 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-zone {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.bg-zone-inner {
+    position: absolute;
+    top: -40px;
+    left: -40px;
+    right: -40px;
+    bottom: -40px;
+
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+
+    filter: blur(var(--blur, 0px));
+    opacity: var(--opacity, 0.5);
+
+    transition: filter 0.3s ease, opacity 0.3s ease;
+}
+
+.bg-zone--repeat .bg-zone-inner {
+    background-size: cover;
+    background-repeat: repeat-y;
+    background-position: center top;
+}

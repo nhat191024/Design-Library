@@ -1,10 +1,45 @@
 @extends('client.layouts.master')
 @section('content')
-    <header class="hero bg-base-100 pt-10 md:pt-5">
+    <style>
+        .hero-title {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
+        }
+        .hero-subtitle {
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
+        }
+        html[data-theme="dark"] .hero-title {
+            text-shadow: 0 4px 10px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.9);
+        }
+        html[data-theme="dark"] .hero-subtitle {
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
+        }
+    </style>
+
+    {{-- === BACKGROUND LAYERS === --}}
+    @if (!empty($bgSettings['zone1_image']))
+    <div id="bg-zone1" class="bg-zone" aria-hidden="true"
+         style="--bg-image: url('{{ asset($bgSettings['zone1_image']) }}');
+                --blur: {{ $bgSettings['zone1_blur'] ?? 0 }}px;
+                --opacity: {{ $bgSettings['zone1_opacity'] ?? 0.5 }};">
+        <div class="bg-zone-inner"></div>
+    </div>
+    @endif
+
+    @if (!empty($bgSettings['zone2_image']))
+    <div id="bg-zone2" class="bg-zone bg-zone--repeat" aria-hidden="true"
+         style="--bg-image: url('{{ asset($bgSettings['zone2_image']) }}');
+                --blur: {{ $bgSettings['zone2_blur'] ?? 0 }}px;
+                --opacity: {{ $bgSettings['zone2_opacity'] ?? 0.5 }};">
+        <div class="bg-zone-inner"></div>
+    </div>
+    @endif
+    {{-- === END BACKGROUND LAYERS === --}}
+
+    <header class="hero bg-base-100/80 pt-10 md:pt-5 relative z-10">
         <div class="hero-content pb-0 text-center">
             <div class="max-w-4xl">
-                <h1 class="mb-4 text-3xl font-bold md:text-5xl">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
-                <h5 class="mb-6 text-xl">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
+                <h1 class="mb-4 text-3xl font-bold md:text-5xl hero-title">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
+                <h5 class="mb-6 text-xl hero-subtitle">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
 
                 <!-- Search Bar Container -->
                 <div class="flex w-full justify-center px-4">
@@ -60,8 +95,8 @@
     </header>
 
     {{-- main page content --}}
-    <main class="container mx-auto px-4 pb-10">
-        <div class="mb-4 mt-12 flex items-center justify-between">
+    <main class="container mx-auto px-4 pb-10 relative z-10">
+        <div id="design-section-header" class="mb-4 mt-12 flex items-center justify-between">
             <div>
                 <a href="javascript:void(0)">
                     <h1 class="text-lg font-bold md:text-xl lg:text-2xl" onclick="location.href='{{ route('client.shop.index') }}'">
@@ -90,10 +125,8 @@
         }
 
         $(document).ready(function() {
-            // Khai báo imageObserver ở scope rộng hơn để có thể dùng trong infinite scroll
             let imageObserver = null;
 
-            // Lazy loading images
             if ('IntersectionObserver' in window) {
                 imageObserver = new IntersectionObserver(function(entries, observer) {
                     entries.forEach(function(entry) {
@@ -116,7 +149,7 @@
                 });
             }
 
-            // Infinite Scroll Implementation
+            // Infinite Scroll
             let currentPage = 1;
             let isLoading = false;
             let hasMoreProducts = true;
@@ -142,7 +175,6 @@
                             currentPage++;
                             hasMoreProducts = response.hasMore;
 
-                            // Re-observe new lazy images
                             if (imageObserver) {
                                 const newImages = $('#products-container .lazy-image').not('[data-observed]');
                                 newImages.each(function() {
@@ -151,7 +183,6 @@
                                 });
                             }
 
-                            // Hiển thị thông báo khi hết sản phẩm
                             if (!response.hasMore) {
                                 $('#load-more-trigger').html(
                                     '<div class="text-center py-8 text-base-content/60">' +
@@ -159,6 +190,11 @@
                                     'Đã hiển thị tất cả sản phẩm nổi bật' +
                                     '</div>'
                                 );
+                            }
+
+                            const zone2El = document.getElementById('bg-zone2');
+                            if (zone2El) {
+                                zone2El.style.height = (document.body.scrollHeight - parseFloat(zone2El.style.top)) + 'px';
                             }
                         }
                     },
@@ -173,7 +209,7 @@
                 });
             };
 
-            // Intersection Observer cho infinite scroll
+            // Infinite scroll
             if ('IntersectionObserver' in window) {
                 const scrollObserver = new IntersectionObserver(function(entries) {
                     entries.forEach(function(entry) {
@@ -182,7 +218,7 @@
                         }
                     });
                 }, {
-                    rootMargin: '200px' // Load trước 200px khi gần đến
+                    rootMargin: '200px'
                 });
 
                 const trigger = document.getElementById('load-more-trigger');
@@ -191,6 +227,41 @@
                 }
             }
         });
+
+        function positionBgZones() {
+            const navbar   = document.querySelector('.navbar');
+            const zone1El  = document.getElementById('bg-zone1');
+            const zone2El  = document.getElementById('bg-zone2');
+            const designSectionHeader = document.getElementById('design-section-header');
+
+            if (!navbar) return;
+            const navbarHeight = navbar.getBoundingClientRect().height;
+
+            let sectionTop = window.innerHeight; // Fallback height
+            if (designSectionHeader) {
+                sectionTop = designSectionHeader.getBoundingClientRect().top + window.scrollY;
+            }
+
+            if (zone1El) {
+                zone1El.style.top = '-10px';
+                zone1El.style.height = sectionTop + 'px';
+            }
+
+            if (zone2El) {
+                if (zone1El) {
+                    const transitionHeight = 150;
+                    zone2El.style.top = (sectionTop - transitionHeight) + 'px';
+                    zone2El.style.height = (document.body.scrollHeight - sectionTop + transitionHeight) + 'px';
+                    zone2El.style.WebkitMaskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
+                    zone2El.style.maskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
+                } else {
+                    zone2El.style.top = sectionTop + 'px';
+                    zone2El.style.height = (document.body.scrollHeight - sectionTop) + 'px';
+                }
+            }
+        }
+
+        $(window).on('load resize', positionBgZones);
     </script>
     @include('client.partials.search-suggestions')
 @endsection

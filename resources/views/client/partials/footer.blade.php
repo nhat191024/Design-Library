@@ -1,4 +1,4 @@
-<footer class="footer bg-base-300 p-10 text-base-content sm:footer-horizontal">
+<footer class="footer bg-base-300 p-10 text-base-content sm:footer-horizontal relative z-10">
     <div class="container mx-auto grid w-full grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <nav class="flex flex-col">
             <h6 class="footer-title">Về chúng tôi</h6>

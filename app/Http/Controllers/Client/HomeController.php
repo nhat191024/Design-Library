@@ -29,11 +29,22 @@ class HomeController extends Controller
             ->get();
 
         $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->latest()->get();
+
+        $bgSettings = [
+            'zone1_image'   => \App\Models\SiteSetting::get('bg_zone1_image'),
+            'zone1_blur'    => \App\Models\SiteSetting::get('bg_zone1_blur', 0),
+            'zone1_opacity' => \App\Models\SiteSetting::get('bg_zone1_opacity', 0.5),
+            'zone2_image'   => \App\Models\SiteSetting::get('bg_zone2_image'),
+            'zone2_blur'    => \App\Models\SiteSetting::get('bg_zone2_blur', 0),
+            'zone2_opacity' => \App\Models\SiteSetting::get('bg_zone2_opacity', 0.5),
+        ];
+
         return view('client.home.home')->with([
             'title' => $this->PAGE_TITLE,
             'products' => $products,
             'showcaseCategories' => $showcaseCategories,
             'tagSuggestions' => $tagSuggestions,
+            'bgSettings' => $bgSettings,
         ]);
     }
 
