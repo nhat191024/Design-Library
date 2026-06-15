@@ -13,9 +13,35 @@
         html[data-theme="dark"] .hero-subtitle {
             text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
         }
+        #bg-zone0 {
+            z-index: 1; /* Keep above zone1 but behind navbar */
+        }
+        #bg-zone0 .bg-zone-inner {
+            background-size: cover; /* "Zoom to fit" filling the navbar area */
+            background-position: center;
+        }
+        /* Navbar text shadows for legibility over Zone 0 background */
+        .navbar-center .menu > li > a,
+        .navbar-center .menu > li > details > summary,
+        .navbar-end .menu > li > a {
+            text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
+        }
+        html[data-theme="dark"] .navbar-center .menu > li > a,
+        html[data-theme="dark"] .navbar-center .menu > li > details > summary,
+        html[data-theme="dark"] .navbar-end .menu > li > a {
+            text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
+        }
     </style>
 
     {{-- === BACKGROUND LAYERS === --}}
+    @if (!empty($bgSettings['zone0_image']))
+    <div id="bg-zone0" class="bg-zone" aria-hidden="true"
+         style="--bg-image: url('{{ asset($bgSettings['zone0_image']) }}');
+                --blur: {{ $bgSettings['zone0_blur'] ?? 0 }}px;
+                --opacity: {{ $bgSettings['zone0_opacity'] ?? 0.5 }};">
+        <div class="bg-zone-inner"></div>
+    </div>
+    @endif
     @if (!empty($bgSettings['zone1_image']))
     <div id="bg-zone1" class="bg-zone" aria-hidden="true"
          style="--bg-image: url('{{ asset($bgSettings['zone1_image']) }}');
@@ -193,9 +219,7 @@
                             }
 
                             const zone2El = document.getElementById('bg-zone2');
-                            if (zone2El) {
-                                zone2El.style.height = (document.body.scrollHeight - parseFloat(zone2El.style.top)) + 'px';
-                            }
+                            // Height recalculation is no longer needed since we use bottom: 0px
                         }
                     },
                     error: function(xhr, status, error) {
@@ -230,6 +254,7 @@
 
         function positionBgZones() {
             const navbar   = document.querySelector('.navbar');
+            const zone0El  = document.getElementById('bg-zone0');
             const zone1El  = document.getElementById('bg-zone1');
             const zone2El  = document.getElementById('bg-zone2');
             const designSectionHeader = document.getElementById('design-section-header');
@@ -242,8 +267,13 @@
                 sectionTop = designSectionHeader.getBoundingClientRect().top + window.scrollY;
             }
 
+            if (zone0El) {
+                zone0El.style.top = '-' + navbarHeight + 'px';
+                zone0El.style.height = navbarHeight + 'px';
+            }
+
             if (zone1El) {
-                zone1El.style.top = '-10px';
+                zone1El.style.top = '0px';
                 zone1El.style.height = sectionTop + 'px';
             }
 
@@ -251,12 +281,14 @@
                 if (zone1El) {
                     const transitionHeight = 150;
                     zone2El.style.top = (sectionTop - transitionHeight) + 'px';
-                    zone2El.style.height = (document.body.scrollHeight - sectionTop + transitionHeight) + 'px';
+                    zone2El.style.bottom = '0px';
+                    zone2El.style.height = 'auto';
                     zone2El.style.WebkitMaskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
                     zone2El.style.maskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
                 } else {
                     zone2El.style.top = sectionTop + 'px';
-                    zone2El.style.height = (document.body.scrollHeight - sectionTop) + 'px';
+                    zone2El.style.bottom = '0px';
+                    zone2El.style.height = 'auto';
                 }
             }
         }

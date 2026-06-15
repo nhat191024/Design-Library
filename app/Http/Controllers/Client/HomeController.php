@@ -31,6 +31,9 @@ class HomeController extends Controller
         $showcaseCategories = Category::where('is_show', 1)->whereNotNull('parent_id')->latest()->get();
 
         $bgSettings = [
+            'zone0_image'   => \App\Models\SiteSetting::get('bg_zone0_image'),
+            'zone0_blur'    => \App\Models\SiteSetting::get('bg_zone0_blur', 0),
+            'zone0_opacity' => \App\Models\SiteSetting::get('bg_zone0_opacity', 0.5),
             'zone1_image'   => \App\Models\SiteSetting::get('bg_zone1_image'),
             'zone1_blur'    => \App\Models\SiteSetting::get('bg_zone1_blur', 0),
             'zone1_opacity' => \App\Models\SiteSetting::get('bg_zone1_opacity', 0.5),

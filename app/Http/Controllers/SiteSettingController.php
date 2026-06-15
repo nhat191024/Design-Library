@@ -10,6 +10,9 @@ class SiteSettingController extends Controller
     public function backgroundIndex()
     {
         $settings = [
+            'bg_zone0_image'   => SiteSetting::get('bg_zone0_image'),
+            'bg_zone0_blur'    => SiteSetting::get('bg_zone0_blur', 0),
+            'bg_zone0_opacity' => SiteSetting::get('bg_zone0_opacity', 0.5),
             'bg_zone1_image'   => SiteSetting::get('bg_zone1_image'),
             'bg_zone1_blur'    => SiteSetting::get('bg_zone1_blur', 0),
             'bg_zone1_opacity' => SiteSetting::get('bg_zone1_opacity', 0.5),
@@ -24,12 +27,16 @@ class SiteSettingController extends Controller
     public function backgroundUpdate(Request $request)
     {
         $request->validate([
+            'bg_zone0_blur'    => 'nullable|integer|min:0|max:30',
+            'bg_zone0_opacity' => 'nullable|numeric|min:0|max:1',
             'bg_zone1_blur'    => 'nullable|integer|min:0|max:30',
             'bg_zone1_opacity' => 'nullable|numeric|min:0|max:1',
             'bg_zone2_blur'    => 'nullable|integer|min:0|max:30',
             'bg_zone2_opacity' => 'nullable|numeric|min:0|max:1',
         ]);
 
+        SiteSetting::set('bg_zone0_blur',    $request->input('bg_zone0_blur', 0));
+        SiteSetting::set('bg_zone0_opacity', $request->input('bg_zone0_opacity', 0.5));
         SiteSetting::set('bg_zone1_blur',    $request->input('bg_zone1_blur', 0));
         SiteSetting::set('bg_zone1_opacity', $request->input('bg_zone1_opacity', 0.5));
         SiteSetting::set('bg_zone2_blur',    $request->input('bg_zone2_blur', 0));
@@ -41,7 +48,7 @@ class SiteSettingController extends Controller
     public function backgroundUpload(Request $request)
     {
         $request->validate([
-            'zone'  => 'required|in:1,2',
+            'zone'  => 'required|in:0,1,2',
             'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120',
         ]);
 
@@ -69,7 +76,7 @@ class SiteSettingController extends Controller
     public function backgroundDelete(Request $request)
     {
         $request->validate([
-            'zone'  => 'required|in:1,2',
+            'zone'  => 'required|in:0,1,2',
         ]);
 
         $zone = $request->input('zone');
