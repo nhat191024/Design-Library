@@ -50,6 +50,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/categories/edit/{id}', [CategoryController::class, 'showEditForm'])->name('categories.edit');
     Route::patch('/categories/update/{id}', [CategoryController::class, 'update'])->name('categories.update');
     Route::get('/categories/delete/{id}', [CategoryController::class, 'destroy'])->name('categories.destroy');
+
+    // Background settings
+    Route::get('/admin/site-settings/background', [\App\Http\Controllers\SiteSettingController::class, 'backgroundIndex'])
+        ->name('admin.settings.background');
+    Route::post('/admin/site-settings/background', [\App\Http\Controllers\SiteSettingController::class, 'backgroundUpdate'])
+        ->name('admin.settings.background.update');
+    Route::post('/admin/site-settings/background/upload', [\App\Http\Controllers\SiteSettingController::class, 'backgroundUpload'])
+        ->name('admin.settings.background.upload');
+    Route::post('/admin/site-settings/background/delete', [\App\Http\Controllers\SiteSettingController::class, 'backgroundDelete'])
+        ->name('admin.settings.background.delete');
 });
 
 require __DIR__ . '/auth.php';

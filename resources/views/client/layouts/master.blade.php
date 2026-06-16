@@ -29,8 +29,10 @@
 
 <body>
     @include('client.partials.navigation')
-    @yield('content')
-    @include('client.partials.footer')
+    <div id="page-content-wrapper" class="relative">
+        @yield('content')
+        @include('client.partials.footer')
+    </div>
 </body>
 
 </html>

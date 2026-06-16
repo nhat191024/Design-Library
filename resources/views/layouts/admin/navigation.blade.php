@@ -24,6 +24,9 @@
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.index')">
                         {{ __('Danh mục') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.settings.background')" :active="request()->routeIs('admin.settings.background*')">
+                        {{ __('Ảnh nền trang chủ') }}
+                    </x-nav-link>
                 </div>
             </div>
 
