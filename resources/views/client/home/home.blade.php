@@ -1,35 +1,12 @@
 @extends('client.layouts.master')
 @section('content')
     <style>
-        .hero-title {
-            text-shadow: 0 2px 4px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
-        }
-        .hero-subtitle {
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
-        }
-        html[data-theme="dark"] .hero-title {
-            text-shadow: 0 4px 10px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.9);
-        }
-        html[data-theme="dark"] .hero-subtitle {
-            text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
-        }
         #bg-zone0 {
             z-index: 1; /* Keep above zone1 but behind navbar */
         }
         #bg-zone0 .bg-zone-inner {
             background-size: cover; /* "Zoom to fit" filling the navbar area */
             background-position: center;
-        }
-        /* Navbar text shadows for legibility over Zone 0 background */
-        .navbar-center .menu > li > a,
-        .navbar-center .menu > li > details > summary,
-        .navbar-end .menu > li > a {
-            text-shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 1px rgba(0,0,0,0.5);
-        }
-        html[data-theme="dark"] .navbar-center .menu > li > a,
-        html[data-theme="dark"] .navbar-center .menu > li > details > summary,
-        html[data-theme="dark"] .navbar-end .menu > li > a {
-            text-shadow: 0 2px 6px rgba(0,0,0,0.8), 0 1px 2px rgba(0,0,0,0.9);
         }
     </style>
 
@@ -64,8 +41,8 @@
     <header class="hero bg-base-100/80 pt-10 md:pt-5 relative z-10">
         <div class="hero-content pb-0 text-center">
             <div class="max-w-4xl">
-                <h1 class="mb-4 text-3xl font-bold md:text-5xl hero-title">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
-                <h5 class="mb-6 text-xl hero-subtitle">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
+                <h1 class="mb-4 text-3xl font-bold md:text-5xl">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
+                <h5 class="mb-6 text-xl">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
 
                 <!-- Search Bar Container -->
                 <div class="flex w-full justify-center px-4">
@@ -278,18 +255,12 @@
             }
 
             if (zone2El) {
-                if (zone1El) {
-                    const transitionHeight = 150;
-                    zone2El.style.top = (sectionTop - transitionHeight) + 'px';
-                    zone2El.style.bottom = '0px';
-                    zone2El.style.height = 'auto';
-                    zone2El.style.WebkitMaskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
-                    zone2El.style.maskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
-                } else {
-                    zone2El.style.top = sectionTop + 'px';
-                    zone2El.style.bottom = '0px';
-                    zone2El.style.height = 'auto';
-                }
+                
+                zone2El.style.top = (sectionTop - 1) + 'px';
+                zone2El.style.bottom = '0px';
+                zone2El.style.height = 'auto';
+                zone2El.style.WebkitMaskImage = 'none';
+                zone2El.style.maskImage = 'none';
             }
         }
 
