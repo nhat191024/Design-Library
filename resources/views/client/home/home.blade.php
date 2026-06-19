@@ -255,18 +255,12 @@
             }
 
             if (zone2El) {
-                if (zone1El) {
-                    const transitionHeight = 150;
-                    zone2El.style.top = (sectionTop - transitionHeight) + 'px';
-                    zone2El.style.bottom = '0px';
-                    zone2El.style.height = 'auto';
-                    zone2El.style.WebkitMaskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
-                    zone2El.style.maskImage = `linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${transitionHeight}px)`;
-                } else {
-                    zone2El.style.top = sectionTop + 'px';
-                    zone2El.style.bottom = '0px';
-                    zone2El.style.height = 'auto';
-                }
+                
+                zone2El.style.top = (sectionTop - 1) + 'px';
+                zone2El.style.bottom = '0px';
+                zone2El.style.height = 'auto';
+                zone2El.style.WebkitMaskImage = 'none';
+                zone2El.style.maskImage = 'none';
             }
         }
 
