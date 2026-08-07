@@ -47,8 +47,8 @@
             </div>
 
             {{-- Product Info --}}
-            <div class="flex flex-col gap-6">
-                <h1 class="text-3xl font-bold">{{ $product->name ?? '' }}</h1>
+            <div class="flex flex-col gap-4">
+                <h1 class="text-xl font-bold">{{ $product->name ?? '' }}</h1>
 
                 {{-- Price --}}
                 <div class="flex items-center gap-4">
