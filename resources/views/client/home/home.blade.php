@@ -42,7 +42,7 @@
         <div class="hero-content pb-0 text-center">
             <div class="max-w-4xl">
                 <h1 class="mb-4 text-3xl font-bold md:text-5xl">KHO TÀI NGUYÊN THIẾT KẾ DECOR EVENT-BIRTHDAY-WEDDING</h1>
-                <h5 class="mb-6 text-xl">Nhận thiết kế thương mại file chất lượng giá tốt và uy tín</h5>
+                <h5 class="mb-6 text-xl">Nhận Thi công Toàn quốc &amp; Thương mại File Uy tín Chất lượng</h5>
 
                 <!-- Search Bar Container -->
                 <div class="flex w-full justify-center px-4">

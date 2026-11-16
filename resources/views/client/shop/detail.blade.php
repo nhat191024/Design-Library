@@ -47,8 +47,8 @@
             </div>
 
             {{-- Product Info --}}
-            <div class="flex flex-col gap-6">
-                <h1 class="text-3xl font-bold">{{ $product->name ?? '' }}</h1>
+            <div class="flex flex-col gap-4">
+                <h1 class="text-xl font-bold">{{ $product->name ?? '' }}</h1>
 
                 {{-- Price --}}
                 <div class="flex items-center gap-4">
@@ -90,7 +90,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8" />
                         </svg>Tải ảnh demo
                     </button>
-                    <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">Liên hệ ngay</button>
+                    <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">LIÊN HỆ THI CÔNG</button>
                 </div>
 
                 {{-- Social Share --}}
