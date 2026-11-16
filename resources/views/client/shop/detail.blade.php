@@ -90,7 +90,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8l-8 8-8-8" />
                         </svg>Tải ảnh demo
                     </button>
-                    <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">Liên hệ ngay</button>
+                    <button class="btn btn-primary flex-1 text-lg" onclick="location.href='{{ route('client.contact.index') }}'">LIÊN HỆ THI CÔNG</button>
                 </div>
 
                 {{-- Social Share --}}
